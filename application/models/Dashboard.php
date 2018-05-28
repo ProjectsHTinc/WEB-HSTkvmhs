@@ -489,7 +489,8 @@ LEFT JOIN edu_sections AS s ON cm.section=s.sec_id LEFT JOIN edu_subject AS esu 
     // Admin students
 
     function dash_students($user_id){
- $query="SELECT ed.name,ed.user_pic,ed.student_id,ea.admisn_year,ea.admisn_no,ea.admission_id,ee.name,ee.class_id,ea.sex,ea.age,ea.dob,ea.mother_tongue,ea.mobile,ea.email,ea.student_pic,c.class_name,s.sec_name FROM edu_users AS ed LEFT JOIN edu_admission AS ea ON ed.student_id=ea.admission_id LEFT JOIN edu_enrollment AS ee ON ee.admission_id=ea.admission_id INNER JOIN edu_classmaster AS cm ON ee.class_id=cm.class_sec_id INNER JOIN edu_class AS c ON cm.class=c.class_id INNER JOIN edu_sections AS s ON cm.section=s.sec_id WHERE ed.user_id='$user_id'";
+		$year_id = $this->getYear();
+ $query="SELECT ed.name,ed.user_pic,ed.student_id,ea.admisn_year,ea.admisn_no,ea.admission_id,ee.name,ee.class_id,ea.sex,ea.age,ea.dob,ea.mother_tongue,ea.mobile,ea.email,ea.student_pic,c.class_name,s.sec_name FROM edu_users AS ed LEFT JOIN edu_admission AS ea ON ed.student_id=ea.admission_id LEFT JOIN edu_enrollment AS ee ON ee.admission_id=ea.admission_id INNER JOIN edu_classmaster AS cm ON ee.class_id=cm.class_sec_id INNER JOIN edu_class AS c ON cm.class=c.class_id INNER JOIN edu_sections AS s ON cm.section=s.sec_id WHERE ed.user_id='$user_id' AND ee.admit_year = '$year_id'";
 $result12=$this->db->query($query);
 return  $result12->result();
     }
@@ -516,32 +517,35 @@ return  $result12->result();
   }
   function get_students($user_id)
   {
+	  $year_id = $this->getYear();
     $query="SELECT eu.user_id,eu.parent_id,ep.name,ep.admission_id FROM edu_users AS eu LEFT JOIN edu_parents AS ep ON eu.parent_id=ep.id WHERE eu.user_id='$user_id'";
     $res=$this->db->query($query);
     foreach($res->result() as $rows){ }
     $pare_id= $rows->parent_id;
 
-    $get_stude="SELECT ee.name,ee.class_id,c.class_name,s.sec_name,ee.enroll_id,ed.* FROM edu_admission AS ed LEFT JOIN edu_enrollment AS ee ON ee.admission_id=ed.admission_id INNER JOIN edu_classmaster AS cm ON ee.class_id=cm.class_sec_id
-INNER JOIN edu_class AS c ON cm.class=c.class_id INNER JOIN edu_sections AS s ON cm.section=s.sec_id WHERE FIND_IN_SET('$pare_id',ed.parnt_guardn_id)";
+     $get_stude="SELECT ee.name,ee.class_id,c.class_name,s.sec_name,ee.enroll_id,ed.* FROM edu_admission AS ed LEFT JOIN edu_enrollment AS ee ON ee.admission_id=ed.admission_id INNER JOIN edu_classmaster AS cm ON ee.class_id=cm.class_sec_id
+INNER JOIN edu_class AS c ON cm.class=c.class_id INNER JOIN edu_sections AS s ON cm.section=s.sec_id WHERE FIND_IN_SET('$pare_id',ed.parnt_guardn_id) AND ee.admit_year = '$year_id'";
     $res1=$this->db->query($get_stude);
     return $res1->result();
   }
 
   function stud_details($user_id){
-    $query="SELECT eu.user_id,eu.parent_id,ep.name,ep.admission_id FROM edu_users AS eu LEFT JOIN edu_parents AS ep ON eu.parent_id=ep.id WHERE eu.user_id='$user_id'";
+	  $year_id = $this->getYear();
+    $query="SELECT eu.user_id,eu.parent_id,ep.name,ep.admission_id FROM edu_users AS eu LEFT JOIN edu_parents AS ep ON eu.parent_id=ep.id WHERE eu.user_id='$user_id' ";
     $res=$this->db->query($query);
     foreach($res->result() as $rows){ }
     $pare_id= $rows->parent_id;
 
     $get_stude="SELECT ee.name,ee.class_id,c.class_name,s.sec_name,ee.enroll_id,ed.* FROM edu_admission AS ed LEFT JOIN edu_enrollment AS ee ON ee.admission_id=ed.admission_id INNER JOIN edu_classmaster AS cm ON ee.class_id=cm.class_sec_id
-INNER JOIN edu_class AS c ON cm.class=c.class_id INNER JOIN edu_sections AS s ON cm.section=s.sec_id WHERE FIND_IN_SET('$pare_id',ed.parnt_guardn_id)";
+INNER JOIN edu_class AS c ON cm.class=c.class_id INNER JOIN edu_sections AS s ON cm.section=s.sec_id WHERE FIND_IN_SET('$pare_id',ed.parnt_guardn_id)  AND ee.admit_year = '$year_id'";
     $res1=$this->db->query($get_stude);
     return $res1->result();
   }
   function get_students_cls_id($user_id){
+	   $year_id = $this->getYear();
 	    $user_id=$this->session->userdata('user_id');
         $get_enroll_id="SELECT ed.name,ed.student_id,ea.admisn_year,ea.admisn_no,ee.enroll_id,ee.class_id FROM edu_users AS ed LEFT JOIN edu_admission AS ea ON ed.student_id=ea.admission_id
-        LEFT JOIN edu_enrollment AS ee ON ee.admission_id=ea.admission_id WHERE ed.user_id='$user_id'";
+        LEFT JOIN edu_enrollment AS ee ON ee.admission_id=ea.admission_id WHERE ed.user_id='$user_id' AND ee.admit_year = '$year_id'";
 
         $results=$this->db->query($get_enroll_id);
 		$ress=$results->result();

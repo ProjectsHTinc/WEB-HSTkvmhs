@@ -26,7 +26,7 @@
                         <?php $i=1; foreach ($list_of_message as $rowsclass) {  ?>
                         <tr>
                            <td><?php echo $i;  ?></td>
-                           <td><?php echo $rowsclass->group_title;  ?><?php echo "<br>"; echo $new_date = date('d-m-Y H:i A', strtotime($rowsclass->created_at));  ?></td>
+                           <td><?php echo $rowsclass->group_title;  ?><?php echo "<br>"; echo $new_date = date('d-m-Y H:i', strtotime($rowsclass->created_at));  ?></td>
                            <td><?php echo $rowsclass->notification_type;  ?></td>
                            <td><?php echo $rowsclass->notes;  ?>
                            </td>
