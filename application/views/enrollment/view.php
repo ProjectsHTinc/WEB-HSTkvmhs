@@ -42,20 +42,15 @@
                               </thead>
                               <tbody>
                                  <?php
+							
+								 //exit;
                                     $i=1;
                           foreach ($result as $rows) {
                           $stu=$rows->status;
                           ?>
                        <tr>
                           <td><?php echo $i; ?></td>
-                          <?php  foreach ($year as $row)
-                             {
-                                 $fyear=$row->from_month;
-                                 $month= strtotime($fyear);
-                                 $eyear=$row->to_month;
-                                 $month1= strtotime($eyear);
-                             }
-                             ?>
+                    
                          
                           <td><?php echo $rows->name; ?></td>
                           <td><?php echo $rows->admisn_no; ?></td>

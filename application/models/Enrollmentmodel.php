@@ -165,9 +165,7 @@ Class Enrollmentmodel extends CI_Model
 	   {
 		  $year_id=$this->getYear();
 
-        $query="SELECT e.*,cm.class_sec_id,cm.class,cm.section,c.class_id,c.class_name,s.sec_id,s.sec_name,a.admission_id,a.admisn_no,a.sex,a.name,(Select b.blood_group_name FROM edu_blood_group as b WHERE  b.id IN(a.blood_group)) AS blood_group_name FROM edu_enrollment as e,edu_classmaster as cm, edu_sections as s,edu_class as c,edu_admission AS a WHERE  
-          e.class_id=cm.class_sec_id and cm.class=c.class_id and cm.section=s.sec_id AND e.admission_id=a.admission_id  AND  e.admit_year='$year_id' ORDER BY enroll_id DESC";
-         
+        $query="SELECT e.*,cm.class_sec_id,cm.class,cm.section,c.class_id,c.class_name,s.sec_id,s.sec_name,a.admission_id,a.admisn_no,a.sex,a.name,(Select b.blood_group_name FROM edu_blood_group as b WHERE  b.id IN(a.blood_group)) AS blood_group_name FROM edu_enrollment as e,edu_classmaster as cm, edu_sections as s,edu_class as c,edu_admission AS a WHERE e.class_id=cm.class_sec_id and cm.class=c.class_id and cm.section=s.sec_id AND e.admission_id=a.admission_id  AND  e.admit_year='$year_id' ORDER BY enroll_id DESC";
          $res=$this->db->query($query);
          return $res->result();
        }
