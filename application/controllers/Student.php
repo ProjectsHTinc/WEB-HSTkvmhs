@@ -152,7 +152,7 @@ class Student extends CI_Controller
         $user_type = $this->session->userdata('user_type');
         if ($user_type == 3) {
             $datas['total'] = $this->adminparentmodel->get_total_working_days($user_id, $user_type);
-			$datas['ableavedays'] = $this->adminparentmodel->get_absent_leave_days_student($user_id, $user_type);
+			      $datas['ableavedays'] = $this->adminparentmodel->get_absent_leave_days_student($user_id, $user_type);
             $this->load->view('adminstudent/student_header');
             $this->load->view('adminstudent/attendance/calender', $datas);
             $this->load->view('adminstudent/student_footer');
