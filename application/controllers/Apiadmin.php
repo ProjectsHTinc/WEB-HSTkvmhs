@@ -896,6 +896,31 @@ class Apiadmin extends CI_Controller {
 						echo json_encode($response);
 					}
 
+					// GET ALL Cricular class wise
+					public function get_class_circular_view()
+					{
+						//$_POST = json_decode(file_get_contents("php://input"), TRUE);
 
+						if(!$this->checkMethod())
+						{
+							return FALSE;
+						}
+
+						if($_POST == FALSE)
+						{
+							$res = array();
+							$res["opn"] = "SOMETHING WENT WRONG ";
+							$res["scode"] = 204;
+							$res["message"] = "Input error";
+
+							echo json_encode($res);
+							return;
+						}
+
+						$user_type=$this->input->post('user_type');
+						$data['result']=$this->apiadminmodel->get_class_circular_view($user_type);
+						$response = $data['result'];
+						echo json_encode($response);
+					}
 
 }

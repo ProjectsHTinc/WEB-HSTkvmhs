@@ -28,7 +28,7 @@ class Apiadminmodel extends CI_Model {
 
 	public function getYear()
 	{
-		$sqlYear = "SELECT * FROM edu_academic_year WHERE NOW() >= from_month AND NOW() <= to_month AND status = 'Active'";
+		$sqlYear = "SELECT * FROM edu_academic_year WHERE CURDATE() >= from_month AND CURDATE() <= to_month AND status = 'Active'";
 		$year_result = $this->db->query($sqlYear);
 		$ress_year = $year_result->result();
 
@@ -50,7 +50,7 @@ class Apiadminmodel extends CI_Model {
 	public function getTerm()
 	{
 	    $year_id = $this->getYear();
-		$sqlTerm = "SELECT * FROM edu_terms WHERE NOW() >= from_date AND NOW() <= to_date AND year_id = '$year_id' AND status = 'Active'";
+		$sqlTerm = "SELECT * FROM edu_terms WHERE CURDATE() >= from_date AND CURDATE() <= to_date AND year_id = '$year_id' AND status = 'Active'";
 		$term_result = $this->db->query($sqlTerm);
 		$ress_term = $term_result->result();
 		
@@ -825,6 +825,29 @@ LEFT JOIN edu_terms AS et ON  efm.term_id=et.term_id WHERE efm.class_master_id='
 
           function get_all_circular_view($user_id){
           $query="SELECT ecm.id,ecm.circular_title,ecm.circular_description,ec.circular_type,ecm.status,ecm.created_at as circular_date FROM edu_circular_master AS ecm,edu_circular as ec GROUP by id ORDER BY ecm.id DESC";
+            $result_query=$this->db->query($query);
+            if($result_query->num_rows()==0){
+                $data=array("status"=>"error","msg"=>"nodata");
+                return $data;
+            }else{
+              $result=$result_query->result();
+              $data=array("status"=>"success","msg"=>"circularfound","circularDetails"=>$result);
+              return $data;
+            }
+          }
+		  
+		  function get_class_circular_view($user_type){
+			$year_id=$this->getYear();
+			//$year_id = '1';
+			if ($user_type =='2'){
+				echo $query="SELECT c.id,c.user_type,c.user_id,c.circular_master_id,c.circular_date,c.circular_type,cm.*,u.user_id,u.name FROM edu_circular AS c,edu_users AS u,edu_circular_master AS cm WHERE c.user_type='2' AND  cm.id=c.circular_master_id AND c.user_id=u.user_id AND cm.academic_year_id = '$year_id' AND  cm.status='Active' ORDER BY c.id DESC";
+			}
+			if ($user_type =='3'){
+				$query="SELECT cm.*, c.circular_date, c.circular_type, c.user_type, e.class_id, cl.class_name, se.sec_name FROM edu_circular AS c, edu_users AS u, edu_admission AS a, edu_enrollment AS e, edu_circular_master AS cm, edu_classmaster AS clm, edu_class AS cl, edu_sections AS se WHERE c.user_type = '$user_type' AND u.user_type = c.user_type AND cm.id = c.circular_master_id AND c.user_id = u.user_id AND u.user_master_id = a.admission_id AND u.student_id = a.admission_id AND a.admission_id = e.admission_id AND clm.class_sec_id = e.class_id AND clm.class = cl.class_id AND clm.section = se.sec_id AND cm.academic_year_id = '$year_id' AND cm.status = 'Active' GROUP BY e.class_id, cm.circular_title, c.circular_type, c.circular_date ORDER BY c.id DESC";
+			}
+			if ($user_type =='4'){
+				$query="SELECT cm.*, c.circular_date, c.circular_type, c.user_type, e.class_id, cl.class_name, se.sec_name FROM edu_circular AS c, edu_users AS u, edu_admission AS a, edu_enrollment AS e, edu_circular_master AS cm, edu_classmaster AS clm, edu_class AS cl, edu_sections AS se WHERE c.user_type = '$user_type' AND u.user_type = c.user_type AND cm.id = c.circular_master_id AND c.user_id = u.user_id AND u.user_master_id = a.parnt_guardn_id AND a.admission_id = e.admission_id AND clm.class_sec_id = e.class_id AND clm.class = cl.class_id AND clm.section = se.sec_id AND cm.academic_year_id = '$year_id' AND cm.status = 'Active' GROUP BY e.class_id, cm.circular_title, c.circular_type, c.circular_date ORDER BY c.id DESC";
+			}
             $result_query=$this->db->query($query);
             if($result_query->num_rows()==0){
                 $data=array("status"=>"error","msg"=>"nodata");
