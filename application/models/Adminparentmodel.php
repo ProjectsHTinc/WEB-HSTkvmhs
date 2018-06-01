@@ -205,7 +205,7 @@ left join edu_enrollment as ee on ee.admission_id=ep.admission_id WHERE eu.user_
         foreach ($row as $rows) {
         }
         $class_id   = $rows->class_id;
-       
+
         $query      = "SELECT at_id AS total FROM edu_attendence WHERE class_id='$class_id'  AND ac_year='$year_id'";
         $resultset1 = $this->db->query($query);
         return $resultset1->result();
@@ -234,15 +234,15 @@ left join edu_enrollment as ee on ee.admission_id=ep.admission_id WHERE eu.user_
     function get_absent_leave_days_student($user_id, $user_type)
     {
 		$year_id    = $this->getYear();
-		
+
          $get_class_name = "SELECT eu.user_master_id, ea.admission_id, ee.admission_id,ee.enroll_id from edu_users eu,edu_admission ea, edu_enrollment ee WHERE eu.user_master_id = ea.admission_id AND ea.admission_id=ee.admission_id AND ee.admit_year ='$year_id' AND eu.user_id = '$user_id'";
         $resultset      = $this->db->query($get_class_name);
         $row            = $resultset->result();
         foreach ($row as $rows) {
         }
         //$class_id   = $rows->class_id;
-		$enroll_id   = $rows->enroll_id;
-        
+		      $enroll_id   = $rows->enroll_id;
+
         $query      = "SELECT *  FROM `edu_attendance_history` WHERE `student_id` = '$enroll_id'";
         $resultset1 = $this->db->query($query);
         return $resultset1->result();
@@ -263,6 +263,14 @@ left join edu_enrollment as ee on ee.admission_id=ep.admission_id WHERE eu.user_
         $resultset1 = $this->db->query($query);
         return $resultset1->result();
     }
+
+
+    function get_absent_leave_days_student_for_students($enroll_id){
+      $query      = "SELECT *  FROM `edu_attendance_history` WHERE `student_id` = '$enroll_id'";
+      $resultset1 = $this->db->query($query);
+      return $resultset1->result();
+    }
+
 
     function get_fees_status_details($enroll_id)
     //echo $enroll_id;
