@@ -45,12 +45,12 @@
                                echo date_format($ctdate,"d-m-Y");?>
                           </td>
                           <td>
-						  
+
 						  <a  style="padding-right:15px;" href="<?php echo base_url(); ?>homework/view_send_all_homework/<?php echo $tdate; ?>/<?php echo $cid; ?>" ><i class="fa fa-list" aria-hidden="true"></i></a>
-						  
+
                             <a rel="tooltip" href="" data-toggle="modal" data-target="#addmodel" data-id="<?php echo $tdate; ?>"  class="open-AddBookDialog"><i class="fa fa-paper-plane" aria-hidden="true"></i></a>
                             <span style="padding-left:20px;"></span>
-							
+
                             <?php if($send_status=="1")
                             { ?>
                               <i style="color:green; font-weight:bold;padding-right:10px;" class="fa fa-check" aria-hidden="true"></i> ( <?php $date=date_create($rows->updated_at);

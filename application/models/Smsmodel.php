@@ -8,7 +8,7 @@ Class Smsmodel extends CI_Model
 
   }
 
-   public function getYear()
+    function getYear()
     {
       $sqlYear = "SELECT * FROM edu_academic_year WHERE NOW() >= from_month AND NOW() <= to_month AND status = 'Active'";
       $year_result = $this->db->query($sqlYear);
@@ -24,36 +24,72 @@ Class Smsmodel extends CI_Model
       }
     }
 
+
+  function sendSMS($phone,$notes)
+   {
+         //Your authentication key
+         $authKey = "191431AStibz285a4f14b4";
+
+         //Multiple mobiles numbers separated by comma
+         $mobileNumber = "$phone";
+
+         //Sender ID,While using route4 sender id should be 6 characters long.
+         $senderId = "EDUAPP";
+
+         //Your message to send, Add URL encoding here.
+         $message =$notes;
+
+         //Define route
+         $route = "transactional";
+
+         //Prepare you post parameters
+         $postData = array(
+             'authkey' => $authKey,
+             'mobiles' => $mobileNumber,
+             'message' => $message,
+             'sender' => $senderId,
+             'route' => $route
+         );
+
+         //API URL
+         $url="https://control.msg91.com/api/sendhttp.php";
+
+         // init the resource
+         $ch = curl_init();
+         curl_setopt_array($ch, array(
+             CURLOPT_URL => $url,
+             CURLOPT_RETURNTRANSFER => true,
+             CURLOPT_POST => true,
+             CURLOPT_POSTFIELDS => $postData
+             //,CURLOPT_FOLLOWLOCATION => true
+         ));
+
+
+         //Ignore SSL certificate verification
+         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+
+
+         //get response
+         $output = curl_exec($ch);
+
+         //Print error if any
+         if(curl_errno($ch))
+         {
+             echo 'error:' . curl_error($ch);
+         }
+
+         curl_close($ch);
+   }
+
+
   function send_sms_for_teacher_leave($number,$leave_type)
   {
-	// http://173.45.76.227/send.aspx?username=kvmhss&pass=kvmhss123&route=trans1&senderid=KVMHSS&numbers=12345&message=WELCOME
-     //Thank you for the information. This is to inform you that your leave has been approved.
 
 	$textmessage='Thank you for the information This is to inform you that your '.$leave_type.' has been approved';
-
-	$textmsg =urlencode($textmessage);
-
-	$smsGatewayUrl = 'http://173.45.76.227/send.aspx?';
-
-	$api_element = 'username=kvmhss&pass=kvmhss123&route=trans1&senderid=KVMHSS';
-
-    $api_params = $api_element.'&numbers='.$number.'&message='.$textmsg;
-
-	$smsgatewaydata = $smsGatewayUrl.$api_params;
-
-	$url = $smsgatewaydata;
-
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_POST, false);
-	curl_setopt($ch, CURLOPT_URL, $url);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	$output = curl_exec($ch);
-	curl_close($ch);
-
-	if(!$output)
-	{
-      $output =  file_get_contents($smsgatewaydata);
-    }
+	$notes =utf8_encode($textmessage);
+  $phone=$number;
+  $this->sendSMS($phone,$notes);
  }
 
  function send_sms_for_teacher_substitution($tname,$sub_teacher,$sub_tname,$leave_date,$cls_id,$period_id)
@@ -63,42 +99,20 @@ Class Smsmodel extends CI_Model
 	$resultset=$this->db->query($sql);
 	$res=$resultset->result();
 	foreach($res as $cell){}
-	$num=$cell->phone;
+	 $phone=$cell->phone;
 
-	$sql1="SELECT cm.class_sec_id,cm.class,cm.section,c.class_id,c.class_name,s.sec_id,s.sec_name FROM edu_classmaster AS cm,edu_class AS c,edu_sections AS s WHERE cm.class_sec_id='$cls_id' AND cm.class=c.class_id AND cm.section=s.sec_id ";
-	$resultset1=$this->db->query($sql1);
-	$res1=$resultset1->result();
-	foreach($res1 as $cls){}
-	$cname=$cls->class_name;
-	$sename=$cls->sec_name;
+	 $sql1="SELECT cm.class_sec_id,cm.class,cm.section,c.class_id,c.class_name,s.sec_id,s.sec_name FROM edu_classmaster AS cm,edu_class AS c,edu_sections AS s WHERE cm.class_sec_id='$cls_id' AND cm.class=c.class_id AND cm.section=s.sec_id ";
 
-    $textmessage='This is to inform you that as '.$tname.' is on leave,'.$sub_tname.' will be the substitute teacher to fill in for '.$cname.'-'.$sename.',period ('.$period_id.') on '.$leave_date.' ';
+    	$resultset1=$this->db->query($sql1);
+    	$res1=$resultset1->result();
+    	foreach($res1 as $cls){}
+    	$cname=$cls->class_name;
+    	$sename=$cls->sec_name;
 
-//$textmessage='This is to inform you that as '.$tname.' is on leave, '.$sub_tname.' will be the substitute teacher to fill in for '.$leave_date.' class & section ('.$cname.'-'.$sename.') period ('.$period_id.') day/s.';
+    $textmessage='This is to inform you that as '.$tname.' is  leave,'.$sub_tname.' will be the substitute teacher to fill in for '.$cname.'-'.$sename.',period ('.$period_id.') on '.$leave_date.' ';
+	  $notes =utf8_encode($textmessage);
+    $this->sendSMS($phone,$notes);
 
-	 $textmsg =urlencode($textmessage);
-
-	$smsGatewayUrl = 'http://173.45.76.227/send.aspx?';
-
-	$api_element = 'username=kvmhss&pass=kvmhss123&route=trans1&senderid=KVMHSS';
-
-    $api_params = $api_element.'&numbers='.$num.'&message='.$textmsg;
-
-	$smsgatewaydata = $smsGatewayUrl.$api_params;
-
-	$url = $smsgatewaydata;
-
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_POST, false);
-	curl_setopt($ch, CURLOPT_URL, $url);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	$output = curl_exec($ch);
-	curl_close($ch);
-
-	if(!$output)
-	{
-      $output =  file_get_contents($smsgatewaydata);
-    }
 }
 
   function send_circular_via_sms($title,$notes,$tusers_id,$stusers_id,$pusers_id,$users_id)
@@ -109,48 +123,37 @@ Class Smsmodel extends CI_Model
 		foreach($result as $rows)
 		{ }
 		$title = $rows->circular_title;
-		$notes = $rows->circular_description;
-		
+		$desc = $rows->circular_description;
+
 	 //-----------------------------Teacher----------------------
 		   //echo'hi'; print_r($tusers_id);
 			 if($tusers_id!='')
 			 {
 			     $countid=count($tusers_id);
-			     //echo $countid;
 				 for ($i=0;$i<$countid;$i++)
 				 {
 					$userid=$tusers_id[$i];
-					$sql="SELECT u.user_id,u.user_type,u.user_master_id,t.teacher_id,t.name,t.phone FROM edu_users AS u,edu_teachers AS t WHERE u.user_id='$userid' AND u.user_type='2' AND u.user_master_id=t.teacher_id";
+				 	$sql="SELECT u.user_id,u.user_type,u.user_master_id,t.teacher_id,t.name,t.phone FROM edu_users AS u,edu_teachers AS t WHERE u.user_id='$userid' AND u.user_type='2' AND u.user_master_id=t.teacher_id";
 					$tcell=$this->db->query($sql);
 					$res=$tcell->result();
 					foreach($res as $row)
-					{ } 
-					    $number=$row->phone;
-					    $textmsg =urlencode($notes);
-						$smsGatewayUrl = 'http://173.45.76.227/send.aspx?';
-						$api_element = 'username=kvmhss&pass=kvmhss123&route=trans1&senderid=KVMHSS';
-						$api_params = $api_element.'&numbers='.$number.'&message='.$textmsg;
-						$smsgatewaydata = $smsGatewayUrl.$api_params;
-						$url = $smsgatewaydata;
-						$ch = curl_init();
-						curl_setopt($ch, CURLOPT_POST, false);
-						curl_setopt($ch, CURLOPT_URL, $url);
-						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-						$output = curl_exec($ch);
-						curl_close($ch);
-                }
-				/* if(!$output)
-				{
-				  $output =  file_get_contents($smsgatewaydata);
-				} */
+					{
+          $cell[] = $row->phone;
+          }
+          }
+
+          $phone = implode(',', $cell);
+          $notes =utf8_encode($desc);
+          $this->sendSMS($phone,$notes);
+
+
              }
 			 //-----------------------------Students----------------------
-		     //print_r($stusers_id);
+
 			 if($stusers_id!='')
 			 {
 			     $scountid=count($stusers_id);
-			      //echo $scountid; exit;
-				 for ($i=0;$i<$scountid;$i++)
+				   for ($i=0;$i<$scountid;$i++)
 				 {
 					$clsid=$stusers_id[$i];
     				$sql1="SELECT e.enroll_id,e.admission_id,e.admisn_no,e.name,e.class_id,a.admission_id,a.admisn_no,a.name,a.mobile FROM edu_enrollment AS e,edu_admission AS a WHERE e.class_id='$clsid' AND e.admission_id=a.admission_id ";
@@ -158,34 +161,22 @@ Class Smsmodel extends CI_Model
 					$res1=$scell->result();
 					foreach($res1 as $row1)
 					{
-       					$snumber=$row1->mobile;
-						$textmsg =urlencode($notes);
-						$smsGatewayUrl = 'http://173.45.76.227/send.aspx?';
-						$api_element = 'username=kvmhss&pass=kvmhss123&route=trans1&senderid=KVMHSS';
-						$api_params = $api_element.'&numbers='.$snumber.'&message='.$textmsg;
-						$smsgatewaydata = $smsGatewayUrl.$api_params;
-						$url = $smsgatewaydata;
-						$ch = curl_init();
-						curl_setopt($ch, CURLOPT_POST, false);
-						curl_setopt($ch, CURLOPT_URL, $url);
-						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-						$output = curl_exec($ch);
-						curl_close($ch);
-                  }
-				 /*  if(!$output)
-						{
-						  $output =  file_get_contents($smsgatewaydata);
-						} */
-				}
+          $notes =utf8_encode($desc);
+            $cell[] = $row1->mobile;
+
+          }
+           }
+          $phone = implode(',', $cell);
+          $notes =utf8_encode($desc);
+          $this->sendSMS($phone,$notes);
+
 
              }
 
 	 //-----------------------------Parents----------------------
-		  //print_r($pusers_id);
 		  if($pusers_id!='')
 		  {
 			 $pcountid=count($pusers_id);
-			 //echo $pcountid;exit;
 			 for ($i=0;$i<$pcountid;$i++)
 			 {
 				$classid=$pusers_id[$i];
@@ -201,26 +192,15 @@ Class Smsmodel extends CI_Model
     				  $res3=$pcell1->result();
 					foreach($res3 as $row3)
 					{
-       					$pnumber=$row3->mobile;
-						$textmsg =urlencode($notes);
-						$smsGatewayUrl ='http://173.45.76.227/send.aspx?';
-						$api_element ='username=kvmhss&pass=kvmhss123&route=trans1&senderid=KVMHSS';
-						$api_params = $api_element.'&numbers='.$pnumber.'&message='.$textmsg;
-						$smsgatewaydata = $smsGatewayUrl.$api_params;
-						$url = $smsgatewaydata;
-						$ch = curl_init();
-						curl_setopt($ch, CURLOPT_POST, false);
-						curl_setopt($ch, CURLOPT_URL, $url);
-						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-						$output = curl_exec($ch);
-						curl_close($ch);
-                  }
+            $cell[] = $row3->mobile;
+            }
+            }
+            $phone = implode(',', $cell);
+            $notes =utf8_encode($desc);
+            $this->sendSMS($phone,$notes);
 				 }
-				 /*  if(!$output)
-						{
-						  $output =  file_get_contents($smsgatewaydata);
-						} */
-				}
+
+
 		  }
 
 
@@ -231,25 +211,16 @@ Class Smsmodel extends CI_Model
 				if($users_id==2)
 				{
 				 //echo $users_id;
-					$tsql="SELECT u.user_id,u.user_type,u.user_master_id,t.teacher_id,t.name,t.phone FROM edu_users AS u,edu_teachers AS t  WHERE u.user_type='$users_id' AND u.user_master_id=t.teacher_id AND u.status='Active'";
+					 $tsql="SELECT u.user_id,u.user_type,u.user_master_id,t.teacher_id,t.name,t.phone FROM edu_users AS u,edu_teachers AS t  WHERE u.user_type='$users_id' AND u.user_master_id=t.teacher_id AND u.status='Active'";
 					$res=$this->db->query($tsql);
 					$result1=$res->result();
 					foreach($result1 as $rows)
 					{
-					   $tcell=$rows->phone;
-						$textmsg =urlencode($notes);
-						$smsGatewayUrl = 'http://173.45.76.227/send.aspx?';
-						$api_element = 'username=kvmhss&pass=kvmhss123&route=trans1&senderid=KVMHSS';
-						$api_params = $api_element.'&numbers='.$tcell.'&message='.$textmsg;
-						$smsgatewaydata = $smsGatewayUrl.$api_params;
-						$url = $smsgatewaydata;
-						$ch = curl_init();
-						curl_setopt($ch, CURLOPT_POST, false);
-						curl_setopt($ch, CURLOPT_URL, $url);
-						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-						$output = curl_exec($ch);
-						curl_close($ch);
-				    }
+            $cell[] = $rows->phone;
+				   }
+           $phone = implode(',', $cell);
+           $notes =utf8_encode($desc);
+           $this->sendSMS($phone,$notes);
 				}
 
 				//---------------------------Students----------------------
@@ -261,21 +232,11 @@ Class Smsmodel extends CI_Model
 					$result2=$res2->result();
 					foreach($result2 as $rows1)
 					{
-					    $scell=$rows1->mobile;
-					    $textmsg =urlencode($notes);
-						$smsGatewayUrl = 'http://173.45.76.227/send.aspx?';
-						$api_element = 'username=kvmhss&pass=kvmhss123&route=trans1&senderid=KVMHSS';
-						$api_params = $api_element.'&numbers='.$scell.'&message='.$textmsg;
-						$smsgatewaydata = $smsGatewayUrl.$api_params;
-						$url = $smsgatewaydata;
-						$ch = curl_init();
-						curl_setopt($ch, CURLOPT_POST, false);
-						curl_setopt($ch, CURLOPT_URL, $url);
-						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-						$output = curl_exec($ch);
-						curl_close($ch);
-
+            $cell[] = $rows1->mobile;
 				    }
+            $phone = implode(',', $cell);
+            $notes =utf8_encode($desc);
+            $this->sendSMS($phone,$notes);
 				}
 
 					//---------------------------Parents--------------------------------------------
@@ -287,21 +248,11 @@ Class Smsmodel extends CI_Model
 					$presult2=$pres2->result();
 					foreach($presult2 as $prows1)
 					{
-					   $pcell=$prows1->mobile;
-						$textmsg =urlencode($notes);
-						$smsGatewayUrl = 'http://173.45.76.227/send.aspx?';
-						$api_element = 'username=kvmhss&pass=kvmhss123&route=trans1&senderid=KVMHSS';
-						$api_params = $api_element.'&numbers='.$pcell.'&message='.$textmsg;
-						$smsgatewaydata = $smsGatewayUrl.$api_params;
-						$url = $smsgatewaydata;
-						$ch = curl_init();
-						curl_setopt($ch, CURLOPT_POST, false);
-						curl_setopt($ch, CURLOPT_URL, $url);
-						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-						$output = curl_exec($ch);
-						curl_close($ch);
-
+          $cell[] = $prows1->mobile;
 				    }
+            $phone = implode(',', $cell);
+            $notes =utf8_encode($desc);
+            $this->sendSMS($phone,$notes);
 				}
 
 			}
@@ -319,24 +270,8 @@ Class Smsmodel extends CI_Model
              $name=$rows->name;
              $number=$rows->mobile;
              $textmessage='Wishing you a Birthday filled with joy and a year filled with happiness and good health Happy Birthday '.$name.'';
-           	 $textmsg =urlencode($textmessage);
-           	 $smsGatewayUrl = 'http://173.45.76.227/send.aspx?';
-             $api_element = 'username=kvmhss&pass=kvmhss123&route=trans1&senderid=KVMHSS';
-             $api_params = $api_element.'&numbers='.$number.'&message='.$textmsg;
-           	 $smsgatewaydata = $smsGatewayUrl.$api_params;
-           	 $url = $smsgatewaydata;
+           	 $notes =utf8_encode($desc);
 
-           	$ch = curl_init();
-           	curl_setopt($ch, CURLOPT_POST, false);
-           	curl_setopt($ch, CURLOPT_URL, $url);
-           	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-           	$output = curl_exec($ch);
-           	curl_close($ch);
-
-           	if(!$output)
-           	{
-                 $output =  file_get_contents($smsgatewaydata);
-               }
 
 
            }
@@ -351,24 +286,7 @@ Class Smsmodel extends CI_Model
             $name=$rows->name;
             $number=$rows->phone;
             $textmessage='Wishing you a Birthday filled with joy and a year filled with happiness and good health Happy Birthday '.$name.'';
-            $textmsg =urlencode($textmessage);
-            $smsGatewayUrl = 'http://173.45.76.227/send.aspx?';
-            $api_element = 'username=kvmhss&pass=kvmhss123&route=trans1&senderid=KVMHSS';
-            $api_params = $api_element.'&numbers='.$number.'&message='.$textmsg;
-            $smsgatewaydata = $smsGatewayUrl.$api_params;
-            $url = $smsgatewaydata;
 
-           $ch = curl_init();
-           curl_setopt($ch, CURLOPT_POST, false);
-           curl_setopt($ch, CURLOPT_URL, $url);
-           curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-           $output = curl_exec($ch);
-           curl_close($ch);
-
-           if(!$output)
-           {
-                $output =  file_get_contents($smsgatewaydata);
-              }
 
 
           }
@@ -376,8 +294,8 @@ Class Smsmodel extends CI_Model
          }
 
 
-    //
-    //     //  Group  SMS
+
+    //  Group  SMS
         function send_msg($group_id,$notes,$user_id,$members_id)
 		{
       if(empty($members_id)){
@@ -391,51 +309,27 @@ Class Smsmodel extends CI_Model
 
           }else{
             foreach($res as $phone){
-              $phone=$phone->phone;
-              $textmessage=$notes;
-              $textmsg =urlencode($textmessage);
-              $smsGatewayUrl = 'http://173.45.76.227/send.aspx?';
-              $api_element = 'username=kvmhss&pass=kvmhss123&route=trans1&senderid=KVMHSS';
-              $api_params = $api_element.'&numbers='.$phone.'&message='.$textmsg;
-              $smsgatewaydata = $smsGatewayUrl.$api_params;
-              $url = $smsgatewaydata;
-              $ch = curl_init();
-              curl_setopt($ch, CURLOPT_POST, false);
-              curl_setopt($ch, CURLOPT_URL, $url);
-              curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-              $output = curl_exec($ch);
-              curl_close($ch);
-              if(!$output)
-              {
-              $output =  file_get_contents($smsgatewaydata);
-              }
+                $cell[] = $phone->phone;
             }
+              $textmessage=$notes;
+              $notes =utf8_encode($textmessage);
+              $phone = implode(',', $cell);
+              $this->sendSMS($phone,$notes);
+
           }
       }
-    
+
          $class="SELECT egm.group_member_id,ep.email,ep.mobile FROM edu_grouping_members AS egm LEFT JOIN edu_users AS eu ON eu.user_id=egm.group_member_id LEFT JOIN edu_admission AS ea ON ea.admission_id=eu.user_master_id LEFT JOIN edu_parents AS ep ON FIND_IN_SET(ea.admission_id,ep.admission_id) WHERE  egm.group_title_id='$group_id' and ep.mobile <>''";
          $pcell=$this->db->query($class);
           $res2=$pcell->result();
           foreach($res2 as $result){
-             $number=$result->mobile;
+              $cell[]=$result->mobile;
+              }
+            $phone = implode(',', $cell);
             $textmessage=$notes;
-            $textmsg =urlencode($textmessage);
-            $smsGatewayUrl = 'http://173.45.76.227/send.aspx?';
-            $api_element = 'username=kvmhss&pass=kvmhss123&route=trans1&senderid=KVMHSS';
-            $api_params = $api_element.'&numbers='.$number.'&message='.$textmsg;
-            $smsgatewaydata = $smsGatewayUrl.$api_params;
-            $url = $smsgatewaydata;
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_POST, false);
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $output = curl_exec($ch);
-            curl_close($ch);
-            if(!$output)
-            {
-            $output =  file_get_contents($smsgatewaydata);
-            }
-          }
+            $notes =utf8_encode($textmessage);
+            $this->sendSMS($phone,$notes);
+
         }
 
 
@@ -471,69 +365,49 @@ Class Smsmodel extends CI_Model
 			$home_work_details[]=$message;
 		  }
 			//print_r($home_work_details);
-		    $hdetails=implode('',$home_work_details);
-			$num=implode(',',$cell);
-			$count1=count($cell);
+		     $hdetails=implode('',$home_work_details);
+			   $phone=implode(',',$cell);
+			   $count1=count($cell);
 
 				$textmsg =urlencode($hdetails);
-				$smsGatewayUrl = 'http://173.45.76.227/send.aspx?';
-				$api_element = 'username=kvmhss&pass=kvmhss123&route=trans1&senderid=KVMHSS';
-				$api_params = $api_element.'&numbers='.$num.'&message='.$textmsg;
-				$smsgatewaydata = $smsGatewayUrl.$api_params;
+				// $smsGatewayUrl = 'http://173.45.76.227/send.aspx?';
+				// $api_element = 'username=kvmhss&pass=kvmhss123&route=trans1&senderid=KVMHSS';
+				// $api_params = $api_element.'&numbers='.$num.'&message='.$textmsg;
+				// $smsgatewaydata = $smsGatewayUrl.$api_params;
 
-				$url = $smsgatewaydata;
+         $notes =utf8_encode($textmsg);
+         $stat=$this->sendSMS($phone,$notes);
+        if($notes){
+           $data= array("status" => "success");
+        }else{
+           $data= array("status" => "failed");
+        }
 
-			   $ch = curl_init();
-			   curl_setopt($ch, CURLOPT_POST, false);
-			   curl_setopt($ch, CURLOPT_URL, $url);
-			   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			   $output = curl_exec($ch);
-			   curl_close($ch);
-
-			   if(!$output)
-			   {
-				  $output =  file_get_contents($smsgatewaydata);
-			   }else{  $data= array("status"=>"success");
-		      return $data; }
 	}
 
 
 
       function send_sms_attendance($attend_id){
          $query="SELECT ee.name,ep.mobile,ee.admission_id,eah.abs_date,eah.student_id,eah.a_status,eah.attend_period,
-         CASE WHEN attend_period = 0 THEN 'MORNING'  ELSE 'AFTERNOON' END  AS a_session,CASE WHEN a_status = 'L' THEN 'Leave' WHEN a_status = 'A' THEN 'Absent' ELSE 'OnDuty' END  AS abs_atatus FROM edu_attendance_history AS eah LEFT JOIN edu_enrollment AS ee ON ee.enroll_id=eah.student_id LEFT JOIN edu_parents AS ep ON ee.admission_id=ep.admission_id WHERE eah.attend_id='$attend_id' AND ep.primary_flag='Yes'";
+         CASE WHEN attend_period = 0 THEN 'FULLDAY'  ELSE 'FULLDAY' END  AS a_session,CASE WHEN a_status = 'L' THEN 'Leave' WHEN a_status = 'A' THEN 'Absent' ELSE 'OnDuty' END  AS abs_atatus FROM edu_attendance_history AS eah LEFT JOIN edu_enrollment AS ee ON ee.enroll_id=eah.student_id LEFT JOIN edu_parents AS ep ON ee.admission_id=ep.admission_id
+         WHERE eah.attend_id='$attend_id' AND ep.primary_flag='Yes'";
 
         $result=$this->db->query($query);
         $res=$result->result();
         foreach($res as $rows){
            $st_name=$rows->name;
-           $parents_num=$rows->mobile;
+           $phone=$rows->mobile;
            $at_ses=$rows->a_session;
            $abs_date=$rows->abs_date;
            $abs_status=$rows->abs_atatus;
-
-           $textmessage='Your child '.$st_name.' was marked '.$abs_status.' today, '.$abs_date.' ON '.$at_ses.' To Known more details login into http://bit.ly/2wLwdRQ';
-
-          $textmsg =urlencode($textmessage);
-          $smsGatewayUrl = 'http://173.45.76.227/send.aspx?';
-          $api_element = 'username=kvmhss&pass=kvmhss123&route=trans1&senderid=KVMHSS';
-          $api_params = $api_element.'&numbers='.$parents_num.'&message='.$textmsg;
-          $smsgatewaydata = $smsGatewayUrl.$api_params;
-          $url = $smsgatewaydata;
-
-         $ch = curl_init();
-         curl_setopt($ch, CURLOPT_POST, false);
-         curl_setopt($ch, CURLOPT_URL, $url);
-         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-         $output = curl_exec($ch);
-         curl_close($ch);
-
-         if(!$output)
-         {
-              $output =  file_get_contents($smsgatewaydata);
-            }
-
+            $textmessage='Your child '.$st_name.' was marked '.$abs_status.' -, '.$abs_date.' ON '.$at_ses.' To Known more details login into http://bit.ly/2wLwdRQ';
+            $notes =utf8_encode($textmessage);
+            $this->sendSMS($phone,$notes);
         }
+
+
+
+
       }
 
 

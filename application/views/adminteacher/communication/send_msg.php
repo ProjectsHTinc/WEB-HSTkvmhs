@@ -96,12 +96,16 @@
                </div>
                <!--  end card  -->
             </div>
+            <div id="loading">
+               <center><img src="<?php echo base_url(); ?>assets/loader.gif" id="loading" style="position: absolute;    top: 50%;    left: 80%;"></center>
+            </div>
             <!-- end col-md-12 -->
          </div>
       </div>
    </div>
 </div>
 <script type="text/javascript">
+$("#loading").hide();
    $('#grouping').addClass('active');
    $('#send_msg').validate({ // initialize the plugin
      rules: {
@@ -132,7 +136,7 @@
                    },
                    function(isConfirm) {
                        if (isConfirm) {
-
+                           $("#loading").show();
         $.ajax({
             url: "<?php echo base_url(); ?>teacherprofile/send_msg",
              type:'POST',
@@ -140,7 +144,7 @@
 
             success: function(response) {
                 if(response=="success"){
-                 //  swal("Success!", "Thanks for Your Note!", "success");
+                  $("#loading").hide();
                    $('#send_msg')[0].reset();
                    swal({
             title: "Wow!",
@@ -155,7 +159,7 @@
             }
         });
       }else{
-          swal("Cancelled", response , "error");
+          swal("Cancelled", "Process Cancel" , "error");
       }
     });
    }

@@ -339,7 +339,7 @@
                   </a>
                   <div class="collapse" id="communcicationmenu">
                      <ul class="nav">
-                        <li id="communication1"><a href="<?php echo base_url(); ?>circular/add_circular">Add Circular </a></li>
+                        <li id="communication1"><a href="<?php echo base_url(); ?>circular/add_circular">Send Circular </a></li>
                         <li id="communication2"><a href="<?php echo base_url(); ?>circular/view_circular">View Circular </a></li>
                      </ul>
                   </div>
