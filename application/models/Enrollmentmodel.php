@@ -27,113 +27,101 @@ Class Enrollmentmodel extends CI_Model
 
 //CREATE ADMISSION   ad_enrollment
 
-        function ad_enrollment($admisnid,$admit_year,$formatted_date,$admisn_no,$name,$class,$quota_id,$groups_id,$activity_id,$status){
-        	//echo $admisn_no; echo'<br>'; echo $admisnid;
-			$year_id=$this->getYear();
-          $check_email="SELECT * FROM edu_enrollment WHERE admit_year='$admit_year' AND admit_year='$year_id' AND admisn_no='$admisn_no'";
-          $result=$this->db->query($check_email);
-          if($result->num_rows()==0){
+function ad_enrollment($admisnid,$admit_year,$formatted_date,$admisn_no,$name,$class,$quota_id,$groups_id,$activity_id,$status){
+  //echo $admisn_no; echo'<br>'; echo $admisnid;
+$year_id=$this->getYear();
 
-			  $digits = 6;
-		      $OTP = str_pad(rand(0, pow(10, $digits)-1), $digits, '0', STR_PAD_LEFT);
-			  //echo $OTP;
-              $md5pwd=md5($OTP);
+    $check_email="SELECT * FROM edu_enrollment WHERE admit_year='$admit_year'  AND admission_id='$admisnid'";
 
-			  $admisn="select name,admission_id,admisn_no from edu_admission WHERE admisn_no='".$admisn_no."'"; 
-     	      $resultset = $this->db->query($admisn);
-		      foreach ($resultset->result() as $rows)
-		      {}
-			    if(!empty($admisnid)){
-		        $admisnid=$rows->admission_id; 
-				}else{
-					$admisnid=$admisnid;
-				}
-				//echo  $admisn_no;exit;
-             $query="INSERT INTO edu_enrollment (admission_id,admit_year,admit_date,admisn_no,name,class_id,house_id,extra_curicullar_id,quota_id,created_at,status) VALUES ('$admisnid','$admit_year','$formatted_date','$admisn_no','$name','$class','$groups_id','$activity_id','$quota_id',NOW(),'$status')";
-             $resultset=$this->db->query($query);
-             
-            //Student User Creation
-             $sql="SELECT COUNT(admission_id) AS student FROM edu_admission " ;
-             $resultsql=$this->db->query($sql);
-             $result1= $resultsql->result();
-             $cont=$result1[0]->student;
-			//echo $cont;
-             $user_id=$admisnid+400000;
-              //echo $user_id;
-             $getmail="select email,mobile,name from edu_admission WHERE admission_id='".$admisnid."'";
-     	      $resultset12 = $this->db->query($getmail);
-			  $reu=$resultset12->result();
 
-             foreach($reu as $rows){}
-             $email=$rows->email;
-			 $cell=$rows->mobile;
-			 $sname=$rows->name;
+  $result=$this->db->query($check_email);
 
-			 if(!empty($email))
-			 {
-              $to =$email;
-              $subject ='"Welcome Message"';
-              $htmlContent = '
-			   <html>
-			   <head>  <title></title>
-			   </head>
-			   <body style="background-color:beige;">
-				 <table cellspacing="0" style=" width: 300px; height: 200px;">
-					   <tr>
-						   <th>Email:</th><td>'.$email.'</td>
-					   </tr>
-					   <tr>
-						   <th>Username :</th><td>'.$user_id.'</td>
-					   </tr>
-					   <tr>
-						   <th>Password:</th><td>'.$OTP.'</td>
-					   </tr>
-					   <tr>
-						   <th></th><td><a href="'.base_url() .'">Click here  to Login</a></td>
-					   </tr>
-				   </table>
-			   </body>
-			   </html>';
-			   // Set content-type header for sending HTML email
-			   $headers = "MIME-Version: 1.0" . "\r\n";
-			   $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-			   // Additional headers
-			   $headers .= 'From: happysanz<info@happysanz.com>' . "\r\n";
-			   mail($to,$subject,$htmlContent,$headers);
-			 }
-			 if(!empty($cell))
-			 {
-				$userdetails="Name : " .$sname. ",Username".$user_id.",Password :".$OTP.",";
-				//echo $userdetails;
-				$textmsg =urlencode($userdetails."To Known more details login into http://bit.ly/2wLwdRQ");
-				$smsGatewayUrl = 'http://173.45.76.227/send.aspx?';
-				$api_element = 'username=kvmhss&pass=kvmhss123&route=trans1&senderid=KVMHSS';
-				$api_params = $api_element.'&numbers='.$cell.'&message='.$textmsg;
-				$smsgatewaydata = $smsGatewayUrl.$api_params;
-				$url = $smsgatewaydata;
-				//echo $url;
-				$ch = curl_init();
-				curl_setopt($ch, CURLOPT_POST, false);
-				curl_setopt($ch, CURLOPT_URL, $url);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-				$output = curl_exec($ch);
-				curl_close($ch);
-			 }
+  if($result->num_rows()==0){
 
-              $stude_insert="INSERT INTO edu_users (name,user_name,user_password,user_type,user_master_id,student_id,created_date,updated_date,status) VALUES ('$name','$user_id','$md5pwd','3','$admisnid','$admisnid',NOW(),NOW(),'$status')";
-              $resultset=$this->db->query($stude_insert);
+$digits = 6;
+  $OTP = str_pad(rand(0, pow(10, $digits)-1), $digits, '0', STR_PAD_LEFT);
+//echo $OTP;
+      $md5pwd=md5($OTP);
 
-      		 $query2="UPDATE edu_admission SET enrollment='1' WHERE admission_id='$admisnid'";
-      		 $resultset=$this->db->query($query2);
+$admisn="select name,admission_id,admisn_no from edu_admission WHERE admission_id='".$admisnid."'";
+    $resultset = $this->db->query($admisn);
+  foreach ($resultset->result() as $rows)
+  {}
+  if(!empty($admisnid)){
+    $admisnid=$rows->admission_id;
+}else{
+  $admisnid=$admisnid;
+}
+//echo  $admisn_no;exit;
+     $query="INSERT INTO edu_enrollment (admission_id,admit_year,admit_date,admisn_no,name,class_id,house_id,extra_curicullar_id,quota_id,created_at,status) VALUES ('$admisnid','$admit_year','$formatted_date','$admisn_no','$name','$class','$groups_id','$activity_id','$quota_id',NOW(),'$status')";
+     $resultset=$this->db->query($query);
 
-            $data= array("status" => "success");
-            return $data;
-          }else{
-            $data= array("status" => "Admission Already Exist");
-            return $data;
-          }
+    //Student User Creation
+     $sql="SELECT COUNT(admission_id) AS student FROM edu_admission " ;
+     $resultsql=$this->db->query($sql);
+     $result1= $resultsql->result();
+     $cont=$result1[0]->student;
+//echo $cont;
+     $user_id=$admisnid+400000;
+      //echo $user_id;
+     $getmail="select email,mobile,name from edu_admission WHERE admission_id='".$admisnid."'";
+    $resultset12 = $this->db->query($getmail);
+$reu=$resultset12->result();
 
-       }
+     foreach($reu as $rows){}
+     $email=$rows->email;
+$cell=$rows->mobile;
+$sname=$rows->name;
+
+if(!empty($email))
+{
+      $to =$email;
+      $subject ='"Welcome Message"';
+      $htmlContent = '
+ <html>
+ <head>  <title></title>
+ </head>
+ <body style="background-color:beige;">
+ <table cellspacing="0" style=" width: 300px; height: 200px;">
+     <tr>
+       <th>Email:</th><td>'.$email.'</td>
+     </tr>
+     <tr>
+       <th>Username :</th><td>'.$user_id.'</td>
+     </tr>
+     <tr>
+       <th>Password:</th><td>'.$OTP.'</td>
+     </tr>
+     <tr>
+       <th></th><td><a href="'.base_url() .'">Click here  to Login</a></td>
+     </tr>
+   </table>
+ </body>
+ </html>';
+ // Set content-type header for sending HTML email
+ $headers = "MIME-Version: 1.0" . "\r\n";
+ $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+ // Additional headers
+ $headers .= 'From: happysanz<info@happysanz.com>' . "\r\n";
+ mail($to,$subject,$htmlContent,$headers);
+}
+
+
+      $stude_insert="INSERT INTO edu_users (name,user_name,user_password,user_type,user_master_id,student_id,created_date,updated_date,status) VALUES ('$name','$user_id','$md5pwd','3','$admisnid','$admisnid',NOW(),NOW(),'$status')";
+      $resultset=$this->db->query($stude_insert);
+
+     $query2="UPDATE edu_admission SET enrollment='1' WHERE admission_id='$admisnid'";
+
+   $resultset=$this->db->query($query2);
+
+    $data= array("status" => "success");
+    return $data;
+  }else{
+    $data= array("status" => "Admission Already Exist");
+    return $data;
+  }
+
+}
 
 	   function add_enrollment($admission_id)
 	   {
@@ -248,7 +236,7 @@ Class Enrollmentmodel extends CI_Model
 		  foreach ($resultset->result() as $rows)
 		  {
 		   echo $rows->name;
-		   //echo $rows->admission_id;  
+		   //echo $rows->admission_id;
 		   exit;
 		  }
 

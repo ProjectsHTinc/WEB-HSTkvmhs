@@ -332,8 +332,8 @@ $('#promo1').addClass('active');
                 required: true
             },
             next_year_id: {
-                required: true,
-                notEqualTo: "#year_id"
+                required: true
+                // notEqualTo: "#year_id"
             },
             class_master_id_for_last_academic_year: {
                 required: true
@@ -360,7 +360,7 @@ $('#promo1').addClass('active');
             status: "select status"
 
         },
-  
+
         submitHandler: function(form) {
          //alert("hi");
          swal({
