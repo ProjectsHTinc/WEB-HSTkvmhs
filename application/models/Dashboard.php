@@ -356,7 +356,7 @@ Class Dashboard extends CI_Model
     (SELECT GROUP_CONCAT(p.name,'- (',p.mobile,')' SEPARATOR ',') FROM edu_parents AS p
     WHERE FIND_IN_SET (p.id,a.parnt_guardn_id)) AS parentsname FROM edu_admission AS a
     INNER JOIN edu_enrollment AS e ON a.admission_id= e.admission_id INNER JOIN edu_classmaster AS cm ON e.class_id = cm.class_sec_id
-    INNER JOIN edu_class AS c ON  cm.class=c.class_id INNER JOIN edu_sections AS s ON cm.section=s.sec_id WHERE e.class_id='$class_sec' AND e.admit_year='$year_id' AND   e.name LIKE '$ser_txt%'";
+    INNER JOIN edu_class AS c ON  cm.class=c.class_id INNER JOIN edu_sections AS s ON cm.section=s.sec_id WHERE e.class_id='$class_sec' AND e.admit_year='$year_id' AND e.status='Active' AND   e.name LIKE '$ser_txt%'";
 
          $result=$this->db->query($query);
          if($result->num_rows()==0){
