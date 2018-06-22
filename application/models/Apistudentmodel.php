@@ -92,7 +92,7 @@ class Apistudentmodel extends CI_Model {
 			$year_id = $this->getYear();
 			$term_id = $this->getTerm();
 			
-			$timetable_query = "SELECT tt.table_id,tt.class_id,tt.subject_id,COALESCE(s.subject_name, '') as subject_name,tt.teacher_id,te.name,tt.day,tt.period,ss.sec_name,c.class_name
+			$timetable_query = "SELECT tt.table_id,tt.class_id,tt.subject_id,COALESCE(s.subject_name, '') as subject_name,tt.teacher_id,te.name,tt.day as day_id,tt.period,tt.from_time,tt.to_time,tt.is_break,ss.sec_name,c.class_name
 			FROM edu_timetable AS tt LEFT JOIN edu_teachers AS te ON tt.teacher_id = te.teacher_id LEFT JOIN edu_subject AS s ON tt.subject_id=s.subject_id INNER JOIN edu_classmaster AS cm ON tt.class_id=cm.class_sec_id INNER JOIN edu_class AS c ON cm.class=c.class_id INNER JOIN edu_sections AS ss ON cm.section=ss.sec_id WHERE tt.class_id = '$class_id' AND tt.year_id='$year_id' AND tt.term_id='$term_id' ORDER BY tt.table_id";
 			$timetable_res = $this->db->query($timetable_query);
 			$timetable_result= $timetable_res->result();

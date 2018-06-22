@@ -107,7 +107,7 @@ class Apiadminmodel extends CI_Model {
               foreach($result as $rows){   }
               $classid=$rows->class_sec_id;
               $year_id=$this->getYear();
-            $stu_list="SELECT eer.name,eer.enroll_id,eer.admisn_no,ea.sex,ea.admisn_year,eer.class_id FROM edu_enrollment AS eer LEFT JOIN edu_admission AS ea ON ea.admission_id=eer.admission_id WHERE eer.class_id='$classid' AND eer.admit_year='$year_id' AND eer.status='Active' order by eer.enroll_id asc";
+            $stu_list="SELECT eer.name,eer.enroll_id,ea.admisn_no,ea.sex,ea.admisn_year,eer.class_id FROM edu_enrollment AS eer LEFT JOIN edu_admission AS ea ON ea.admission_id=eer.admission_id WHERE eer.class_id='$classid' AND eer.admit_year='$year_id' AND eer.status='Active' order by eer.enroll_id asc";
             $res_stu=$this->db->query($stu_list);
               $result_stud=$res_stu->result();
             if($res->num_rows()==0){
@@ -341,8 +341,7 @@ class Apiadminmodel extends CI_Model {
                 //#################### GET  ALL TEACHERS ####################//
 
             function get_all_teachers(){
-              $sql="SELECT et.name,et.sex,et.age,et.class_teacher,c.class_name,s.sec_name,et.subject,esu.subject_name,et.teacher_id FROM edu_teachers
-              AS et LEFT JOIN edu_classmaster AS cm ON et.class_teacher=cm.class_sec_id LEFT JOIN edu_class AS c ON cm.class=c.class_id LEFT JOIN edu_sections AS s ON  cm.section=s.sec_id LEFT JOIN edu_subject AS esu ON et.subject=esu.subject_id WHERE et.status='Active' order by et.teacher_id asc";
+              $sql="SELECT et.name, et.sex, et.age, et.class_teacher, IF(c.class_name IS NULL, '', c.class_name) as class_name, IF(s.sec_name IS NULL, '', s.sec_name) as sec_name, et.subject, IF(esu.subject_name IS NULL, '',esu.subject_name) as subject_name, et.teacher_id FROM edu_teachers AS et LEFT JOIN edu_classmaster AS cm ON et.class_teacher = cm.class_sec_id LEFT JOIN edu_class AS c ON cm.class = c.class_id LEFT JOIN edu_sections AS s ON cm.section = s.sec_id LEFT JOIN edu_subject AS esu ON et.subject = esu.subject_id WHERE et.status = 'Active' ORDER BY et.teacher_id ASC";
               $res=$this->db->query($sql);
               if($res->num_rows()==0){
                   $data=array("status"=>"error","msg"=>"nodata");
@@ -407,7 +406,7 @@ class Apiadminmodel extends CI_Model {
 						}
 
 
-						$timetable_query = "SELECT tt.table_id,tt.class_id,tt.subject_id,s.subject_name,tt.teacher_id,t.name,tt.day,tt.period,ss.sec_name,c.class_name FROM edu_timetable AS tt LEFT JOIN edu_subject AS s ON tt.subject_id=s.subject_id LEFT JOIN edu_teachers AS t ON tt.teacher_id=t.teacher_id INNER JOIN edu_classmaster AS cm ON tt.class_id=cm.class_sec_id INNER JOIN edu_class AS c ON cm.class=c.class_id INNER JOIN edu_sections AS ss ON cm.section=ss.sec_id WHERE tt.teacher_id ='$teacher_id' AND tt.year_id='$year_id' ORDER BY tt.day, tt.period";
+						$timetable_query = "SELECT tt.table_id,tt.class_id,tt.subject_id,s.subject_name,tt.teacher_id,t.name,tt.day as day_id,tt.period,tt.from_time,tt.to_time,tt.is_break,ss.sec_name,c.class_name FROM edu_timetable AS tt LEFT JOIN edu_subject AS s ON tt.subject_id=s.subject_id LEFT JOIN edu_teachers AS t ON tt.teacher_id=t.teacher_id INNER JOIN edu_classmaster AS cm ON tt.class_id=cm.class_sec_id INNER JOIN edu_class AS c ON cm.class=c.class_id INNER JOIN edu_sections AS ss ON cm.section=ss.sec_id WHERE tt.teacher_id ='$teacher_id' AND tt.year_id='$year_id' ORDER BY tt.day, tt.period";
 						$timetable_res = $this->db->query($timetable_query);
 
 						 if($timetable_res->num_rows()==0){
@@ -556,7 +555,7 @@ class Apiadminmodel extends CI_Model {
                       $admisson_id = $rows->admission_id;
                   }
 
-                   $enroll_query = "SELECT A.enroll_id,A.admission_id,A.admisn_no,A.class_id,A.name,C.class_name,D.sec_name,EA.sex,A.admit_year FROM edu_enrollment A, edu_classmaster B, edu_class C, edu_sections D ,edu_admission EA WHERE A.class_id = B.class_sec_id AND B.class = C.class_id AND B.section = D.sec_id AND EA.admission_id=A.admission_id AND A.admit_year ='$year_id' AND A.admission_id IN ($admisson_id)";
+                   $enroll_query = "SELECT A.enroll_id,A.admission_id,EA.admisn_no,A.class_id,A.name,C.class_name,D.sec_name,EA.sex,A.admit_year FROM edu_enrollment A, edu_classmaster B, edu_class C, edu_sections D ,edu_admission EA WHERE A.class_id = B.class_sec_id AND B.class = C.class_id AND B.section = D.sec_id AND EA.admission_id=A.admission_id AND A.admit_year ='$year_id' AND A.admission_id IN ($admisson_id)";
                   $enroll_res = $this->db->query($enroll_query);
                   $stu_enroll_res= $enroll_res->result();
 

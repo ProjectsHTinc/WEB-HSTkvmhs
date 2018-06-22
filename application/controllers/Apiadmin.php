@@ -5,11 +5,9 @@ class Apiadmin extends CI_Controller {
 	function __construct() {
 		 parent::__construct();
 
-		 	$this->load->model('apiadminmodel');
+		 $this->load->model('apiadminmodel');
 		  $this->load->helper('url');
 		  $this->load->library('session');
-
-
  }
 
 	/**
