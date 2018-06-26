@@ -161,7 +161,7 @@
                   type:'POST',
                   data: $('#homeworkform').serialize(),
                   success: function(response) {
-                    alert(response);
+                  //  alert(response);
                     if(response=="success")
                     {
                       //  swal("Success!", "Thanks for Your Note!", "success");

@@ -347,21 +347,29 @@ Class Smsmodel extends CI_Model
 		  {  $cell[]=$res->mobile;
 		     //echo $num=implode(',',$cell); echo"<br>";
 			}
-		  $sms="SELECT h.title,h.hw_details,h.hw_type,h.test_date,s.subject_name FROM edu_homework AS h,edu_subject AS s WHERE h.class_id='$clssid' AND h.year_id='$year_id' AND DATE_FORMAT(h.created_at,'%Y-%m-%d')='$createdate' AND h.subject_id=s.subject_id";
+		    //$sms="SELECT h.title,h.hw_details,h.hw_type,h.test_date,s.subject_name FROM edu_homework AS h,edu_subject AS s WHERE h.class_id='$clssid' AND h.year_id='$year_id' AND DATE_FORMAT(h.created_at,'%Y-%m-%d')='$createdate' AND h.subject_id=s.subject_id";
+        $sms="SELECT h.title,h.hw_details,h.hw_type,h.test_date,s.subject_name,IFNULL(c.class_name, '') AS class_name,IFNULL(se.sec_name, '') AS sec_name FROM edu_homework AS h
+        LEFT JOIN edu_subject AS s ON s.subject_id=h.subject_id
+        LEFT JOIN edu_classmaster AS cm ON h.class_id=cm.class_sec_id
+        LEFT JOIN edu_class AS c ON cm.class=c.class_id
+        LEFT JOIN edu_sections AS se ON  cm.section=se.sec_id
+        WHERE h.class_id='$clssid' AND h.year_id='$year_id' AND DATE_FORMAT(h.created_at,'%Y-%m-%d')='$createdate' AND h.subject_id=s.subject_id";
 		  $sms1=$this->db->query($sms);
 		  $sms2= $sms1->result();
 		  //return $sms2;
 		  foreach ($sms2 as $value)
           {
-            $hwtitle=$value->title;
-		    $hwdetails=$value->hw_details;
+      $hwtitle=$value->title;
+		  $hwdetails=$value->hw_details;
 			$subname=$value->subject_name;
 			$ht=$value->hw_type;
 			$tdat=$value->test_date;
+      $class_name=$value->class_name.'-'.$value->sec_name;
 
 			if($ht=='HW'){ $type="Home Work" ; }else{ $type="Class Test" ; }
 
-			$message="Title : " .$hwtitle. ",Type : " .$type. ", Details : " .$hwdetails .", Subject : ".$subname.",";
+			 $message="Subject : " .$subname. ", Details : " .$hwdetails .",";
+
 			$home_work_details[]=$message;
 		  }
 			//print_r($home_work_details);
@@ -369,13 +377,9 @@ Class Smsmodel extends CI_Model
 			   $phone=implode(',',$cell);
 			   $count1=count($cell);
 
-				$textmsg =urlencode($hdetails);
-				// $smsGatewayUrl = 'http://173.45.76.227/send.aspx?';
-				// $api_element = 'username=kvmhss&pass=kvmhss123&route=trans1&senderid=KVMHSS';
-				// $api_params = $api_element.'&numbers='.$num.'&message='.$textmsg;
-				// $smsgatewaydata = $smsGatewayUrl.$api_params;
+				 $textmsg =urlencode($hdetails);
+         $notes =utf8_encode("Dear parents class $class_name'-'$hdetails" );
 
-         $notes =utf8_encode($textmsg);
          $stat=$this->sendSMS($phone,$notes);
         if($notes){
            $data= array("status" => "success");
