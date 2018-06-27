@@ -359,7 +359,7 @@ Class Mailmodel extends CI_Model
 		{
 		   $year_id=$this->getYear();
 
-		   $pcell="SELECT p.email FROM edu_parents AS p,edu_enrollment AS e WHERE e.class_id='$clssid' AND FIND_IN_SET( e.admission_id,p.admission_id) GROUP BY p.name";
+		   $pcell="SELECT p.email FROM edu_parents AS p,edu_enrollment AS e WHERE e.class_id='$clssid' AND e.admit_year='$year_id' AND FIND_IN_SET( e.admission_id,p.admission_id) GROUP BY p.name";
 		  $pcell1=$this->db->query($pcell);
 		  $pcel2=$pcell1->result();
 		  foreach($pcel2 as $res)

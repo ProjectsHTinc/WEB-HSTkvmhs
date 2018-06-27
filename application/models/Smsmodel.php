@@ -117,7 +117,8 @@ Class Smsmodel extends CI_Model
 
   function send_circular_via_sms($title,$notes,$tusers_id,$stusers_id,$pusers_id,$users_id)
   {
-      	$ssql = "SELECT * FROM edu_circular_master WHERE id ='$title'";
+     $year_id=$this->getYear();
+    $ssql = "SELECT * FROM edu_circular_master WHERE id ='$title'";
 		$res = $this->db->query($ssql);
 		$result =$res->result();
 		foreach($result as $rows)
@@ -156,7 +157,7 @@ Class Smsmodel extends CI_Model
 				   for ($i=0;$i<$scountid;$i++)
 				 {
 					$clsid=$stusers_id[$i];
-    				$sql1="SELECT e.enroll_id,e.admission_id,e.admisn_no,e.name,e.class_id,a.admission_id,a.admisn_no,a.name,a.mobile FROM edu_enrollment AS e,edu_admission AS a WHERE e.class_id='$clsid' AND e.admission_id=a.admission_id ";
+    				$sql1="SELECT e.enroll_id,e.admission_id,e.admisn_no,e.name,e.class_id,a.admission_id,a.admisn_no,a.name,a.mobile FROM edu_enrollment AS e,edu_admission AS a WHERE e.class_id='$clsid' AND e.admit_year='$year_id' AND e.admission_id=a.admission_id ";
 					$scell=$this->db->query($sql1);
 					$res1=$scell->result();
 					foreach($res1 as $row1)
@@ -181,7 +182,7 @@ Class Smsmodel extends CI_Model
 			 {
 				$classid=$pusers_id[$i];
 
-				 $pgid="SELECT e.enroll_id,e.admission_id,e.admisn_no,e.name,e.class_id FROM edu_enrollment AS e WHERE e.class_id='$classid'";
+				 $pgid="SELECT e.enroll_id,e.admission_id,e.admisn_no,e.name,e.class_id FROM edu_enrollment AS e WHERE e.class_id='$classid' AND e.admit_year='$year_id'";
 				 $pcell=$this->db->query($pgid);
 				 $res2=$pcell->result();
 				 foreach($res2 as $row2)
@@ -340,7 +341,7 @@ Class Smsmodel extends CI_Model
 		{
 		   $year_id=$this->getYear();
 
-		   $pcell="SELECT p.mobile FROM edu_parents AS p,edu_enrollment AS e WHERE e.class_id='$clssid' AND FIND_IN_SET( e.admission_id,p.admission_id) GROUP BY p.name";
+		   $pcell="SELECT p.mobile FROM edu_parents AS p,edu_enrollment AS e WHERE e.class_id='$clssid' AND FIND_IN_SET( e.admission_id,p.admission_id) AND e.admit_year='$year_id' GROUP BY p.name";
 		  $pcell1=$this->db->query($pcell);
 		  $pcel2=$pcell1->result();
 		  foreach($pcel2 as $res)
@@ -368,7 +369,7 @@ Class Smsmodel extends CI_Model
 
 			if($ht=='HW'){ $type="Home Work" ; }else{ $type="Class Test" ; }
 
-			 $message="Subject : " .$subname. ", Details : " .$hwdetails .",";
+			   $message=$subname.'-'.$hwdetails.'.';
 
 			$home_work_details[]=$message;
 		  }
