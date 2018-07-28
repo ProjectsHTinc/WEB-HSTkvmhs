@@ -328,10 +328,12 @@ class Apimainmodel extends CI_Model {
 
 						$stud_query = "SELECT
                                         A.enroll_id,
+										A.status,
                                         A.admission_id,
                                         A.class_id,
                                         A.name,
                                         F.subject_name as pref_language,
+										E.status,
                                         CONCAT(C.class_name, ' ', D.sec_name) AS class_section
                                     FROM
                                         edu_enrollment A,
@@ -341,7 +343,7 @@ class Apimainmodel extends CI_Model {
                                         edu_admission E,
                                         edu_subject F
                                     WHERE
-                                        A.class_id = B.class_sec_id AND B.class = C.class_id AND B.section = D.sec_id AND A.admission_id = E.admission_id AND E.language = F.subject_id AND A.admit_year = '$year_id' AND A.class_id IN(SELECT DISTINCT class_master_id from edu_teacher_handling_subject WHERE teacher_id ='$teacher_id') ORDER BY A.class_id";
+                                        A.class_id = B.class_sec_id AND B.class = C.class_id AND B.section = D.sec_id AND A.admission_id = E.admission_id AND E.language = F.subject_id AND A.admit_year = '$year_id' AND A.status = 'Active' AND E.status = 'Active' AND A.class_id IN(SELECT DISTINCT class_master_id from edu_teacher_handling_subject WHERE teacher_id ='$teacher_id') ORDER BY A.class_id";
 
 						$stud_res = $this->db->query($stud_query);
 
