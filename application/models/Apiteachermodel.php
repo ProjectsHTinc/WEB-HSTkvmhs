@@ -133,7 +133,7 @@ class Apiteachermodel extends CI_Model {
                         INNER JOIN edu_attendence AS at ON ah.attend_id = at.at_id
                         INNER JOIN edu_classmaster AS cm ON en.class_id = cm.class_sec_id
                         INNER JOIN edu_class AS c ON cm.class=c.class_id 
-                        INNER JOIN edu_sections AS s ON cm.section=s.sec_id WHERE en.class_id='$class_id' AND en.admit_year = '$year_id' AND ah.abs_date = '$disp_date' GROUP by ah.student_id
+                        INNER JOIN edu_sections AS s ON cm.section=s.sec_id WHERE en.class_id='$class_id' AND en.admit_year = '$year_id' AND ah.abs_date = '$disp_date' AND en.status='Active' GROUP by ah.student_id
                         
                         UNION ALL
                         
@@ -141,13 +141,13 @@ class Apiteachermodel extends CI_Model {
                         FROM edu_enrollment en
                         INNER JOIN edu_classmaster AS cm ON en.class_id = cm.class_sec_id
                         INNER JOIN edu_class AS c ON cm.class=c.class_id 
-                        INNER JOIN edu_sections AS s ON cm.section=s.sec_id WHERE en.class_id='$class_id'  AND en.admit_year = '$year_id' AND en.enroll_id 
+                        INNER JOIN edu_sections AS s ON cm.section=s.sec_id WHERE en.class_id='$class_id'  AND en.admit_year = '$year_id' AND en.status='Active' AND en.enroll_id 
                         NOT IN (SELECT en.enroll_id FROM edu_enrollment en
                         INNER JOIN edu_attendance_history AS ah ON en.enroll_id = ah.student_id
                         INNER JOIN edu_attendence AS at ON ah.attend_id = at.at_id
                         INNER JOIN edu_classmaster AS cm ON en.class_id = cm.class_sec_id
                         INNER JOIN edu_class AS c ON cm.class=c.class_id 
-                        INNER JOIN edu_sections AS s ON cm.section=s.sec_id WHERE en.class_id='$class_id' AND ah.abs_date = '$disp_date' GROUP by ah.student_id)  GROUP by en.enroll_id";
+                        INNER JOIN edu_sections AS s ON cm.section=s.sec_id WHERE en.class_id='$class_id' AND ah.abs_date = '$disp_date' AND en.status='Active' GROUP by ah.student_id)  GROUP by en.enroll_id";
     				
         				$attend_res = $this->db->query($attend_query);
             			$attend_result= $attend_res->result();
@@ -180,7 +180,7 @@ class Apiteachermodel extends CI_Model {
                     INNER JOIN edu_attendence AS at ON ah.attend_id = at.at_id
                     INNER JOIN edu_classmaster AS cm ON en.class_id = cm.class_sec_id
                     INNER JOIN edu_class AS c ON cm.class=c.class_id 
-                    INNER JOIN edu_sections AS s ON cm.section=s.sec_id WHERE en.class_id='$class_id' AND en.admit_year = '$year_id' AND ah.abs_date >= '$first_date' AND ah.abs_date <= '$last_date' 
+                    INNER JOIN edu_sections AS s ON cm.section=s.sec_id WHERE en.class_id='$class_id' AND en.status='Active' AND en.admit_year = '$year_id' AND ah.abs_date >= '$first_date' AND ah.abs_date <= '$last_date' 
                     GROUP BY ah.student_id
 
                     UNION ALL
@@ -188,13 +188,13 @@ class Apiteachermodel extends CI_Model {
                     SELECT count(en.enroll_id) as leaves,en.enroll_id, en.class_id, en.name, c.class_name, s.sec_name, '' as abs_date, 'P' as a_status, '' as attend_period,'' as at_id FROM edu_enrollment en 
                     INNER JOIN edu_classmaster AS cm ON en.class_id = cm.class_sec_id
                     INNER JOIN edu_class AS c ON cm.class=c.class_id 
-                    INNER JOIN edu_sections AS s ON cm.section=s.sec_id WHERE en.class_id='$class_id' AND en.admit_year = '$year_id' AND en.enroll_id 
+                    INNER JOIN edu_sections AS s ON cm.section=s.sec_id WHERE en.class_id='$class_id' AND en.status='Active' AND en.admit_year = '$year_id' AND en.enroll_id 
                     NOT IN (SELECT en.enroll_id FROM edu_enrollment en
                     INNER JOIN edu_attendance_history AS ah ON en.enroll_id = ah.student_id
                     INNER JOIN edu_attendence AS at ON ah.attend_id = at.at_id
                     INNER JOIN edu_classmaster AS cm ON en.class_id = cm.class_sec_id
                     INNER JOIN edu_class AS c ON cm.class=c.class_id 
-                    INNER JOIN edu_sections AS s ON cm.section=s.sec_id WHERE en.class_id='$class_id' AND ah.abs_date >= '$first_date' AND ah.abs_date <= '$last_date')
+                    INNER JOIN edu_sections AS s ON cm.section=s.sec_id WHERE en.class_id='$class_id' AND en.status='Active' AND ah.abs_date >= '$first_date' AND ah.abs_date <= '$last_date')
                     GROUP BY en.enroll_id";
                     
                     $attend_res = $this->db->query($attend_query);
@@ -296,7 +296,7 @@ class Apiteachermodel extends CI_Model {
 	{
 			$year_id = $this->getYear();
 			
-			$hw_query = "SELECT B.name, A.marks  FROM `edu_class_marks`A, edu_enrollment B WHERE A.enroll_mas_id = B.enroll_id AND A.hw_mas_id = '$hw_id'";
+			$hw_query = "SELECT B.name, A.marks FROM `edu_class_marks`A, edu_enrollment B WHERE A.enroll_mas_id = B.enroll_id AND B.status ='Active' AND A.hw_mas_id = '$hw_id'";
 		
 			$hw_res = $this->db->query($hw_query);
 			$hw_result= $hw_res->result();
@@ -441,10 +441,10 @@ class Apiteachermodel extends CI_Model {
 			$year_id = $this->getYear();
 			
 			if ($is_internal_external =='0') {
-			  	$mark_query = "SELECT C.exam_name, B.subject_name, D.name, A.internal_mark, A.internal_grade, A.external_mark,A.external_grade, A.total_marks, A.total_grade FROM `edu_exam_marks` A, `edu_subject` B, `edu_examination` C, `edu_enrollment` D WHERE A.`exam_id` = '$exam_id' AND A.`classmaster_id` = '$class_id' AND A.subject_id = '$subject_id' AND A.subject_id = B.subject_id AND A.exam_id = C.exam_id AND A.stu_id = D.enroll_id";
+			  	$mark_query = "SELECT C.exam_name, B.subject_name, D.name, A.internal_mark, A.internal_grade, A.external_mark,A.external_grade, A.total_marks, A.total_grade FROM `edu_exam_marks` A, `edu_subject` B, `edu_examination` C, `edu_enrollment` D WHERE A.`exam_id` = '$exam_id' AND A.`classmaster_id` = '$class_id' AND A.subject_id = '$subject_id' AND A.subject_id = B.subject_id AND A.exam_id = C.exam_id AND A.stu_id = D.enroll_id AND D.status='Active'";
 		  
 			} else {
-				$mark_query = "SELECT C.exam_name, B.subject_name, D.name, A.internal_mark, A.internal_grade, A.external_mark,A.external_grade, A.total_marks, A.total_grade FROM `edu_exam_marks` A, `edu_subject` B, `edu_examination` C, `edu_enrollment` D WHERE A.`exam_id` = '$exam_id' AND A.`classmaster_id` = '$class_id' AND A.subject_id = '$subject_id' AND A.subject_id = B.subject_id AND A.exam_id = C.exam_id AND A.stu_id = D.enroll_id";
+				$mark_query = "SELECT C.exam_name, B.subject_name, D.name, A.internal_mark, A.internal_grade, A.external_mark,A.external_grade, A.total_marks, A.total_grade FROM `edu_exam_marks` A, `edu_subject` B, `edu_examination` C, `edu_enrollment` D WHERE A.`exam_id` = '$exam_id' AND A.`classmaster_id` = '$class_id' AND A.subject_id = '$subject_id' AND A.subject_id = B.subject_id AND A.exam_id = C.exam_id AND A.stu_id = D.enroll_id AND D.status='Active'";
 			}
 			
 			$mark_res = $this->db->query($mark_query);
