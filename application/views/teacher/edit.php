@@ -287,7 +287,7 @@
    rules: {
 
    name:{required:true }, address:{required:true },
-   email:{required:true,email:true,  remote: {
+   email:{required:false,email:true,  remote: {
                 url: "<?php echo base_url(); ?>teacher/email_checker/<?php echo $rows->teacher_id; ?>",
                 type: "post"
              }

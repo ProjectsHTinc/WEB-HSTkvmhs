@@ -10,6 +10,22 @@ Class Examinationresultmodel extends CI_Model
     }
 
 
+    function getYear()
+      {
+        $sqlYear = "SELECT * FROM edu_academic_year WHERE NOW() >= from_month AND NOW() <= to_month AND status = 'Active'";
+        $year_result = $this->db->query($sqlYear);
+        $ress_year = $year_result->result();
+
+        if($year_result->num_rows()==1)
+        {
+          foreach ($year_result->result() as $rows)
+          {
+              $year_id = $rows->year_id;
+          }
+          return $year_id;
+        }
+      }
+
     function get_teacher_id($user_id)
     {
         $query     = "SELECT teacher_id FROM edu_users WHERE user_id='$user_id'";
@@ -171,13 +187,14 @@ Class Examinationresultmodel extends CI_Model
 	}
     function getall_cls_sec_stu($user_id,$sub_id,$cls_masid,$exam_id,$user_type)
     {
+    $year_id=$this->getYear();
     $query     = "SELECT teacher_id,user_master_id FROM edu_users WHERE user_id='$user_id' AND user_type='$user_type'";
         $resultset = $this->db->query($query);
         $row       = $resultset->result();
         foreach ($row as $rows) {}
         $teacher_id = $rows->user_master_id;
         //echo $teacher_id;exit;  AND en.name=a.name
-          $sql="SELECT t.teacher_id,t.subject_id,t.class_master_id,su.subject_id,su.subject_name,en.enroll_id,en.admission_id,en.name,en.class_id,en.status,en.admisn_no,a.admission_id,a.admisn_no,a.name,a.sex,a.status,a.language FROM edu_subject AS su,edu_teacher_handling_subject AS t,edu_enrollment AS en,edu_admission AS a WHERE t.subject_id='$sub_id' AND t.subject_id=su.subject_id AND en.class_id='$cls_masid' AND t.class_master_id=en.class_id AND t.teacher_id='$teacher_id' AND en.status='Active' AND a.status='Active' AND en.admission_id=a.admission_id GROUP by en.enroll_id  ORDER BY a.sex DESC,en.name ASC";
+          $sql="SELECT t.teacher_id,t.subject_id,t.class_master_id,su.subject_id,su.subject_name,en.enroll_id,en.admission_id,en.name,en.class_id,en.status,en.admisn_no,a.admission_id,a.admisn_no,a.name,a.sex,a.status,a.language FROM edu_subject AS su,edu_teacher_handling_subject AS t,edu_enrollment AS en,edu_admission AS a WHERE t.subject_id='$sub_id' AND t.subject_id=su.subject_id AND en.class_id='$cls_masid' AND t.class_master_id=en.class_id AND t.teacher_id='$teacher_id' AND admit_year='$year_id' AND en.status='Active' AND a.status='Active' AND en.admission_id=a.admission_id GROUP by en.enroll_id  ORDER BY a.sex DESC,en.name ASC";
         $res        = $this->db->query($sql);
         $result     = $res->result();
         return $result;
@@ -274,6 +291,7 @@ Class Examinationresultmodel extends CI_Model
 
     function getall_stuname($user_id, $cls_masid, $exam_id)
     {
+        $year_id=$this->getYear();
         $query     = "SELECT teacher_id FROM edu_users WHERE user_id='$user_id'";
         $resultset = $this->db->query($query);
         $row       = $resultset->result();
@@ -282,7 +300,7 @@ Class Examinationresultmodel extends CI_Model
         //echo $teacher_id;exit;
         //$sql="SELECT t.teacher_id,t.class_teacher,t.name,t.subject,en.enroll_id,en.name,en.admisn_no,en.class_id FROM edu_teachers AS t,edu_enrollment AS en WHERE t.teacher_id='$teacher_id' AND en.class_id='$cls_masid'";
 
-		
+
 		$sql  = "SELECT
 			en.enroll_id,
 			en.name,
@@ -304,15 +322,15 @@ Class Examinationresultmodel extends CI_Model
 			a.language,
 			s.subject_name,
 			s.is_preferred_lang,
-			if(s.is_preferred_lang='1',s.subject_name,'') AS pref_language 
+			if(s.is_preferred_lang='1',s.subject_name,'') AS pref_language
 		FROM
 			edu_enrollment AS en,
 			edu_exam_marks AS m,
 			edu_admission AS a,
 			edu_subject AS s
 		WHERE
-			en.class_id = '$cls_masid' AND en.enroll_id = m.stu_id AND m.exam_id = '$exam_id' AND en.admission_id = a.admission_id AND s.subject_id = a.language ORDER BY a.sex DESC,en.name ASC";
-			
+			en.class_id = '$cls_masid' AND en.admit_year='$year_id' AND en.enroll_id = m.stu_id AND m.exam_id = '$exam_id' AND en.admission_id = a.admission_id AND s.subject_id = a.language ORDER BY a.sex DESC,en.name ASC";
+
           //$sql  = "SELECT en.enroll_id,en.name,en.admission_id,en.admisn_no,en.class_id,m.subject_id,m.classmaster_id,m.internal_mark,m.internal_grade,m.external_mark,m.external_grade,m.total_marks,m.total_grade,a.admission_id,a.admisn_no,a.name,a.sex,a.language,s.subject_name FROM edu_enrollment AS en,edu_exam_marks AS m,edu_admission AS a LEFT JOIN edu_subject AS s ON s.subject_id=a.language  WHERE en.class_id='$cls_masid' AND en.enroll_id=m.stu_id AND m.exam_id='$exam_id' AND en.admission_id=a.admission_id  ORDER BY a.sex DESC,en.name ASC";
 
 		//SELECT en.enroll_id,en.name,en.admission_id,en.admisn_no,en.class_id,m.subject_id,m.classmaster_id,m.internal_mark,m.internal_grade,m.external_mark,m.external_grade,m.total_marks,m.total_grade,a.admission_id,a.admisn_no,a.name,a.sex FROM edu_enrollment AS en,edu_exam_marks AS m,edu_admission AS a WHERE en.class_id='$cls_masid' AND en.enroll_id=m.stu_id AND m.exam_id='$exam_id' AND en.admission_id=a.admission_id AND en.name=a.name AND en.admisn_no=a.admisn_no ORDER BY a.sex DESC,en.name ASC

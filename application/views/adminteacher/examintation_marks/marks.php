@@ -91,7 +91,7 @@
                                  <td style="width:05%;"><?php echo $i;?></td>
                                  <td style="width:15%;">
                                     <?php  $stdid=$rows->name;
-                                       echo $stdid; echo ' '; echo '('; echo ' '; echo $sub_name; echo ' '; echo ')';
+                                       echo $stdid;
                                        ?>
                                  </td>
                                  <?php
@@ -122,7 +122,7 @@
                                  <td style="width:15%;"><?php echo $i;?></td>
                                  <td style="width:25%;">
                                     <?php  $stdid=$rows->name;
-                                       echo $stdid; echo ' '; echo '('; echo ' '; echo $sub_name; echo ' '; echo ')'; ?>
+                                       echo $stdid;  ?>
                                  </td>
                                  <?php  if(is_numeric($tm)){ ?>
                                  <td style="width:30%;"><?php echo $rows->total_marks; ?> ( <?php echo $rows->total_grade; ?> )</td>
@@ -147,7 +147,7 @@
                               <tr>
                                  <td><?php echo $i;?></td>
                                  <td style="">
-                                  <?php echo $row->name; echo' '; echo'('; echo' '; echo $sub_name; echo' '; echo')'; ?>
+                                  <?php echo $row->name;  ?>
                                     <input type="hidden" name="sutid[]" value="<?php echo $row->enroll_id; ?>" />
                                     <input type="hidden" name="teaid" value="<?php echo $row->teacher_id; ?>" />
                                     <input type="hidden" name="clsmastid" value="<?php echo $row->class_id; ?>" />

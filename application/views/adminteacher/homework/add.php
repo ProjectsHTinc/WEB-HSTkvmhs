@@ -6,7 +6,7 @@
 <div class="main-panel">
    <div class="content">
       <div class="container-fluid">
-	  
+
 	  <?php if(empty($cls_tutor)){  }else{ ?>
 	  <div class="row">
             <div class="col-md-12">
@@ -16,7 +16,7 @@
                   </div>
                   <div class="content">
                      <div class="row">
-                        <?php 
+                        <?php
                             foreach($cls_tutor as $rows1)
                               {
                            	 $cls_tutor_id=$rows1->class_teacher;
@@ -33,7 +33,7 @@
             </div>
          </div>
 		 <?php } ?>
-		 
+
          <div class="row">
             <div class="col-md-12">
                <div class="card">
@@ -42,7 +42,7 @@
                   </div>
                   <div class="content">
                      <div class="row">
-                        <?php 
+                        <?php
                            if(empty($cls_sec)){
                            	echo "<p>Records Not Found</p>";
                            }else{
@@ -96,7 +96,7 @@
                                   ?>
                               <tr>
                                  <td><?php   echo $i; ?></td>
-                                 <?php         
+                                 <?php
                                     $cid=$rows->class_id;
                                     $query="SELECT * FROM edu_class WHERE class_id='$cid'";
                                     $resultset=$this->db->query($query);
@@ -176,12 +176,13 @@
                                        <div class="form-group">
                                           <label class="col-sm-2 control-label">Type</label>
                                           <div class="col-sm-10">
-                                             <label class="radio">
-                                             <input type="radio" data-toggle="radio" name="test_type" value="HT" checked onclick="myFunction1()"> 
-											 <a  style="color:#5a5757;" href="" onclick="myFunction1()">Class Test</a>
+                                             <label class="">
+                                             <input type="radio"  name="test_type" value="HT" checked onclick="myFunction1()">
+											                             <span  style="color:#5a5757;">Class Test</span>
                                              </label>
-                                             <label class="radio">
-                                             <input type="radio" data-toggle="radio" name="test_type" value="HW" onclick="myFunction()"><a href="" style="color:#5a5757;"  onclick="myFunction()">Home Work</a>
+                                             <label class="">
+                                             <input type="radio"  name="test_type" value="HW" onclick="myFunction()">
+                                              <span  style="color:#5a5757;">Home Work</span>
                                              </label>
                                              <input type="hidden" id="event_id" name="class_id" class="form-control" value="<?php ?>"/>
                                           </div>
@@ -274,19 +275,19 @@
      tet_date:"Please Select Date",
      details:"Please Enter Details",
      class_id:"Please Enter Class Name"
-   
+
             }
     });
    });
-   
-   function myFunction() 
+
+   function myFunction()
    {
       $("#submission").show();
-   } 
+   }
    function myFunction1(){
    $("#submission").hide();
    }
-   
+
    var $table = $('#bootstrap-table');
          $().ready(function(){
              $table.bootstrapTable({
@@ -301,7 +302,7 @@
                  pageSize: 8,
                  clickToSelect: false,
                  pageList: [8,10,25,50,100],
-   
+
                  formatShowingRows: function(pageFrom, pageTo, totalRows){
                      //do nothing here, we don't want to show the text "showing x of y from..."
                  },
@@ -316,20 +317,20 @@
                      detailClose: 'fa fa-minus-circle'
                  }
              });
-   
+
              //activate the tooltips after the data table is initialized
              $('[rel="tooltip"]').tooltip();
-   
+
              $(window).resize(function () {
                  $table.bootstrapTable('resetView');
              });
-   
-   
+
+
          });
 </script>
 <script type="text/javascript">
    $().ready(function(){
-   
+
      $('.datepicker').datetimepicker({
        format: 'DD-MM-YYYY',
        icons: {
@@ -363,7 +364,7 @@
               {
    	  //alert(test1.status);
    	  //alert(test1.res2);
-               if (test1.status=='success') 
+               if (test1.status=='success')
       {
                    var res1=test1.res2;
           var len=res1.length;
@@ -384,11 +385,10 @@
              }
    });
    }
-   
+
    $(document).on("click", ".open-AddBookDialog", function () {
       var eventId = $(this).data('id');
       $(".modal-body #event_id").val( eventId );
    });
-   
-</script>
 
+</script>

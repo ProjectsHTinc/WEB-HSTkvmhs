@@ -264,15 +264,16 @@ Class Smsmodel extends CI_Model
          //DOB Wisher for users_dob_wishes
 
          function student_dob_wishes($cur_date){
-           $query="SELECT ee.name,ea.dob,ea.mobile FROM edu_enrollment AS ee LEFT JOIN edu_admission AS ea ON ee.admission_id=ea.admission_id WHERE ee.status='Active' AND CONCAT(YEAR(CURDATE()),DATE_FORMAT(ea.dob,'-%m-%d')) = '$cur_date' AND ee.status='Active'";
+           $query="SELECT ep.id,ee.name,ea.dob,ep.mobile FROM edu_enrollment AS ee LEFT JOIN edu_admission AS ea ON ee.admission_id=ea.admission_id
+           LEFT jOIN edu_parents as ep  ON FIND_IN_SET(ea.admission_id,ep.admission_id) WHERE ee.status='Active' AND CONCAT(YEAR(CURDATE()),DATE_FORMAT(ea.dob,'-%m-%d')) = '$cur_date' AND ee.status='Active' and ep.status='Active'";
            $result=$this->db->query($query);
            $res=$result->result();
            foreach($res as $rows){
              $name=$rows->name;
-             $number=$rows->mobile;
+             $phone=$rows->mobile;
              $textmessage='Wishing you a Birthday filled with joy and a year filled with happiness and good health Happy Birthday '.$name.'';
            	 $notes =utf8_encode($desc);
-
+             $this->sendSMS($phone,$notes);
 
 
            }
@@ -285,9 +286,9 @@ Class Smsmodel extends CI_Model
           $res=$result1->result();
           foreach($res as $rows){
             $name=$rows->name;
-            $number=$rows->phone;
-            $textmessage='Wishing you a Birthday filled with joy and a year filled with happiness and good health Happy Birthday '.$name.'';
-
+            $phone$phone=$rows->phone;
+            $notes='Wishing you a Birthday filled with joy and a year filled with happiness and good health Happy Birthday '.$name.'';
+            $this->sendSMS($phone,$notes);
 
 
           }

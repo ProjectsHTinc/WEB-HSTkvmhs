@@ -15,9 +15,7 @@ Class Teachermodel extends CI_Model
 
         function teacher_create($role_type_id,$name,$email,$sec_email,$sex,$formatted_date,$age,$nationality,$religion,$community_class,$community,$mobile,$sec_phone,$address,$class_teacher,$class_name,$subject,$multiple_sub,$qualification,$groups_id,$activity_id,$status,$user_id,$userFileName)
 		{
-          $check_email="SELECT * FROM edu_teachers WHERE email='$email'";
-          $result=$this->db->query($check_email);
-          if($result->num_rows()==0){
+
          $query="INSERT INTO edu_teachers(role_type_id,name,email,sec_email,sex,dob,age,nationality,religion,community_class,community,phone,sec_phone,address,class_teacher,class_name,subject,subject_handling,qualification,house_id,extra_curicullar_id,profile_pic,created_by,created_at,status) VALUES ('$role_type_id','$name','$email','$sec_email','$sex','$formatted_date','$age','$nationality','$religion','$community_class','$community','$mobile','$sec_phone','$address','$class_teacher','$class_name','$subject','$multiple_sub','$qualification','$groups_id','$activity_id','$userFileName','$user_id',NOW(),'$status')";
            $resultset=$this->db->query($query);
            $insert_id = $this->db->insert_id();
@@ -75,10 +73,7 @@ Class Teachermodel extends CI_Model
           $resultset=$this->db->query($query);
             $data= array("status" => "success");
             return $data;
-          }else{
-            $data= array("status" => "Email Already Exist");
-            return $data;
-          }
+
 
        }
 

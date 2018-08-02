@@ -259,14 +259,14 @@
    rules: {
      role_type_id:{required:true },
  	   name:{required:true }, address:{required:true },
-   	 email:{required:true,email:true,
+   	 email:{required:false,email:true,
                     remote: {
                                url: "<?php echo base_url(); ?>teacher/checker",
                                type: "post"
                             }
                           },
    	sex:{required:true },
-   	dob:{required:true },
+   	dob:{required:false },
    	// age:{required:true,number:true,maxlength:2 },
    	nationality:{required:true },
    	religion:{required:true },
@@ -277,7 +277,7 @@
                  type: "post"
               }
              },
-   	qualification:{required:true },
+   	qualification:{required:false },
    	status:{required:true }
    },
    messages: {
