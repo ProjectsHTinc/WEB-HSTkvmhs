@@ -153,7 +153,7 @@ class Apistudentmodel extends CI_Model {
 	{
 			 $year_id = $this->getYear();
 		
-			$exam_query = "SELECT A.exam_id,A.exam_name,C.subject_name,B.exam_date, B.times FROM `edu_examination` A, `edu_exam_details` B, `edu_subject` C WHERE A.`exam_id` = B. exam_id AND B.subject_id = C.subject_id AND B.classmaster_id ='$class_id' AND B.exam_id='$exam_id'";
+			$exam_query = "SELECT A.exam_id,A.exam_name,C.subject_name,B.exam_date, B.times FROM `edu_examination` A, `edu_exam_details` B, `edu_subject` C WHERE A.`exam_id` = B. exam_id AND B.subject_id = C.subject_id AND B.classmaster_id ='$class_id' AND B.exam_id='$exam_id' AND A.status = 'Active' AND B.status ='Active'";
 			$exam_res = $this->db->query($exam_query);
 			$exam_result= $exam_res->result();
 			$exam_result_count = $exam_res->num_rows();
@@ -207,7 +207,7 @@ class Apistudentmodel extends CI_Model {
 	{
 			$year_id = $this->getYear();
 			
-			$hw_query = "SELECT A.hw_id,A.hw_type,A.title, A.test_date,A.due_date, A.hw_details, A.mark_status, B.subject_name FROM `edu_homework` A, `edu_subject` B WHERE A.subject_id = B.subject_id AND A.class_id ='$class_id' AND A.year_id='$year_id' AND A.status = 'Active' AND A.hw_type = '$hw_type'";
+			$hw_query = "SELECT A.hw_id,A.hw_type,A.title, A.test_date,A.due_date, A.hw_details, A.mark_status, B.subject_name FROM `edu_homework` A, `edu_subject` B WHERE A.subject_id = B.subject_id AND A.class_id ='$class_id' AND A.year_id='$year_id' AND A.status = 'Active' AND A.hw_type = '$hw_type' order by A.due_date DESC";
 			$hw_res = $this->db->query($hw_query);
 			$hw_result= $hw_res->result();
 			$hw_count = $hw_res->num_rows();

@@ -150,9 +150,9 @@ class Enrollment extends CI_Controller {
 
 		 $datas['result'] = $this->enrollmentmodel->get_all_enrollment();
 		 //$datas['sorting'] = $this->enrollmentmodel->get_all_enrollment_sorting_details();
-		 //$datas['sortclass'] = $this->enrollmentmodel->get_all_enrollment_sorting_class();
+		// $datas['sortclass'] = $this->enrollmentmodel->get_all_enrollment_sorting_class();
 		 //$datas['year'] = $this->yearsmodel->admisn_year();
-		 // echo "<pre>";print_r($datas['year']);exit;
+		  //echo "<pre>";print_r($datas['result']);exit;
 		
  		 if($user_type==1){
 			 $this->load->view('header');

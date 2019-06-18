@@ -5,9 +5,11 @@ class Apiadmin extends CI_Controller {
 	function __construct() {
 		 parent::__construct();
 
-		 $this->load->model('apiadminmodel');
+		 	$this->load->model('apiadminmodel');
 		  $this->load->helper('url');
 		  $this->load->library('session');
+
+
  }
 
 	/**
@@ -893,11 +895,11 @@ class Apiadmin extends CI_Controller {
 						$response = $data['result'];
 						echo json_encode($response);
 					}
-
+					
 					// GET ALL Cricular class wise
 					public function get_class_circular_view()
 					{
-						//$_POST = json_decode(file_get_contents("php://input"), TRUE);
+						$_POST = json_decode(file_get_contents("php://input"), TRUE);
 
 						if(!$this->checkMethod())
 						{
@@ -920,5 +922,7 @@ class Apiadmin extends CI_Controller {
 						$response = $data['result'];
 						echo json_encode($response);
 					}
+
+
 
 }

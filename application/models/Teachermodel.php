@@ -64,16 +64,17 @@ Class Teachermodel extends CI_Model
        // Additional headers
        $headers .= 'From: happysanz<info@happysanz.com>' . "\r\n";
        mail($to,$subject,$htmlContent,$headers);
-       $userdetails="Dear : " .$name. ", Username : " .$user_id.", Password : ".$OTP.", ";
+      $userdetails="Dear : " .$name. ", Username : " .$user_id.", Password : ".$OTP.", ";
        $notes =utf8_encode($userdetails."More details  click here  http://bit.ly/2wLwdRQ");
        $phone=$mobile;
        $this->smsmodel->sendSMS($phone,$notes);
+
         $query="INSERT INTO edu_users (name,user_name,user_password,user_pic,user_type,user_master_id,teacher_id,created_date,updated_date,status) VALUES ('$name','$user_id',md5($OTP),'$userFileName','$role_type_id','$insert_id','$insert_id',NOW(),NOW(),'$status')";
 
           $resultset=$this->db->query($query);
             $data= array("status" => "success");
             return $data;
-
+       
 
        }
 

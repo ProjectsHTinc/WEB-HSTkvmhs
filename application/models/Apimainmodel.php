@@ -84,72 +84,71 @@ class Apimainmodel extends CI_Model {
 
 	public function sendSMS($Phoneno,$Message)
 	{
-		// $textmsg = urlencode($Message);
-		// $smsGatewayUrl = 'http://173.45.76.227/send.aspx?';
-		// $api_element = 'username=kvmhss&pass=kvmhss123&route=trans1&senderid=KVMHSS';
-		// $api_params = $api_element.'&numbers='.$Phoneno.'&message='.$textmsg;
-		// $smsgatewaydata = $smsGatewayUrl.$api_params;
-		// $url = $smsgatewaydata;
-    //
-		// $ch = curl_init();
-		// curl_setopt($ch, CURLOPT_POST, false);
-		// curl_setopt($ch, CURLOPT_URL, $url);
-		// curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		// $output = curl_exec($ch);
-		// curl_close($ch);
-    //Your authentication key
-    $authKey = "191431AStibz285a4f14b4";
+// 		$textmsg = urlencode($Message);
+// 		$smsGatewayUrl = 'http://173.45.76.227/send.aspx?';
+// 		$api_element = 'username=kvmhss&pass=kvmhss123&route=trans1&senderid=KVMHSS';
+// 		$api_params = $api_element.'&numbers='.$Phoneno.'&message='.$textmsg;
+// 		$smsgatewaydata = $smsGatewayUrl.$api_params;
+// 		$url = $smsgatewaydata;
 
-    //Multiple mobiles numbers separated by comma
-    $mobileNumber = "$Phoneno";
-
-    //Sender ID,While using route4 sender id should be 6 characters long.
-    $senderId = "ENSYFI";
-
-    //Your message to send, Add URL encoding here.
-    $message =$Message;
-
-    //Define route
-    $route = "transactional";
-
-    //Prepare you post parameters
-    $postData = array(
-        'authkey' => $authKey,
-        'mobiles' => $mobileNumber,
-        'message' => $message,
-        'sender' => $senderId,
-        'route' => $route
-    );
-
-    //API URL
-    $url="https://control.msg91.com/api/sendhttp.php";
-
-    // init the resource
-    $ch = curl_init();
-    curl_setopt_array($ch, array(
-        CURLOPT_URL => $url,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_POST => true,
-        CURLOPT_POSTFIELDS => $postData
-        //,CURLOPT_FOLLOWLOCATION => true
-    ));
-
-
-    //Ignore SSL certificate verification
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-
-
-    //get response
-    $output = curl_exec($ch);
-
-    //Print error if any
-    if(curl_errno($ch))
-    {
-        echo 'error:' . curl_error($ch);
-    }
-
-    curl_close($ch);
+// 		$ch = curl_init();
+// 		curl_setopt($ch, CURLOPT_POST, false);
+// 		curl_setopt($ch, CURLOPT_URL, $url);
+// 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+// 		$output = curl_exec($ch);
+// 		curl_close($ch);
+                    $authKey = "191431AStibz285a4f14b4";
+        
+            //Multiple mobiles numbers separated by comma
+            $mobileNumber = "$Phoneno";
+        
+            //Sender ID,While using route4 sender id should be 6 characters long.
+            $senderId = "ENSYFI";
+        
+            //Your message to send, Add URL encoding here.
+            $message =$Message;
+        
+            //Define route
+            $route = "transactional";
+        
+            //Prepare you post parameters
+            $postData = array(
+                'authkey' => $authKey,
+                'mobiles' => $mobileNumber,
+                'message' => $message,
+                'sender' => $senderId,
+                'route' => $route
+            );
+        
+            //API URL
+            $url="https://control.msg91.com/api/sendhttp.php";
+        
+            // init the resource
+            $ch = curl_init();
+            curl_setopt_array($ch, array(
+                CURLOPT_URL => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => $postData
+                //,CURLOPT_FOLLOWLOCATION => true
+            ));
+        
+        
+            //Ignore SSL certificate verification
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        
+        
+            //get response
+            $output = curl_exec($ch);
+        
+            //Print error if any
+            if(curl_errno($ch))
+            {
+                echo 'error:' . curl_error($ch);
+            }
+        
+            curl_close($ch);
 	}
 
 //#################### SMS End ####################//
@@ -159,7 +158,7 @@ class Apimainmodel extends CI_Model {
 
 	public function getYear()
 	{
-		$sqlYear = "SELECT * FROM edu_academic_year WHERE NOW() >= from_month AND NOW() <= to_month AND status = 'Active'";
+		$sqlYear = "SELECT * FROM edu_academic_year WHERE CURDATE() >= from_month AND CURDATE() <= to_month AND status = 'Active'";
 		$year_result = $this->db->query($sqlYear);
 		$ress_year = $year_result->result();
 
@@ -180,10 +179,10 @@ class Apimainmodel extends CI_Model {
 	public function getTerm()
 	{
 	    $year_id = $this->getYear();
-		$sqlTerm = "SELECT * FROM edu_terms WHERE NOW() >= from_date AND NOW() <= to_date AND year_id = '$year_id' AND status = 'Active'";
+		$sqlTerm = "SELECT * FROM edu_terms WHERE CURDATE() >= from_date AND CURDATE() <= to_date AND year_id = '$year_id' AND status = 'Active'";
 		$term_result = $this->db->query($sqlTerm);
 		$ress_term = $term_result->result();
-
+		
 		if($term_result->num_rows()==1)
 		{
 			foreach ($term_result->result() as $rows)
@@ -313,7 +312,65 @@ class Apimainmodel extends CI_Model {
 
 							$class_sub_result = array("status" => "success", "msg" => "Class and Section found","data"=> $class_sub_res->result());
 						}
+						
+						
+						$sqldays = "SELECT A.day as day_id, B.list_day FROM `edu_timetable` A, `edu_days` B WHERE A.day = B.d_id AND A.teacher_id = '$teacher_id' AND A.year_id = '$year_id' AND A.term_id = '$term_id' GROUP BY day ORDER BY A.day";
+						$day_res = $this->db->query($sqldays);
 
+						if($day_res->num_rows()==0){
+							 $day_result = array("status" => "error", "msg" => "TimeTable days not found");
+
+						}else{
+							 $day_result = array("status" => "success", "msg" => "TimeTable Days","data"=> $day_res->result());
+						}
+
+						$timetable_query = "SELECT
+									tt.table_id,
+									tt.class_id,
+									c.class_name,
+									ss.sec_name,
+									tt.subject_id,
+									tt.teacher_id,
+									tt.day as day_id,
+									tt.period,
+									t.name,
+									s.subject_name,
+									tt.from_time,
+									tt.to_time,
+									tt.is_break
+								FROM
+									edu_timetable AS tt
+								LEFT JOIN edu_subject AS s
+								ON
+									tt.subject_id = s.subject_id
+								LEFT JOIN edu_teachers AS t
+								ON
+									tt.teacher_id = t.teacher_id
+								INNER JOIN edu_classmaster AS cm
+								ON
+									tt.class_id = cm.class_sec_id
+								INNER JOIN edu_class AS c
+								ON
+									cm.class = c.class_id
+								INNER JOIN edu_sections AS ss
+								ON
+									cm.section = ss.sec_id
+								WHERE
+									tt.teacher_id = '$teacher_id' AND tt.year_id = '$year_id' AND tt.term_id = '$term_id'
+								ORDER BY
+									tt.day,
+									tt.period";
+						$timetable_res = $this->db->query($timetable_query);
+
+						 if($timetable_res->num_rows()==0){
+							 $timetable_result = array("status" => "error", "msg" => "TimeTable not found");
+
+						}else{
+
+							 $timetable_result = array("status" => "success", "msg" => "TimeTable found","data"=> $timetable_res->result());
+						}
+
+/*
 
 						$timetable_query = "SELECT tt.table_id,tt.class_id,tt.subject_id,s.subject_name,tt.teacher_id,t.name,tt.day,tt.period,ss.sec_name,c.class_name FROM edu_timetable AS tt LEFT JOIN edu_subject AS s ON tt.subject_id=s.subject_id LEFT JOIN edu_teachers AS t ON tt.teacher_id=t.teacher_id INNER JOIN edu_classmaster AS cm ON tt.class_id=cm.class_sec_id INNER JOIN edu_class AS c ON cm.class=c.class_id INNER JOIN edu_sections AS ss ON cm.section=ss.sec_id WHERE tt.teacher_id ='$teacher_id' AND tt.year_id='$year_id' AND tt.term_id='$term_id' ORDER BY tt.day, tt.period";
 						$timetable_res = $this->db->query($timetable_query);
@@ -328,10 +385,28 @@ class Apimainmodel extends CI_Model {
 
 						$stud_query = "SELECT
                                         A.enroll_id,
+                                        A.admission_id,
+                                        A.class_id,
+                                        A.name,
+                                        F.subject_name as pref_language,
+                                        CONCAT(C.class_name, ' ', D.sec_name) AS class_section
+                                    FROM
+                                        edu_enrollment A,
+                                        edu_classmaster B,
+                                        edu_class C,
+                                        edu_sections D,
+                                        edu_admission E,
+                                        edu_subject F
+                                    WHERE
+                                        A.class_id = B.class_sec_id AND B.class = C.class_id AND B.section = D.sec_id AND A.admission_id = E.admission_id AND E.language = F.subject_id AND A.admit_year = '$year_id' AND A.class_id IN(SELECT DISTINCT class_master_id from edu_teacher_handling_subject WHERE teacher_id ='$teacher_id') ORDER BY A.class_id";
+*/                                        
+                        $stud_query = "SELECT
+                                        A.enroll_id,
 										A.status,
                                         A.admission_id,
                                         A.class_id,
                                         A.name,
+                                        E.sex,
                                         F.subject_name as pref_language,
 										E.status,
                                         CONCAT(C.class_name, ' ', D.sec_name) AS class_section
@@ -344,7 +419,6 @@ class Apimainmodel extends CI_Model {
                                         edu_subject F
                                     WHERE
                                         A.class_id = B.class_sec_id AND B.class = C.class_id AND B.section = D.sec_id AND A.admission_id = E.admission_id AND E.language = F.subject_id AND A.admit_year = '$year_id' AND A.status = 'Active' AND E.status = 'Active' AND A.class_id IN(SELECT DISTINCT class_master_id from edu_teacher_handling_subject WHERE teacher_id ='$teacher_id') ORDER BY A.class_id";
-
 						$stud_res = $this->db->query($stud_query);
 
 						 if($stud_res->num_rows()==0){
@@ -464,7 +538,7 @@ class Apimainmodel extends CI_Model {
 
                           $academic_marks=array("internals"=>$internal_marks,"externals"=>$external_marks);
 
-						$response = array("status" => "loggedIn", "msg" => "User loggedIn successfully", "userData" => $userData,"teacherProfile" =>$teacher_profile,"classSubject"=>$class_sub_result,"timeTable"=>$timetable_result,"studDetails"=>$stud_result,"Exams"=>$exam_result,"examDetails"=>$examdetail_result,"homeWork"=>$hw_result,"Reminders"=>$reminder_result, "year_id" => $year_id, "academic_month" => $month,"academic_marks"=>$academic_marks);
+						$response = array("status" => "loggedIn", "msg" => "User loggedIn successfully", "userData" => $userData,"teacherProfile" =>$teacher_profile,"classSubject"=>$class_sub_result,"timeTabledays"=>$day_result,"timeTable"=>$timetable_result,"studDetails"=>$stud_result,"Exams"=>$exam_result,"examDetails"=>$examdetail_result,"homeWork"=>$hw_result,"Reminders"=>$reminder_result, "year_id" => $year_id, "academic_month" => $month,"academic_marks"=>$academic_marks);
 						return $response;
 				  }
 				  else if ($user_type==3) {

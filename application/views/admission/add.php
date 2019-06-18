@@ -147,7 +147,7 @@
                               <?php } ?>
                            </select>
                         </div>
-
+                       
                      </div>
                   </fieldset>
                   <fieldset>
@@ -218,17 +218,16 @@
     var output = document.getElementById('output');
     output.src = URL.createObjectURL(event.target.files[0]);
    };
-
+   
    $(document).ready(function () {
-
+   
    jQuery('#admissionmenu').addClass('collapse in');
    $('#admission').addClass('active');
    $('#admission1').addClass('active');
-
+   
       $('#admissionform').validate({ // initialize the plugin
         rules: {
-            admission_no:{required:true  // will count space
-               maxlength: 9 },
+            admission_no:{required:true },
             admission_year:{required:true },
             admission_date:{required:true },
             name:{required:true },
@@ -266,10 +265,10 @@
               //mobile:"Enter the mobile Number",
              // student_pic:"Enter the Student Picture"
             }
-
-    });
+   
+    }); 
    });
-
+   
 </script>
 <script type="text/javascript">
    function checkemailfun1(val)
@@ -290,14 +289,14 @@
         else{
           /* alert(test); */
           $("#no1").html(test1);
-
+   
               $("#save").show();
         }
-
+   
       }
      });
    }
-
+   
    function checkmobilefun(val)
      { //alert('hi');exit;
         $.ajax({
@@ -319,11 +318,11 @@
      }
      });
      }
-
+     
 </script>
 <script type="text/javascript">
    $().ready(function(){
-
+   
      $('.datepicker').datetimepicker({
        format: 'DD-MM-YYYY',
        icons: {
@@ -338,7 +337,7 @@
            close: 'fa fa-remove'
        }
     });
-
+   
    $('.datepicker1').datetimepicker({
        format: 'YYYY',
    maxDate: new Date(),
@@ -354,7 +353,7 @@
            close: 'fa fa-remove'
        }
     });
-
+   
    });
 </script>
 <script type="text/javascript">
@@ -379,9 +378,10 @@
       $("#msg").html(test).hide();
            $("#save").show();
     }
-
+   
    }
    });
    }
-
+   
 </script>
+

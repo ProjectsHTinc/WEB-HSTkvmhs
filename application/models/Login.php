@@ -25,6 +25,11 @@ Class Login extends CI_Model
                  $status= $rows->status;
                  switch($status){
                     case "Active":
+                        
+                      $update_web_login="UPDATE edu_users SET web_login_count=web_login_count+1 WHERE user_id='$rows->user_id'";
+                    $result_web_login=$this->db->query($update_web_login);
+
+                        
                       $data = array("user_name"  => $rows->user_name,"msg"  =>"success","name"=>$rows->name, "school_id" => $rows->school_id,"user_type"=>$rows->user_type,"status"=>$rows->status,"user_id"=>$rows->user_id,"user_pic"=>$rows->user_pic);
                       return $data;
                       //break;

@@ -125,12 +125,12 @@
                         <label class="col-sm-2 control-label">Certificates</label>
                         <div class="col-sm-4">
                            <?php $t=$rows->transfer_certificate;
-                              $s=$rows->record_sheet;
-
+                              $s=$rows->record_sheet; 
+                              
                               ?>
                            <label class="checkbox checkbox-inline">
                            <input type="checkbox" data-toggle="checkbox" name="trn_cert" value="1" checked>Transfer Certificate
-                           </label>
+                           </label> 
                            <label class="checkbox checkbox-inline">
                            <input type="checkbox" data-toggle="checkbox" name="rec_sheet" value="1" checked>Record Sheet
                            </label>
@@ -209,7 +209,7 @@
                            </select>
                             <script language="JavaScript">document.formadmission.blood_group.value="<?php echo $rows->blood_group; ?>";</script>
                         </div>
-
+                        
                      </div>
                   </fieldset>
                   <fieldset>
@@ -242,14 +242,14 @@
     var output = document.getElementById('output');
     output.src = URL.createObjectURL(event.target.files[0]);
    };
-
+   
    $(document).ready(function () {
    jQuery('#admissionmenu').addClass('collapse in');
    $('#admission').addClass('active');
    $('#admission2').addClass('active');
     $('#admissionform').validate({ // initialize the plugin
         rules: {
-            admission_no:{required:true},
+            admission_no:{required:true },
             admission_year:{required:true },
             admission_date:{required:true },
             name:{required:true },
@@ -263,7 +263,7 @@
             community:{required:true },
            blood_group:{required:true },
             //mobile:{required:true }
-
+   
         },
         messages: {
               admission_no: "Enter Admission No",
@@ -284,7 +284,7 @@
             }
     });
    });
-
+   
 </script>
 <script type="text/javascript">
    function checkadmitnofun(val)
@@ -305,13 +305,14 @@
           else{
             /* alert(test); */
             $("#no1").html(test1);
-
+   
                 $("#save").show();
           }
-
-
+   
+    
         }
       });
    }
-
+ 
 </script>
+

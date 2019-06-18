@@ -56,14 +56,14 @@
                            <thead>
                               <th>Sno</th>
                               <th>Name</th>
-                              <th style="width:180px;">Preferred Language</th>
+                              
                               <?php
                                  if($status=="Success")
                                  {
                                     $cnt= count($subject_name);
                                     for($i=0;$i<$cnt;$i++)
                                  { ?>
-                              <th> <?php echo $subject_name[$i]; ?> <?php echo $subject_id[$i]; ?></th>
+                              <th> <?php echo $subject_name[$i]; ?> </th>
 							 
                               <?php  }
                                  }else{  ?>
@@ -91,11 +91,7 @@
                                  echo '<input type="hidden" id="sid" name="sutid[]" value="'.$s->enroll_id.'" />';
                                  echo '<input type="hidden" id="cid" name="clsmastid" value="'.$s->class_id.'" />';
                                  $k++;
-                                 echo'<td>';
-								 if ($s->pref_language!=''){
-                                    echo'('; echo' ';  echo $s->pref_language;  echo' '; echo')'; 
-								 }
-                                 echo'</td>';
+                                
                                  }
                                  
                                  if($status=="Success")
@@ -110,8 +106,8 @@
                                  foreach($eflag as $erow){ }
                                  $ef=$erow->is_internal_external;
                                  $efsi=$erow->subject_id;
-                                // if($im==0 && $em==0 && is_numeric($im) && is_numeric($em))
-                                if($ef==0)
+                                 if($im==0 && $em==0 && is_numeric($im) && is_numeric($em))
+                                //if($ef==0)
                                  {
                                  echo '<span class="grade2">';
                                  if(is_numeric($tm)){

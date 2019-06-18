@@ -359,13 +359,13 @@ Class Mailmodel extends CI_Model
 		{
 		   $year_id=$this->getYear();
 
-		   $pcell="SELECT p.email FROM edu_parents AS p,edu_enrollment AS e WHERE e.class_id='$clssid' AND e.admit_year='$year_id' AND FIND_IN_SET( e.admission_id,p.admission_id) GROUP BY p.name";
+		   $pcell="SELECT p.email FROM edu_parents AS p,edu_enrollment AS e WHERE e.class_id='$clssid' AND FIND_IN_SET( e.admission_id,p.admission_id) GROUP BY p.name";
 		  $pcell1=$this->db->query($pcell);
 		  $pcel2=$pcell1->result();
 		  foreach($pcel2 as $res)
 		  {  $pamail[]=$res->email;
 		  }
-		  $sms="SELECT h.title,h.hw_details,h.hw_type,h.test_date,s.subject_name FROM edu_homework AS h,edu_subject AS s WHERE h.class_id='$clssid' AND h.year_id='$year_id' AND DATE_FORMAT(h.created_at,'%Y-%m-%d')='$createdate' AND h.subject_id=s.subject_id";
+		  $sms="SELECT h.title,h.hw_details,h.hw_type,h.test_date,s.subject_name FROM edu_homework AS h,edu_subject AS s WHERE h.class_id='$clssid' AND h.year_id='$year_id' AND DATE_FORMAT(h.created_at,'%Y-%m-%d')='$createdate' AND h.subject_id=s.subject_id AND h.status='Active'";
 		  $sms1=$this->db->query($sms);
 		  $sms2= $sms1->result();
 		  //return $sms2;

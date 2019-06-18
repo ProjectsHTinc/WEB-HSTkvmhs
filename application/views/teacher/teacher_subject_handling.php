@@ -14,6 +14,7 @@
                      <div class="content" id="content1">
                         <div class="fresh-datatables">
                            <h4 class="title" style="padding-bottom: 20px;">List of Teacher Handling Subject
+                              <a href="#myModal"  data-target="#myModal" data-toggle="modal" class="btn btn-wd btn-default " >Add Staff to Class</a> &nbsp;
                             <button onclick="history.go(-1);" class="btn btn-wd btn-default pull-right" style="margin-top:-10px;">Go Back</button>
                           </h4>
                            <form method="post" action="<?php echo base_url(); ?>teacher/get_sorting_details" class="form-horizontal" enctype="multipart/form-data" name="myformsection">

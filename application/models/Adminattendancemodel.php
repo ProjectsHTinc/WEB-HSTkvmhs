@@ -31,7 +31,7 @@ Class Adminattendancemodel extends CI_Model
        function get_all_class(){
          $acd_year=$this->get_cur_year();
           $year_id= $acd_year['cur_year'];
-         $query="SELECT ee.class_id,COUNT(CASE WHEN ee.class_id = ee.class_id THEN ee.class_id END) AS total_count,c.class_name,ss.sec_name FROM edu_enrollment AS ee INNER JOIN edu_classmaster AS cm ON ee.class_id=cm.class_sec_id INNER JOIN edu_class AS c ON cm.class=c.class_id INNER JOIN edu_sections AS ss ON cm.section=ss.sec_id WHERE ee.admit_year='$year_id' AND ee.status='Active' GROUP BY ee.class_id";
+        $query="SELECT ee.class_id,COUNT(CASE WHEN ee.class_id = ee.class_id THEN ee.class_id END) AS total_count,c.class_name,ss.sec_name FROM edu_enrollment AS ee INNER JOIN edu_classmaster AS cm ON ee.class_id=cm.class_sec_id INNER JOIN edu_class AS c ON cm.class=c.class_id INNER JOIN edu_sections AS ss ON cm.section=ss.sec_id WHERE ee.admit_year='$year_id' AND ee.status='Active' GROUP BY ee.class_id";
          $resultset=$this->db->query($query);
          return $resultset->result();
        }
@@ -51,7 +51,7 @@ Class Adminattendancemodel extends CI_Model
        function get_list_record($at_id,$class_id){
          $acd_year=$this->get_cur_year();
           $year_id= $acd_year['cur_year'];
-          $query="SELECT  c.enroll_id, c.name,c.admission_id, o.a_status,a.sex FROM  edu_enrollment c LEFT JOIN edu_attendance_history o ON c.enroll_id = o.student_id AND o.attend_id ='$at_id' LEFT JOIN edu_admission a ON c.admission_id=a.admission_id WHERE c.class_id='$class_id' AND c.admit_year='$year_id' AND c.status='Active' ORDER BY a.sex DESC,c.name ASC";
+           $query="SELECT  c.enroll_id, c.name,c.admission_id, o.a_status,a.sex FROM  edu_enrollment c LEFT JOIN edu_attendance_history o ON c.enroll_id = o.student_id AND o.attend_id ='$at_id' LEFT JOIN edu_admission a ON c.admission_id=a.admission_id WHERE c.class_id='$class_id' AND c.admit_year='$year_id' AND c.status='Active' ORDER BY a.sex DESC,c.name ASC";
          $res=$this->db->query($query);
          return $res->result();
        }

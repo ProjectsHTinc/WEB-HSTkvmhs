@@ -81,8 +81,10 @@
                                                         <?php  $status=$years['status']; if($status=="success"){
                                                 foreach($years['all_years'] as $rows){}
                                                   ?>
-                                                            <input type="hidden" name="current_academic_year_id" id="year_id" value="<?php  echo $rows->year_id; ?>">
-                                                            <input type="text" name="year_name" class="form-control" value="<?php echo date('Y', strtotime($rows->from_month));  echo " - "; echo date('Y', strtotime( $rows->to_month));  ?>" readonly="">
+                                                   <input type="hidden" name="current_academic_year_id" id="year_id" value="2">
+                                                              <input type="text" name="year_name" class="form-control" value="2018-2019" readonly="">
+                                                            <!--<input type="hidden" name="current_academic_year_id" id="year_id" value="<?php  echo $rows->year_id; ?>">-->
+                                                            <!--<input type="text" name="year_name" class="form-control" value="<?php echo date('Y', strtotime($rows->from_month));  echo " - "; echo date('Y', strtotime( $rows->to_month));  ?>" readonly="">-->
                                                             <?php   }else{  ?>
                                                                 <input type="text" name="year_id" class="form-control" value="" readonly="">
                                                                 <?php     } ?>
@@ -332,8 +334,8 @@ $('#promo1').addClass('active');
                 required: true
             },
             next_year_id: {
-                required: true
-                // notEqualTo: "#year_id"
+                required: true,
+                notEqualTo: "#year_id"
             },
             class_master_id_for_last_academic_year: {
                 required: true
@@ -360,7 +362,7 @@ $('#promo1').addClass('active');
             status: "select status"
 
         },
-
+  
         submitHandler: function(form) {
          //alert("hi");
          swal({

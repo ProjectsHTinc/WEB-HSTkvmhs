@@ -23,7 +23,7 @@
                      <div class="content" id="content1">
                         <div class="fresh-datatables">
                            <!-- <h4 class="title" style="padding-bottom: 20px;">List of Teacher</h4> -->
-                           <legend>List of Staff <a href="<?php echo base_url(); ?>teacher/view_subject_handling" class="btn pull-right" style="margin-top:-10px;">Teacher handling Subjects</a></legend>
+                          <legend>List of Staff <a href="<?php echo base_url(); ?>teacher/view_subject_handling" class="btn pull-right" style="margin-top:-10px;">Teacher handling Subjects</a></legend>
                            <table id="example" class="table table-striped table-no-bordered table-hover" cellspacing="0" >
                               <thead>
                                  <th data-field="id" class="text-left" data-sortable="true">S.No</th>

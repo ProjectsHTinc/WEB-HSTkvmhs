@@ -62,7 +62,7 @@
                            <thead>
                               <th>Sno</th>
                               <th>Name</th>
-                              <th>Preferred Language</th>
+                              <!--<th>Preferred Language</th>-->
                               <?php
                                  if($status=="Success")
                                   {
@@ -101,11 +101,11 @@
                                       echo '<input type="hidden" id="cid" name="clsmastid" value="'.$s->class_id.'" />';
                                       //echo $s->language;
                                       $k++;
-                                 echo'<td>';
-                                  if ($s->pref_language!=''){
-                                    echo'('; echo' ';  echo $s->pref_language;  echo' '; echo')'; 
-								 }
-                                 echo'</td>';
+        //                          echo'<td>';
+        //                           if ($s->pref_language!=''){
+        //                             echo'('; echo' ';  echo $s->pref_language;  echo' '; echo')'; 
+								//  }
+        //                          echo'</td>';
                                     }
                                  if($status=="Success")
                                  {
@@ -122,8 +122,8 @@
                                         $ef=$flag->is_internal_external;
                                          $efsi=$flag->subject_id;
                                  
-                                        // if($im==0 && $em==0 && is_numeric($im) && is_numeric($em))
-                                          if($ef==0)
+                                         if($im==0 && $em==0 && is_numeric($im) && is_numeric($em))
+                                          //if($ef==0)
                                          {
                                               echo '<span class="grade2">';
                                               if(is_numeric($tm))

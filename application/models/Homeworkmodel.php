@@ -280,7 +280,7 @@ Class Homeworkmodel extends CI_Model
 		function view_send_homework_all($user_id,$tdate,$cid)
 		{
 		  $year_id=$this->getYear();
-		   $ahmw="SELECT h.hw_id,h.hw_type,h.title,h.created_at,h.test_date,h.due_date,h.hw_details,h.send_option_status,s.subject_id,s.subject_name,t.name FROM edu_homework AS h,edu_subject AS s,edu_teachers AS t WHERE class_id='$cid' AND h.year_id='$year_id' AND h.subject_id=s.subject_id AND DATE_FORMAT(h.created_at,'%Y-%m-%d')='$tdate'  AND h.teacher_id=t.teacher_id";
+		   $ahmw="SELECT h.hw_id,h.hw_type,h.title,h.created_at,h.test_date,h.due_date,h.hw_details,h.send_option_status,s.subject_id,s.subject_name,t.name FROM edu_homework AS h,edu_subject AS s,edu_teachers AS t WHERE class_id='$cid' AND h.year_id='$year_id' AND h.subject_id=s.subject_id AND DATE_FORMAT(h.created_at,'%Y-%m-%d')='$tdate'  AND h.teacher_id=t.teacher_id AND h.status='Active'";
 		  $ahmw1=$this->db->query($ahmw);
 		  $ahmw2= $ahmw1->result();
 		  return $ahmw2;

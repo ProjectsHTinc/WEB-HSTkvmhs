@@ -42,15 +42,13 @@
                               </thead>
                               <tbody>
                                  <?php
-							
-								 //exit;
                                     $i=1;
                           foreach ($result as $rows) {
                           $stu=$rows->status;
                           ?>
                        <tr>
                           <td><?php echo $i; ?></td>
-                    
+                       
                          
                           <td><?php echo $rows->name; ?></td>
                           <td><?php echo $rows->admisn_no; ?></td>

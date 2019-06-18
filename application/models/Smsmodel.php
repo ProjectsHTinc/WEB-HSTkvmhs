@@ -34,7 +34,7 @@ Class Smsmodel extends CI_Model
          $mobileNumber = "$phone";
 
          //Sender ID,While using route4 sender id should be 6 characters long.
-         $senderId = "ENSYFI";
+         $senderId = "KVMHSS";
 
          //Your message to send, Add URL encoding here.
          $message =$notes;
@@ -117,8 +117,8 @@ Class Smsmodel extends CI_Model
 
   function send_circular_via_sms($title,$notes,$tusers_id,$stusers_id,$pusers_id,$users_id)
   {
-     $year_id=$this->getYear();
-    $ssql = "SELECT * FROM edu_circular_master WHERE id ='$title'";
+        $year_id=$this->getYear();
+      	$ssql = "SELECT * FROM edu_circular_master WHERE id ='$title'";
 		$res = $this->db->query($ssql);
 		$result =$res->result();
 		foreach($result as $rows)
@@ -264,16 +264,15 @@ Class Smsmodel extends CI_Model
          //DOB Wisher for users_dob_wishes
 
          function student_dob_wishes($cur_date){
-           $query="SELECT ep.id,ee.name,ea.dob,ep.mobile FROM edu_enrollment AS ee LEFT JOIN edu_admission AS ea ON ee.admission_id=ea.admission_id
-           LEFT jOIN edu_parents as ep  ON FIND_IN_SET(ea.admission_id,ep.admission_id) WHERE ee.status='Active' AND CONCAT(YEAR(CURDATE()),DATE_FORMAT(ea.dob,'-%m-%d')) = '$cur_date' AND ee.status='Active' and ep.status='Active'";
+           $query="SELECT ee.name,ea.dob,ea.mobile FROM edu_enrollment AS ee LEFT JOIN edu_admission AS ea ON ee.admission_id=ea.admission_id WHERE ee.status='Active' AND CONCAT(YEAR(CURDATE()),DATE_FORMAT(ea.dob,'-%m-%d')) = '$cur_date' AND ee.status='Active'";
            $result=$this->db->query($query);
            $res=$result->result();
            foreach($res as $rows){
              $name=$rows->name;
-             $phone=$rows->mobile;
+             $number=$rows->mobile;
              $textmessage='Wishing you a Birthday filled with joy and a year filled with happiness and good health Happy Birthday '.$name.'';
            	 $notes =utf8_encode($desc);
-             $this->sendSMS($phone,$notes);
+
 
 
            }
@@ -286,8 +285,9 @@ Class Smsmodel extends CI_Model
           $res=$result1->result();
           foreach($res as $rows){
             $name=$rows->name;
-            $phone$phone=$rows->phone;
-            $notes='Wishing you a Birthday filled with joy and a year filled with happiness and good health Happy Birthday '.$name.'';
+            $phone=$rows->phone;
+            $textmessage='Wishing you a Birthday filled with joy and a year filled with happiness and good health Happy Birthday '.$name.'';
+            $notes =utf8_encode($textmessage);
             $this->sendSMS($phone,$notes);
 
 
@@ -349,29 +349,28 @@ Class Smsmodel extends CI_Model
 		  {  $cell[]=$res->mobile;
 		     //echo $num=implode(',',$cell); echo"<br>";
 			}
-		    //$sms="SELECT h.title,h.hw_details,h.hw_type,h.test_date,s.subject_name FROM edu_homework AS h,edu_subject AS s WHERE h.class_id='$clssid' AND h.year_id='$year_id' AND DATE_FORMAT(h.created_at,'%Y-%m-%d')='$createdate' AND h.subject_id=s.subject_id";
-        $sms="SELECT h.title,h.hw_details,h.hw_type,h.test_date,s.subject_name,IFNULL(c.class_name, '') AS class_name,IFNULL(se.sec_name, '') AS sec_name FROM edu_homework AS h
+		 // $sms="SELECT h.title,h.hw_details,h.hw_type,h.test_date,s.subject_name FROM edu_homework AS h,edu_subject AS s WHERE h.class_id='$clssid' AND h.year_id='$year_id' AND DATE_FORMAT(h.created_at,'%Y-%m-%d')='$createdate' AND h.subject_id=s.subject_id";
+		    $sms="SELECT h.title,h.hw_details,h.hw_type,h.test_date,s.subject_name,IFNULL(c.class_name, '') AS class_name,IFNULL(se.sec_name, '') AS sec_name FROM edu_homework AS h
         LEFT JOIN edu_subject AS s ON s.subject_id=h.subject_id
         LEFT JOIN edu_classmaster AS cm ON h.class_id=cm.class_sec_id
         LEFT JOIN edu_class AS c ON cm.class=c.class_id
         LEFT JOIN edu_sections AS se ON  cm.section=se.sec_id
-        WHERE h.class_id='$clssid' AND h.year_id='$year_id' AND DATE_FORMAT(h.created_at,'%Y-%m-%d')='$createdate' AND h.subject_id=s.subject_id";
+        WHERE h.class_id='$clssid' AND h.year_id='$year_id' AND DATE_FORMAT(h.created_at,'%Y-%m-%d')='$createdate' AND h.subject_id=s.subject_id AND h.status='Active'";
 		  $sms1=$this->db->query($sms);
 		  $sms2= $sms1->result();
 		  //return $sms2;
 		  foreach ($sms2 as $value)
           {
-      $hwtitle=$value->title;
-		  $hwdetails=$value->hw_details;
+            $hwtitle=$value->title;
+		    $hwdetails=$value->hw_details;
 			$subname=$value->subject_name;
 			$ht=$value->hw_type;
 			$tdat=$value->test_date;
-      $class_name=$value->class_name.'-'.$value->sec_name;
+			  $class_name=$value->class_name.'-'.$value->sec_name;
 
 			if($ht=='HW'){ $type="Home Work" ; }else{ $type="Class Test" ; }
 
-			   $message=$subname.'-'.$hwdetails.'.';
-
+		    $message=$subname.'-'.$hwdetails.'.';
 			$home_work_details[]=$message;
 		  }
 			//print_r($home_work_details);
@@ -379,9 +378,8 @@ Class Smsmodel extends CI_Model
 			   $phone=implode(',',$cell);
 			   $count1=count($cell);
 
-				 $textmsg =urlencode($hdetails);
-         $notes =utf8_encode("Dear parents class $class_name'-'$hdetails" );
-
+			
+           $notes =utf8_encode("Dear parents class $class_name'-'$hdetails" );
          $stat=$this->sendSMS($phone,$notes);
         if($notes){
            $data= array("status" => "success");

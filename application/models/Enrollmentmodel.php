@@ -28,108 +28,109 @@ Class Enrollmentmodel extends CI_Model
 
 //CREATE ADMISSION   ad_enrollment
 
-function ad_enrollment($admisnid,$admit_year,$formatted_date,$admisn_no,$name,$class,$quota_id,$groups_id,$activity_id,$status){
-  //echo $admisn_no; echo'<br>'; echo $admisnid;
-$year_id=$this->getYear();
+        function ad_enrollment($admisnid,$admit_year,$formatted_date,$admisn_no,$name,$class,$quota_id,$groups_id,$activity_id,$status){
+        	//echo $admisn_no; echo'<br>'; echo $admisnid;
+			$year_id=$this->getYear();
+			
+            $check_email="SELECT * FROM edu_enrollment WHERE admit_year='$admit_year'  AND admission_id='$admisnid'";
+        
+       
+          $result=$this->db->query($check_email);
+         
+          if($result->num_rows()==0){
 
-    $check_email="SELECT * FROM edu_enrollment WHERE admit_year='$admit_year'  AND admission_id='$admisnid'";
+			  $digits = 6;
+		      $OTP = str_pad(rand(0, pow(10, $digits)-1), $digits, '0', STR_PAD_LEFT);
+			  //echo $OTP;
+              $md5pwd=md5($OTP);
 
+			  $admisn="select name,admission_id,admisn_no from edu_admission WHERE admission_id='".$admisnid."'"; 
+     	      $resultset = $this->db->query($admisn);
+		      foreach ($resultset->result() as $rows)
+		      {}
+			    if(!empty($admisnid)){
+		        $admisnid=$rows->admission_id; 
+				}else{
+					$admisnid=$admisnid;
+				}
+				//echo  $admisn_no;exit;
+             $query="INSERT INTO edu_enrollment (admission_id,admit_year,admit_date,admisn_no,name,class_id,house_id,extra_curicullar_id,quota_id,created_at,status) VALUES ('$admisnid','$admit_year','$formatted_date','$admisn_no','$name','$class','$groups_id','$activity_id','$quota_id',NOW(),'$status')";
+             $resultset=$this->db->query($query);
+             
+            //Student User Creation
+             $sql="SELECT COUNT(admission_id) AS student FROM edu_admission " ;
+             $resultsql=$this->db->query($sql);
+             $result1= $resultsql->result();
+             $cont=$result1[0]->student;
+			//echo $cont;
+             $user_id=$admisnid+400000;
+              //echo $user_id;
+             $getmail="select email,mobile,name from edu_admission WHERE admission_id='".$admisnid."'";
+     	      $resultset12 = $this->db->query($getmail);
+			  $reu=$resultset12->result();
 
-  $result=$this->db->query($check_email);
+             foreach($reu as $rows){}
+             $email=$rows->email;
+			 $cell=$rows->mobile;
+			 $sname=$rows->name;
 
-  if($result->num_rows()==0){
-
-$digits = 6;
-  $OTP = str_pad(rand(0, pow(10, $digits)-1), $digits, '0', STR_PAD_LEFT);
-//echo $OTP;
-      $md5pwd=md5($OTP);
-
-$admisn="select name,admission_id,admisn_no from edu_admission WHERE admission_id='".$admisnid."'";
-    $resultset = $this->db->query($admisn);
-  foreach ($resultset->result() as $rows)
-  {}
-  if(!empty($admisnid)){
-    $admisnid=$rows->admission_id;
-}else{
-  $admisnid=$admisnid;
-}
-//echo  $admisn_no;exit;
-     $query="INSERT INTO edu_enrollment (admission_id,admit_year,admit_date,admisn_no,name,class_id,house_id,extra_curicullar_id,quota_id,created_at,status) VALUES ('$admisnid','$admit_year','$formatted_date','$admisn_no','$name','$class','$groups_id','$activity_id','$quota_id',NOW(),'$status')";
-     $resultset=$this->db->query($query);
-
-    //Student User Creation
-     $sql="SELECT COUNT(admission_id) AS student FROM edu_admission " ;
-     $resultsql=$this->db->query($sql);
-     $result1= $resultsql->result();
-     $cont=$result1[0]->student;
-//echo $cont;
-     $user_id=$admisnid+400000;
-      //echo $user_id;
-     $getmail="select email,mobile,name from edu_admission WHERE admission_id='".$admisnid."'";
-    $resultset12 = $this->db->query($getmail);
-    $reu=$resultset12->result();
-
-     foreach($reu as $rows){}
-     $email=$rows->email;
-    $cell=$rows->mobile;
-    $sname=$rows->name;
-
-        if(!empty($email))
-        {
+			 if(!empty($email))
+			 {
               $to =$email;
               $subject ='"Welcome Message"';
               $htmlContent = '
-         <html>
-         <head>  <title></title>
-         </head>
-         <body style="background-color:beige;">
-         <table cellspacing="0" style=" width: 300px; height: 200px;">
-             <tr>
-               <th>Name:</th><td>'.$name.'</td>
-             </tr>
-             <tr>
-               <th>Username :</th><td>'.$user_id.'</td>
-             </tr>
-             <tr>
-               <th>Password:</th><td>'.$OTP.'</td>
-             </tr>
-             <tr>
-               <th></th><td><a href="'.base_url() .'">Click here  to Login</a></td>
-             </tr>
-           </table>
-         </body>
-         </html>';
-         // Set content-type header for sending HTML email
-         $headers = "MIME-Version: 1.0" . "\r\n";
-         $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-         // Additional headers
-         $headers .= 'From: happysanz<info@happysanz.com>' . "\r\n";
-         mail($to,$subject,$htmlContent,$headers);
-        }
-        if(!empty($cell))
-        {
-          $userdetails="Dear : " .$name. ", Username : " .$user_id.", Password : ".$OTP.", ";
-          $notes =utf8_encode($userdetails."To known more details click here  http://bit.ly/2wLwdRQ");
-          $phone=$cell;
-          $this->smsmodel->sendSMS($phone,$notes);
+			   <html>
+			   <head>  <title></title>
+			   </head>
+			   <body style="background-color:beige;">
+				 <table cellspacing="0" style=" width: 300px; height: 200px;">
+					   <tr>
+						   <th>Name:</th><td>'.$name.'</td>
+					   </tr>
+					   <tr>
+						   <th>Username :</th><td>'.$user_id.'</td>
+					   </tr>
+					   <tr>
+						   <th>Password:</th><td>'.$OTP.'</td>
+					   </tr>
+					   <tr>
+						   <th></th><td><a href="'.base_url() .'">Click here  to Login</a></td>
+					   </tr>
+				   </table>
+			   </body>
+			   </html>';
+			   // Set content-type header for sending HTML email
+			   $headers = "MIME-Version: 1.0" . "\r\n";
+			   $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+			   // Additional headers
+			   $headers .= 'From: happysanz<info@happysanz.com>' . "\r\n";
+			   mail($to,$subject,$htmlContent,$headers);
+			 }
+			   if(!empty($cell))
+                {
+                  $userdetails="Dear : " .$name. ", Username : " .$user_id.", Password : ".$OTP.", ";
+                  $notes =utf8_encode($userdetails."To known more detail click here  http://bit.ly/2wLwdRQ");
+                  $phone=$cell;
+                  $this->smsmodel->sendSMS($phone,$notes);
+        
+                }
 
-        }
 
-      $stude_insert="INSERT INTO edu_users (name,user_name,user_password,user_type,user_master_id,student_id,created_date,updated_date,status) VALUES ('$name','$user_id','$md5pwd','3','$admisnid','$admisnid',NOW(),NOW(),'$status')";
-      $resultset=$this->db->query($stude_insert);
+              $stude_insert="INSERT INTO edu_users (name,user_name,user_password,user_type,user_master_id,student_id,created_date,updated_date,status) VALUES ('$name','$user_id','$md5pwd','3','$admisnid','$admisnid',NOW(),NOW(),'$status')";
+              $resultset=$this->db->query($stude_insert);
 
-     $query2="UPDATE edu_admission SET enrollment='1' WHERE admission_id='$admisnid'";
+             $query2="UPDATE edu_admission SET enrollment='1' WHERE admission_id='$admisnid'";
+         
+      		 $resultset=$this->db->query($query2);
 
-   $resultset=$this->db->query($query2);
+            $data= array("status" => "success");
+            return $data;
+          }else{
+            $data= array("status" => "Admission Already Exist");
+            return $data;
+          }
 
-    $data= array("status" => "success");
-    return $data;
-  }else{
-    $data= array("status" => "Admission Already Exist");
-    return $data;
-  }
-
-}
+       }
 
 	   function add_enrollment($admission_id)
 	   {
@@ -161,7 +162,9 @@ $admisn="select name,admission_id,admisn_no from edu_admission WHERE admission_i
 	   {
 		  $year_id=$this->getYear();
 
-        $query="SELECT e.*,cm.class_sec_id,cm.class,cm.section,c.class_id,c.class_name,s.sec_id,s.sec_name,a.admission_id,a.admisn_no,a.sex,a.name,(Select b.blood_group_name FROM edu_blood_group as b WHERE  b.id IN(a.blood_group)) AS blood_group_name FROM edu_enrollment as e,edu_classmaster as cm, edu_sections as s,edu_class as c,edu_admission AS a WHERE e.class_id=cm.class_sec_id and cm.class=c.class_id and cm.section=s.sec_id AND e.admission_id=a.admission_id  AND  e.admit_year='$year_id' ORDER BY enroll_id DESC";
+        $query="SELECT e.*,cm.class_sec_id,cm.class,cm.section,c.class_id,c.class_name,s.sec_id,s.sec_name,a.admission_id,a.admisn_no,a.sex,a.name,(Select b.blood_group_name FROM edu_blood_group as b WHERE  b.id IN(a.blood_group)) AS blood_group_name FROM edu_enrollment as e,edu_classmaster as cm, edu_sections as s,edu_class as c,edu_admission AS a WHERE  
+          e.class_id=cm.class_sec_id and cm.class=c.class_id and cm.section=s.sec_id AND e.admission_id=a.admission_id  AND  e.admit_year='$year_id' ORDER BY enroll_id DESC";
+         
          $res=$this->db->query($query);
          return $res->result();
        }
@@ -244,7 +247,7 @@ $admisn="select name,admission_id,admisn_no from edu_admission WHERE admission_i
 		  foreach ($resultset->result() as $rows)
 		  {
 		   echo $rows->name;
-		   //echo $rows->admission_id;
+		   //echo $rows->admission_id;  
 		   exit;
 		  }
 

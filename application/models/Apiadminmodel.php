@@ -28,7 +28,7 @@ class Apiadminmodel extends CI_Model {
 
 	public function getYear()
 	{
-		$sqlYear = "SELECT * FROM edu_academic_year WHERE CURDATE() >= from_month AND CURDATE() <= to_month AND status = 'Active'";
+		$sqlYear = "SELECT * FROM edu_academic_year WHERE NOW() >= from_month AND NOW() <= to_month AND status = 'Active'";
 		$year_result = $this->db->query($sqlYear);
 		$ress_year = $year_result->result();
 
@@ -50,7 +50,7 @@ class Apiadminmodel extends CI_Model {
 	public function getTerm()
 	{
 	    $year_id = $this->getYear();
-		$sqlTerm = "SELECT * FROM edu_terms WHERE CURDATE() >= from_date AND CURDATE() <= to_date AND year_id = '$year_id' AND status = 'Active'";
+		$sqlTerm = "SELECT * FROM edu_terms WHERE NOW() >= from_date AND NOW() <= to_date AND year_id = '$year_id' AND status = 'Active'";
 		$term_result = $this->db->query($sqlTerm);
 		$ress_term = $term_result->result();
 		
@@ -107,7 +107,7 @@ class Apiadminmodel extends CI_Model {
               foreach($result as $rows){   }
               $classid=$rows->class_sec_id;
               $year_id=$this->getYear();
-            $stu_list="SELECT eer.name,eer.enroll_id,ea.admisn_no,ea.sex,ea.admisn_year,eer.class_id FROM edu_enrollment AS eer LEFT JOIN edu_admission AS ea ON ea.admission_id=eer.admission_id WHERE eer.class_id='$classid' AND eer.admit_year='$year_id' AND eer.status='Active' order by eer.enroll_id asc";
+            $stu_list="SELECT eer.name,eer.enroll_id,ea.admisn_no,ea.sex,ea.admisn_year,eer.class_id FROM edu_enrollment AS eer LEFT JOIN edu_admission AS ea ON ea.admission_id=eer.admission_id WHERE eer.class_id='$classid' AND eer.admit_year='$year_id' AND eer.status='Active' order by ea.sex DESC,eer.name ASC";
             $res_stu=$this->db->query($stu_list);
               $result_stud=$res_stu->result();
             if($res->num_rows()==0){
@@ -341,7 +341,9 @@ class Apiadminmodel extends CI_Model {
                 //#################### GET  ALL TEACHERS ####################//
 
             function get_all_teachers(){
-              $sql="SELECT et.name, et.sex, et.age, et.class_teacher, IF(c.class_name IS NULL, '', c.class_name) as class_name, IF(s.sec_name IS NULL, '', s.sec_name) as sec_name, et.subject, IF(esu.subject_name IS NULL, '',esu.subject_name) as subject_name, et.teacher_id FROM edu_teachers AS et LEFT JOIN edu_classmaster AS cm ON et.class_teacher = cm.class_sec_id LEFT JOIN edu_class AS c ON cm.class = c.class_id LEFT JOIN edu_sections AS s ON cm.section = s.sec_id LEFT JOIN edu_subject AS esu ON et.subject = esu.subject_id WHERE et.status = 'Active' ORDER BY et.teacher_id ASC";
+              //$sql="SELECT et.name,et.sex,et.age,et.class_teacher,c.class_name,s.sec_name,et.subject,esu.subject_name,et.teacher_id FROM edu_teachers
+              //AS et LEFT JOIN edu_classmaster AS cm ON et.class_teacher=cm.class_sec_id LEFT JOIN edu_class AS c ON cm.class=c.class_id LEFT JOIN edu_sections AS s ON  cm.section=s.sec_id LEFT JOIN edu_subject AS esu ON et.subject=esu.subject_id WHERE et.status='Active' order by et.teacher_id asc";
+              $sql = "SELECT et.name, et.sex, et.age, et.class_teacher, IF(c.class_name IS NULL, '', c.class_name) as class_name, IF(s.sec_name IS NULL, '', s.sec_name) as sec_name, et.subject, IF(esu.subject_name IS NULL, '',esu.subject_name) as subject_name, et.teacher_id FROM edu_teachers AS et LEFT JOIN edu_classmaster AS cm ON et.class_teacher = cm.class_sec_id LEFT JOIN edu_class AS c ON cm.class = c.class_id LEFT JOIN edu_sections AS s ON cm.section = s.sec_id LEFT JOIN edu_subject AS esu ON et.subject = esu.subject_id WHERE et.status = 'Active' ORDER BY et.teacher_id ASC";
               $res=$this->db->query($sql);
               if($res->num_rows()==0){
                   $data=array("status"=>"error","msg"=>"nodata");
@@ -410,10 +412,11 @@ class Apiadminmodel extends CI_Model {
 						$timetable_res = $this->db->query($timetable_query);
 
 						 if($timetable_res->num_rows()==0){
-							 $timetable_result = array("status" => "timetable", "msg" => "TimeTable not found");
+							 $timetable_result = array("status" => "error", "msg" => "TimeTable not found");
 
 						}else{
-							$timetable_result= $timetable_res->result();
+								$timetable_res= $timetable_res->result();
+              $timetable_result = array("status" => "success", "msg" => "TimeTable  found","data"=>$timetable_res);
 						}
 
 
@@ -834,12 +837,12 @@ LEFT JOIN edu_terms AS et ON  efm.term_id=et.term_id WHERE efm.class_master_id='
               return $data;
             }
           }
-		  
-		  function get_class_circular_view($user_type){
+          
+          function get_class_circular_view($user_type){
 			$year_id=$this->getYear();
 			//$year_id = '1';
 			if ($user_type =='2'){
-				echo $query="SELECT c.id,c.user_type,c.user_id,c.circular_master_id,c.circular_date,c.circular_type,cm.*,u.user_id,u.name FROM edu_circular AS c,edu_users AS u,edu_circular_master AS cm WHERE c.user_type='2' AND  cm.id=c.circular_master_id AND c.user_id=u.user_id AND cm.academic_year_id = '$year_id' AND  cm.status='Active' ORDER BY c.id DESC";
+				$query="SELECT c.id,c.user_type,c.user_id,c.circular_master_id,c.circular_date,c.circular_type,cm.*,u.user_id,u.name FROM edu_circular AS c,edu_users AS u,edu_circular_master AS cm WHERE c.user_type='2' AND  cm.id=c.circular_master_id AND c.user_id=u.user_id AND cm.academic_year_id = '$year_id' AND  cm.status='Active' ORDER BY c.id DESC";
 			}
 			if ($user_type =='3'){
 				$query="SELECT cm.*, c.circular_date, c.circular_type, c.user_type, e.class_id, cl.class_name, se.sec_name FROM edu_circular AS c, edu_users AS u, edu_admission AS a, edu_enrollment AS e, edu_circular_master AS cm, edu_classmaster AS clm, edu_class AS cl, edu_sections AS se WHERE c.user_type = '$user_type' AND u.user_type = c.user_type AND cm.id = c.circular_master_id AND c.user_id = u.user_id AND u.user_master_id = a.admission_id AND u.student_id = a.admission_id AND a.admission_id = e.admission_id AND clm.class_sec_id = e.class_id AND clm.class = cl.class_id AND clm.section = se.sec_id AND cm.academic_year_id = '$year_id' AND cm.status = 'Active' GROUP BY e.class_id, cm.circular_title, c.circular_type, c.circular_date ORDER BY c.id DESC";

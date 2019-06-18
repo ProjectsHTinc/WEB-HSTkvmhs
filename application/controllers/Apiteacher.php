@@ -199,7 +199,7 @@ class Apiteacher extends CI_Controller {
 
 // REload end
 
-    	public function disp_Homework()
+    public function disp_Homework()
 	{
 		$_POST = json_decode(file_get_contents("php://input"), TRUE);
 
