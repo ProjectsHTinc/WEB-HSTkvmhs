@@ -302,8 +302,8 @@ Class Examinationresultmodel extends CI_Model
       edu_admission AS a,
       edu_subject AS s
     WHERE
-      en.class_id = '$cls_masid' AND en.admit_year='$year_id'  AND en.status='Active' AND en.enroll_id = m.stu_id AND m.exam_id = '$exam_id' AND en.admission_id = a.admission_id   order by en.name ASC,a.sex DESC";
-        $res  = $this->db->query($sql);
+       m.classmaster_id='$cls_masid' AND en.admit_year='$year_id'  AND en.status='Active' AND en.enroll_id = m.stu_id AND m.exam_id = '$exam_id' AND en.admission_id = a.admission_id   order by en.name ASC,a.sex DESC";
+       $res  = $this->db->query($sql);
         $rows = $res->result();
         return $rows;
     }
