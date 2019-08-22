@@ -1398,6 +1398,9 @@ table.dataTable thead > tr > td:active {
   outline: none;
 }
 
+
+
+
 table.dataTable thead .sorting,
 table.dataTable thead .sorting_asc,
 table.dataTable thead .sorting_desc,
@@ -6673,7 +6676,7 @@ star {
 }
 
 .navbar-default {
-  
+
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 .navbar-default .navbar-nav > li > a:not(.btn) {
@@ -8127,7 +8130,7 @@ star {
 .wrapper {
   position: relative;
   top: 0;
- 
+
 }
 .wrapper:after {
   display: table;
@@ -8502,7 +8505,7 @@ star {
   }
 
   .wrapper {
-  
+
   }
   .wrapper.wrapper-full-page {
     height: auto;

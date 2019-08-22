@@ -21,6 +21,8 @@
                   <div class="header">
                      <h4 class="title">
                         View Exam Marks ( <?php foreach($cls_exam as $rows){} echo $rows->exam_name;?> )
+                        <?php
+                        if($rows->grade_flag=='0'){ echo "<small>No Grade System</small>";?> <style>.grade_opt{display: none;}</style> <?php  } else{ echo "";  }  ?>
                         <button onclick="history.go(-1);" class="btn btn-wd btn-default pull-right" style="float:right; ">Go Back</button>
                         <button style="float:right;margin-right: 10px;" class="btn btn-info btn-fill center download">Export Excel</button>
                         <!-- <button style="float:right;margin-right: 10px;" class="btn btn-info btn-fill center" onclick="generatefromtable()">Export PDF</button>-->
@@ -56,7 +58,7 @@
                            <thead>
                               <th>Sno</th>
                               <th>Name</th>
-                              
+
                               <?php
                                  if($status=="Success")
                                  {
@@ -64,7 +66,7 @@
                                     for($i=0;$i<$cnt;$i++)
                                  { ?>
                               <th> <?php echo $subject_name[$i]; ?> </th>
-							 
+
                               <?php  }
                                  }else{  ?>
                               <th style="color:red;">Subject Not Found</th>
@@ -77,7 +79,7 @@
                                  {
                                  $student_arr = array();
                                  $student_array_generate($stu,$student_arr);
-                                 
+
                                  $i = 1;
                                  foreach ($student_arr as $k => $s1)
                                  {
@@ -91,11 +93,11 @@
                                  echo '<input type="hidden" id="sid" name="sutid[]" value="'.$s->enroll_id.'" />';
                                  echo '<input type="hidden" id="cid" name="clsmastid" value="'.$s->class_id.'" />';
                                  $k++;
-                                
+
                                  }
-                                 
+
                                  if($status=="Success")
-                                 {    
+                                 {
                                  echo '<input type="hidden" required  name="subid" value="'.$k1.'" class="form-control"/>';
                                  echo '<td>';
                                  if(!empty($s))
@@ -115,51 +117,48 @@
                                      echo'<span class="combat"  style="color:red;">';
                                  echo $s->total_marks; echo "&nbsp";
                                  echo'</span>';
-                                 echo '<span class="space"  style="color:red;">';echo $s->total_grade;echo'</span>';
+                                 echo '<span class="space grade_opt"  style="color:red;">';echo $s->total_grade;echo'</span>';
                                  }else{
                                      echo'<span class="combat">';
                                  echo $s->total_marks; echo "&nbsp";
                                  echo'</span>';
-                                 echo '<span class="space">';echo $s->total_grade;echo'</span>';
-                                 }   
+                                 echo '<span class="space grade_opt">';echo $s->total_grade;echo'</span>';
+                                 }
                                  }else{
                                  //echo"AB";
                                  echo '<span class="space" style="color:red;">';echo $s->total_marks;echo'</span>';
                                  }
-                                 
+
                                  }else{
                                  echo '<span class="grade">';
                                  if(is_numeric($im)){
                                  echo $s->internal_mark;  echo "&nbsp";
-                                 echo '<span class="space">';echo $s->internal_grade;echo'</span>';
+                                 echo '<span class="space grade_opt">';echo $s->internal_grade;echo'</span>';
                                  echo'</span>';
                                  }else{ echo'<span style="color:red;">'; echo $s->internal_mark; echo'</span>'; }
                                  echo "&nbsp";
-                                 
+
                                  echo '<span class="grade1">';
                                  if(is_numeric($em)){
                                  echo $s->external_mark;  echo "&nbsp";
-                                 echo '<span class="space">';echo $s->external_grade;echo'</span>';
+                                 echo '<span class="space grade_opt">';echo $s->external_grade;echo'</span>';
                                  }else{ echo'<span style="color:red;">'; echo $s->external_mark; echo'</span>'; }
                                  echo'</span>';
-                                 
+
                                  echo '<span class="grade2">';
                                  if(is_numeric($tm)){
                                  if($tm <'35' || !is_numeric($im) || !is_numeric($em)){
                                  echo'<span class="combat" style="color:red;">';
                                  echo $s->total_marks; echo "&nbsp";
                                  echo'</span>';
-                                 echo '<span class="space" style="color:red;">';echo $s->total_grade;echo'</span>';
+                                 echo '<span class="space grade_opt" style="color:red;">';echo $s->total_grade;echo'</span>';
                                  }else{
                                  echo'<span class="combat" >';
                                  echo $s->total_marks; echo "&nbsp";
                                  echo'</span>';
-                                 echo '<span class="space">';echo $s->total_grade;echo'</span>';
+                                 echo '<span class="space grade_opt">';echo $s->total_grade;echo'</span>';
                                  }
-                                 //     echo'<span class="combat">';
-                                 //       echo $s->total_marks; echo "&nbsp";
-                                 //      echo'</span>';
-                                 // echo '<span class="space">';echo $s->total_grade;echo'</span>';
+
                                  }else{  echo $s->total_marks; }
                                  echo'</span>';
                                  }
@@ -174,7 +173,7 @@
                                  }
                                  echo '<td class="total-combat">
                                  </td>';
-                                 
+
                                  echo '</tr>';
                                  $i++;
                                  }
@@ -225,8 +224,8 @@ $(document).ready(function(){
    //doc.text(50, height + 20, 'hi world');
    doc.save("<?php echo $cls; echo $sec; ?>.pdf");
    }
-   
-   $(function() 
+
+   $(function()
    {
    $(".download").click(function() {
    $("#bootstrap-table").table2excel({
@@ -239,12 +238,12 @@ $(document).ready(function(){
    exclude_inputs: true
    });
    });
-   
+
    $('#exammenu').addClass('collapse in');
    $('#exam').addClass('active');
    $('#exam3').addClass('active');
    });
-   
+
    $('tr').each(function () {
    var sum = 0;
    $(this).find('.combat').each(function () {
@@ -255,7 +254,7 @@ $(document).ready(function(){
    });
    $(this).find('.total-combat').html(sum);
    });
-   
+
    $('#markform').validate({ // initialize the plugin
    rules:{
    marks1:{required:true },
@@ -266,7 +265,7 @@ $(document).ready(function(){
    marks: "Please Enter The Marks"
    }
    });
-   
+
    function insertfun()
    {//onkeyup="insertfun(this.value)"
    var m=document.getElementById("mark").value;
@@ -293,16 +292,15 @@ $(document).ready(function(){
    $("#msg").html(test);
    $("#save").show();
    }
-   
+
    }
    });
    }
-   
+
    var table = $('#bootstrap-table').DataTable( {
    responsive: true,
    paging: false
    } );
-   
+
    new $.fn.dataTable.FixedHeader( table );
 </script>
-

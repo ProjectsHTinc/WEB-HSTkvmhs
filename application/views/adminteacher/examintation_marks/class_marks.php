@@ -26,7 +26,9 @@
                <div class="card">
                   <div class="header">
                      <h4 class="title">
-                        View Exam Marks( <?php foreach ($cls_exname as $rows) {} echo $rows->exam_name; ?>  )
+                        View Exam Marks( <?php foreach ($cls_exname as $rows) {} echo $rows->exam_name; ?> )
+                        <?php
+                        if($rows->grade_flag=='0'){ echo "<small>No Grade System</small>";?> <style>.grade_opt{display: none;}</style> <?php  } else{ echo "1";  }  ?>
                         <button onclick="history.go(-1);" class="btn btn-wd btn-default pull-right" style="float:right; ">Go Back</button>
                         <button style="float:right;margin-right: 10px;" class="btn btn-info btn-fill center download">Export Excel</button>
                         <!-- <button style="float:right;margin-right: 10px;" class="btn btn-info btn-fill center" onclick="generatefromtable()">Export PDF</button-->
@@ -86,7 +88,7 @@
                                  {
                                  $student_arr = array();
                                  $student_array_generate($stu,$student_arr);
-                                 
+
                                  $i = 1;
                                  foreach ($student_arr as $k => $s1)
                                  {
@@ -101,11 +103,6 @@
                                       echo '<input type="hidden" id="cid" name="clsmastid" value="'.$s->class_id.'" />';
                                       //echo $s->language;
                                       $k++;
-        //                          echo'<td>';
-        //                           if ($s->pref_language!=''){
-        //                             echo'('; echo' ';  echo $s->pref_language;  echo' '; echo')'; 
-								//  }
-        //                          echo'</td>';
                                     }
                                  if($status=="Success")
                                  {
@@ -117,11 +114,11 @@
                                         $em=$s->external_mark;
                                         $tm=$s->total_marks;
                                         //echo $tm;
-                                 
+
                                         foreach($result as $flag){}
                                         $ef=$flag->is_internal_external;
                                          $efsi=$flag->subject_id;
-                                 
+
                                          if($im==0 && $em==0 && is_numeric($im) && is_numeric($em))
                                           //if($ef==0)
                                          {
@@ -132,13 +129,13 @@
                                                      echo'<span class="combat" style="color:red;">';
                                                  echo $s->total_marks; echo "&nbsp";
                                                  echo'</span>';
-                                                 echo '<span class="space" style="color:red;">';echo $s->total_grade;echo'</span>';
+                                                 echo '<span class="space grade_opt" style="color:red;">';echo $s->total_grade;echo'</span>';
                                                  }else{
                                                      echo'<span class="combat">';
                                                  echo $s->total_marks; echo "&nbsp";
                                                  echo'</span>';
-                                                 echo '<span class="space">';echo $s->total_grade;echo'</span>';
-                                                 }   
+                                                 echo '<span class="space grade_opt">';echo $s->total_grade;echo'</span>';
+                                                 }
                                               }else{
                                                 //echo"AB";
                                                 echo '<span class="space" style="color:red;">';echo $s->total_marks;echo'</span>';
@@ -148,14 +145,14 @@
                                                 echo '<span class="grade">';
                                               if(is_numeric($im)){
                                               echo $s->internal_mark;  echo "&nbsp";
-                                              echo '<span class="space">';echo $s->internal_grade;echo'</span>';
+                                              echo '<span class="space grade_opt">';echo $s->internal_grade;echo'</span>';
                                               }else{ echo'<span style="color:red;">'; echo $s->internal_mark; echo'</span>'; }
                                               echo'</span>';
                                                   echo "&nbsp";
                                                 echo '<span class="grade1">';
                                                if(is_numeric($em)){
                                               echo $s->external_mark;  echo "&nbsp";
-                                              echo '<span class="space">';echo $s->external_grade;echo'</span>';
+                                              echo '<span class="space grade_opt">';echo $s->external_grade;echo'</span>';
                                             }else{ echo'<span style="color:red;">'; echo $s->external_mark; echo'</span>'; }
                                               echo'</span>';
                                               echo "&nbsp";
@@ -165,14 +162,14 @@
                                                     echo'<span class="combat" style="color:red;">';
                                                    echo $s->total_marks; echo "&nbsp";
                                                   echo'</span>';
-                                             echo '<span class="space" style="color:red;">';echo $s->total_grade;echo'</span>';
+                                             echo '<span class="space grade_opt" style="color:red;">';echo $s->total_grade;echo'</span>';
                                                    }else{
                                                   echo'<span class="combat">';
                                                    echo $s->total_marks; echo "&nbsp";
                                                   echo'</span>';
-                                             echo '<span class="space">';echo $s->total_grade;echo'</span>';
+                                             echo '<span class="space grade_opt">';echo $s->total_grade;echo'</span>';
                                                   }
-                                            
+
                                                }else{  echo $s->total_marks; }
                                              echo'</span>';
                                           }
@@ -213,7 +210,7 @@
 </div>
 <?php
    foreach ($cls_exname as $rows) {} $cls=$rows->class_name; $sec=$rows->sec_name;
-   // echo $cls; echo $sec; ?>
+?>
 <script type="text/javascript">
 
   $(document).ready(function(){
@@ -231,21 +228,21 @@
         });
         $(this).find('.total-combat').html(sum);
       });
-   
+
    $('#examinationmenu').addClass('collapse in');
    $('#exam').addClass('active');
    $('#exam4').addClass('active');
-   
+
    $('#markform').validate({ // initialize the plugin
            rules: {
                totalmarks:{required:true,number:true }
            },
            messages: {
                  totalmarks: "Please Enter The Marks"
-   
+
                }
        });
-   
+
    var $table = $('#bootstrap-table');
          $(document).ready(function(){
            jQuery('#markform').addClass('collapse in');
@@ -261,7 +258,7 @@
                  pageSize:50,
                  clickToSelect: false,
                  pageList: [10,25,50,100],
-   
+
                  formatShowingRows: function(pageFrom, pageTo, totalRows){
                      //do nothing here, we don't want to show the text "showing x of y from..."
                  },
@@ -276,16 +273,16 @@
                      detailClose: 'fa fa-minus-circle'
                  }
              });
-   
+
              //activate the tooltips after the data table is initialized
              $('[rel="tooltip"]').tooltip();
-   
+
              $(window).resize(function () {
                  $table.bootstrapTable('resetView');
              });
          });
-   
-   function generatefromtable() 
+
+   function generatefromtable()
    {
     var data = [], fontSize =10, height = 0, doc;
     doc = new jsPDF('p', 'pt', 'a3', true);
@@ -305,7 +302,7 @@
     //doc.text(50, height + 20, 'hi world');
     doc.save("<?php  echo $this->session->userdata('name'); ?>( <?php echo $cls; echo $sec; ?> ).pdf");
    }
-   
+
    $(function() {
    $(".download").click(function() {
    $("#bootstrap-table").table2excel({
@@ -318,13 +315,12 @@
       exclude_inputs: true
     });
    });
-   
+
    });
-   
+
    var table = $('#bootstrap-table').DataTable( {
        responsive: true,
        paging: false
    } );
    new $.fn.dataTable.FixedHeader( table );
 </script>
-

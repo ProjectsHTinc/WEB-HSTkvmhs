@@ -6,15 +6,15 @@ class Examinationresult extends CI_Controller
     function __construct()
     {
         parent::__construct();
-        
+
         $this->load->helper('url');
         $this->load->library('session');
 		$this->load->model('examinationresultmodel');
         $this->load->model('class_manage');
         $this->load->model('subjectmodel');
     }
-    
-    
+
+
     public function home()
     {
         $datas     = $this->session->userdata();
@@ -29,8 +29,8 @@ class Examinationresult extends CI_Controller
             redirect('/');
         }
     }
-    
-	
+
+
 	 public function exam_namefor_duty()
     {
         $datas     = $this->session->userdata();
@@ -45,11 +45,11 @@ class Examinationresult extends CI_Controller
             redirect('/');
         }
     }
-   
-   
+
+
   //-----------------------------New------------------------------------
-  
-  
+
+
        public function exname()
 		{
 			$datas     = $this->session->userdata();
@@ -65,8 +65,8 @@ class Examinationresult extends CI_Controller
 				redirect('/');
 			}
 		}
-	
-	
+
+
       public function view_all_subject()
 	  {
 		$exam_id   = $this->input->get('var');
@@ -85,7 +85,7 @@ class Examinationresult extends CI_Controller
             redirect('/');
         }
 	  }
-	  
+
 	  public function view_all_subject_name()
 	  {
 		  $clsmaster_id=$this->input->get('var1');
@@ -94,7 +94,7 @@ class Examinationresult extends CI_Controller
 		$datas     = $this->session->userdata();
         $user_id   = $this->session->userdata('user_id');
         $user_type = $this->session->userdata('user_type');
-        if ($user_type == 2) 
+        if ($user_type == 2)
         {
             $datas = $this->examinationresultmodel->getall_cls_sec($user_id);
             $datas['clssec'] = $this->examinationresultmodel->view_all_sub_details($exam_id,$clsmaster_id,$user_id,$user_type);
@@ -105,12 +105,12 @@ class Examinationresult extends CI_Controller
         } else {
             redirect('/');
         }
-		   
+
 	  }
-  
-  
+
+
   //--------------------------------------------------------------------
-    
+
     public function class_section()
     {
         $exam_id   = $this->input->get('var');
@@ -129,7 +129,7 @@ class Examinationresult extends CI_Controller
             redirect('/');
         }
     }
-    
+
     public function exam_mark_details()
     {
         $datas     = $this->session->userdata();
@@ -153,53 +153,54 @@ class Examinationresult extends CI_Controller
         } else {
             redirect('/');
         }
-        
+
     }
     //------------------Class Marks--------------------------
-    
+
     public function exam_mark_details_cls_teacher()
     {
         $datas     = $this->session->userdata();
         $user_id   = $this->session->userdata('user_id');
         $user_type = $this->session->userdata('user_type');
-        
-        $cls_masid = $this->input->get('var1');
-        $exam_id   = $this->input->get('var2');
-
-       
-        $datas         = $this->examinationresultmodel->getall_subname($user_id,$cls_masid,$exam_id,$user_type);
-        $datas['stu']    = $this->examinationresultmodel->getall_stuname($user_id, $cls_masid,$exam_id);
-        $datas['result'] = $this->examinationresultmodel->getall_exam_inter_exter_details($exam_id,$cls_masid);
-        $datas['marks1'] = $this->examinationresultmodel->getall_marks_details1($user_id,$cls_masid,$user_type);
-        $datas['smark']  = $this->examinationresultmodel->marks_status_details($cls_masid,$exam_id);
-       
-		$datas['cls_exname']=$this->examinationresultmodel->clsname_examname($exam_id,$cls_masid);
-        // print_r($datas['smark']);
-	   //echo'<pre>'; print_r($datas['stu'] );exit;
         if ($user_type == 2) {
+          $cls_masid = $this->input->get('var1');
+          $exam_id   = $this->input->get('var2');
+
+          // List of subject for class in Active
+          $datas         = $this->examinationresultmodel->getall_subname($user_id,$cls_masid,$exam_id,$user_type);
+          // Getting added marks in table
+          $datas['stu']    = $this->examinationresultmodel->getall_stuname($user_id, $cls_masid,$exam_id);
+          // Getting exam details
+          $datas['result'] = $this->examinationresultmodel->getall_exam_inter_exter_details($exam_id,$cls_masid);
+          //Getting user id
+          $datas['marks1'] = $this->examinationresultmodel->getall_marks_details1($user_id,$cls_masid,$user_type);
+          // Getting Mark Status
+          $datas['smark']  = $this->examinationresultmodel->marks_status_details($cls_masid,$exam_id);
+          
+          $datas['cls_exname']=$this->examinationresultmodel->clsname_examname($exam_id,$cls_masid);
             $this->load->view('adminteacher/teacher_header');
             $this->load->view('adminteacher/examintation_marks/class_marks', $datas);
             $this->load->view('adminteacher/teacher_footer');
         } else {
             redirect('/');
         }
-        
+
     }
-    
-    
+
+
     public function checker()
     {
         $classid = $this->input->post('id');
         $data    = $this->class_manage->get_subject($classid);
         echo json_encode($data);
     }
-    
+
     public function marks_details()
     {
         $datas     = $this->session->userdata();
         $user_id   = $this->session->userdata('user_id');
         $user_type = $this->session->userdata('user_type');
-        
+
         $exam_id = $this->input->post('examid1');
         $clsmastid = $this->input->post('clsmastid');
         $subid          = $this->input->post('subjectid');
@@ -209,7 +210,7 @@ class Examinationresult extends CI_Controller
         $external_marks = $this->input->post('external_marks');
         $total_marks = $this->input->post('total_marks');
 		$eflag=$this->input->post('eflag');
-        
+
         $ttlmark=$this->input->post('ttlmark');
         $interlimit=$this->input->post('interlimit');
         $exterlimit=$this->input->post('exterlimit');
@@ -221,7 +222,7 @@ class Examinationresult extends CI_Controller
         if ($datas['status']=="success") {
             $this->session->set_flashdata('msg', 'Added Successfully');
             redirect('examinationresult/marks_details_view?var='.$exam_id.'',$datas);
-                 
+
         }if($datas['status']=="Already Added"){
 			$this->session->set_flashdata('msg', 'Already Added');
             redirect('examinationresult/exam_mark_details?var1='.$clsmastid.'&var2='.$exam_id.'',$datas);
@@ -230,33 +231,33 @@ class Examinationresult extends CI_Controller
             redirect('examinationresult/view_exam_name_marks',$datas);
         }
     }
-    
+
     public function ajaxmarkinsert()
     {
         $datas     = $this->session->userdata();
         $user_id   = $this->session->userdata('user_id');
         $user_type = $this->session->userdata('user_type');
-        
+
         $exam_id   = $this->input->post('examid');
         $clsmastid = $this->input->post('clsid');
         $subid     = $this->input->post('suid');
         $sutid     = $this->input->post('stuid');
         $teaid     = $this->input->post('teid');
         $marks     = $this->input->post('mark');
-        
-      
+
+
         $datas = $this->examinationresultmodel->add_marks_detail_ajax($exam_id, $subid, $sutid, $clsmastid, $teaid, $marks);
         //print_r($datas);
         if ($datas['status'] == "success") {
             $this->session->set_flashdata('msg', 'Added Successfully');
             redirect('examinationresult/exam_mark_details', $datas);
-            //redirect('add_test');        
+            //redirect('add_test');
         } else {
             $this->session->set_flashdata('msg', 'Falid To Added');
             redirect('examinationresult/exam_mark_details', $datas);
         }
     }
-    
+
     public function view_exam_name_marks()
     {
         $datas     = $this->session->userdata();
@@ -271,14 +272,14 @@ class Examinationresult extends CI_Controller
             redirect('/');
         }
     }
-    
-    
+
+
     public function marks_details_view()
     {
         $datas     = $this->session->userdata();
         $user_id   = $this->session->userdata('user_id');
         $user_type = $this->session->userdata('user_type');
-        
+
         $exam_id=$this->input->get('var');
         //echo $exam_id;exit;
         $datas['view_allmarks'] = $this->examinationresultmodel->getall_marks_details($exam_id,$user_id,$user_type);
@@ -290,19 +291,19 @@ class Examinationresult extends CI_Controller
         } else {
             redirect('/');
         }
-        
+
     }
-    
+
     public function exam_mark_edit_details()
     {
         $datas     = $this->session->userdata();
         $user_id   = $this->session->userdata('user_id');
         $user_type = $this->session->userdata('user_type');
-        
+
         $subid    = $this->input->get('var1');
         $clsmasid = $this->input->get('var2');
         $exam_id  = $this->input->get('var3');
-        
+
         //echo $subid;echo $clsmasid;
         $datas['edit'] = $this->examinationresultmodel->edit_marks_details($user_id,$subid,$clsmasid,$exam_id,$user_type);
         $datas['mark'] = $this->examinationresultmodel->marks_status_details($clsmasid, $exam_id);
@@ -316,13 +317,13 @@ class Examinationresult extends CI_Controller
             redirect('/');
         }
     }
-    
+
     public function update_marks_details()
     {
         $datas     = $this->session->userdata();
         $user_id   = $this->session->userdata('user_id');
         $user_type = $this->session->userdata('user_type');
-        
+
         $exam_id        = $this->input->post('examid');
         $clsmastid      = $this->input->post('clsmastid');
         $subid          = $this->input->post('subid');
@@ -348,24 +349,24 @@ class Examinationresult extends CI_Controller
             redirect('examinationresult/view_exam_name_marks',$datas);
         }
     }
-    
+
     public function marks_status()
     {
         $datas     = $this->session->userdata();
         $user_id   = $this->session->userdata('user_id');
         $user_type = $this->session->userdata('user_type');
-        
+
         $exam_id   = $this->input->post('examid');
         $clsmastid = $this->input->post('clsid');
         //echo $exam_id;echo $clsmastid;exit;
         $datas     = $this->examinationresultmodel->marks_status_update($exam_id, $clsmastid, $user_id);
-        
+
         if ($datas['status'] == "success") {
             $a = $datas['var1'];
             $b = $datas['var2']; //exit;
             $this->session->set_flashdata('msg', 'Approved Successfully');
             redirect('examinationresult/exam_mark_details_cls_teacher?var1=' . $b . '&var2=' . $a . '', $datas);
-            //redirect('add_test');        
+            //redirect('add_test');
         } elseif ($datas['status'] == "Already Added Exam Marks") {
             $a = $datas['var1'];
             $b = $datas['var2'];
@@ -377,9 +378,9 @@ class Examinationresult extends CI_Controller
             $this->session->set_flashdata('msg', 'Falid To Approve');
             redirect('examinationresult/exam_mark_details_cls_teacher?var1=' . $b . '&var2=' . $a . '', $datas);
         }
-        
+
     }
-    
+
     public function exam_duty()
     {
         $datas         = $this->session->userdata();
@@ -396,8 +397,8 @@ class Examinationresult extends CI_Controller
         } else {
             redirect('/');
         }
-        
+
     }
-    
+
 }
 ?>

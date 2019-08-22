@@ -18,21 +18,7 @@ class Adminparent extends CI_Controller
         $this->load->model('leavemodel');
 
     }
-    /**
-     * Index Page for this controller.
-     *
-     * Maps to the following URL
-     *         http://example.com/index.php/welcome
-     *    - or -
-     *         http://example.com/index.php/welcome/index
-     *    - or -
-     * Since this controller is set as the default controller in
-     * config/routes.php, it's displayed at http://example.com/
-     *
-     * So any other public methods not prefixed with an underscore will
-     * map to /index.php/welcome/<method_name>
-     * @see https://codeigniter.com/user_guide/general/urls.html
-     */
+
     // Class section
     public function home()
     {
@@ -413,23 +399,18 @@ class Adminparent extends CI_Controller
         if ($user_type == 4) {
             $datas['res'] = $this->dashboard->stud_details($user_id);
             $stu          = count($datas['res']);
-            // echo $stu;exit;
-
             if ($stu == 1) {
                 $datas['stud_details'] = $this->dashboard->get_students($user_id);
                 foreach ($datas['stud_details'] as $rows) {
                 }
                 $enroll_id       = $rows->enroll_id;
-                //echo $enroll_id;exit;
                 $datas['exam']   = $this->adminparentmodel->view_exam_name($enroll_id);
-                //print_r($datas['exam']);exit;
                 $datas['stu_id'] = $this->adminparentmodel->get_stu_id($enroll_id);
                 $this->load->view('adminparent/parent_header');
                 $this->load->view('adminparent/exam_result/exam_name', $datas);
                 $this->load->view('adminparent/parent_footer');
             } else {
                 $datas['stud_details'] = $this->dashboard->get_students($user_id);
-                //echo'<pre>'; print_r($datas['stud_details']);exit;
                 $this->load->view('adminparent/parent_header');
                 $this->load->view('adminparent/exam_result/add', $datas);
                 $this->load->view('adminparent/parent_footer');
@@ -445,10 +426,8 @@ class Adminparent extends CI_Controller
         $datas           = $this->session->userdata();
         $user_id         = $this->session->userdata('user_id');
         $user_type       = $this->session->userdata('user_type');
-        //echo $enroll_id;exit;
         $datas['exam']   = $this->adminparentmodel->view_exam_name($enroll_id);
         $datas['stu_id'] = $this->adminparentmodel->get_stu_id($enroll_id);
-        //print_r($datas['stu_id']);exit;
         if ($user_type == 4) {
             $this->load->view('adminparent/parent_header');
             $this->load->view('adminparent/exam_result/exam_name', $datas);
@@ -461,14 +440,12 @@ class Adminparent extends CI_Controller
 
     public function exam_results($exam_id, $stu_id, $cls_id)
     {
-        //echo $exam_id;echo $stu_id;exit;
         $datas           = $this->session->userdata();
         $user_id         = $this->session->userdata('user_id');
         $user_type       = $this->session->userdata('user_type');
-        $datas['result'] = $this->adminparentmodel->exam_marks($exam_id, $stu_id, $cls_id);
-        //$datas['eflag']  = $this->adminparentmodel->getall_exam_details($exam_id);
-        //echo '<pre>';print_r($datas['result']);exit;
         if ($user_type == 4) {
+            $datas['res']=$this->studentmodel->exam_name($exam_id);
+            $datas['result'] = $this->adminparentmodel->exam_marks($exam_id, $stu_id, $cls_id);
             $this->load->view('adminparent/parent_header');
             $this->load->view('adminparent/exam_result/exam_marks', $datas);
             $this->load->view('adminparent/parent_footer');

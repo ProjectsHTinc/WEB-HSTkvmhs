@@ -5,7 +5,7 @@
            <div class="row">
                <div class="col-md-8">
                    <div class="card">
-                       <div class="header"> 
+                       <div class="header">
                            <h4 class="title">Add House Groups  </h4>
                        </div>
                        <div class="content">
@@ -13,7 +13,7 @@
                                  <fieldset>
                                       <div class="form-group">
                                           <label class="col-sm-2 control-label">House Groups</label>
-                                          <div class="col-sm-4"> 
+                                          <div class="col-sm-4">
 										                         <input type="text" name="groups_name" class="form-control"  value="">
                                           </div>
                                           <label class="col-sm-2 control-label">Status</label>
@@ -69,8 +69,8 @@
                                   <tr>
                                     <td><?php  echo $i; ?></td>
                                     <td><?php  echo $rows->group_name; ?></td>
-									
-									 <td><?php 
+
+									 <td><?php
 										  if($stu=='Active'){?>
 											<button class="btn btn-success btn-fill btn-wd">Active</button>
 										 <?php  }else{?>
@@ -97,9 +97,9 @@
 <script type="text/javascript">
 $(document).ready(function () {
 
-$('#curricular').addClass('collapse in');
-$('#activities').addClass('active');
-$('#curricular2').addClass('active'); 
+$('#mastersmenu').addClass('collapse in');
+$('#master').addClass('active');
+$('#curricular2').addClass('active');
 
    $('#groupsformsection').validate({ // initialize the plugin
        rules: {
@@ -112,44 +112,5 @@ $('#curricular2').addClass('active');
           }
    });
 });
- 
-var $table = $('#bootstrap-table');
-      $().ready(function(){
-          $table.bootstrapTable({
-              toolbar: ".toolbar",
-              clickToSelect: true,
-              showRefresh: true,
-              search: true,
-              showToggle: true,
-              showColumns: true,
-              pagination: true,
-              searchAlign: 'left',
-              pageSize: 8,
-              clickToSelect: false,
-              pageList: [8,10,25,50,100],
-
-              formatShowingRows: function(pageFrom, pageTo, totalRows){
-                  //do nothing here, we don't want to show the text "showing x of y from..."
-              },
-              formatRecordsPerPage: function(pageNumber){
-                  return pageNumber + " rows visible";
-              },
-              icons: {
-                  refresh: 'fa fa-refresh',
-                  toggle: 'fa fa-th-list',
-                  columns: 'fa fa-columns',
-                  detailOpen: 'fa fa-plus-circle',
-                  detailClose: 'fa fa-minus-circle'
-              }
-          });
-
-          //activate the tooltips after the data table is initialized
-          $('[rel="tooltip"]').tooltip();
-
-          $(window).resize(function () {
-              $table.bootstrapTable('resetView');
-          });
-
-
-      });
+$('#bootstrap-table').DataTable();
 </script>

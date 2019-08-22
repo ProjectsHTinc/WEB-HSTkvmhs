@@ -2,7 +2,7 @@
 <div class="content">
        <div class="container-fluid">
            <div class="row">
-               <div class="col-md-8">
+               <div class="col-md-12">
                    <div class="card">
                        <div class="header">
                            <h4 class="title">Update Examination</h4>
@@ -60,23 +60,43 @@
 
 
                                             </div>
-
-                                            <label class="col-sm-2 control-label">Exam Name</label>
-                                          <div class="col-sm-4">
-                                                <input type="text" name="exam_name" class="form-control" placeholder="Enter Exam Name" required value="<?php echo $rows->exam_name; ?>">
-                                            </div>
-				                     </div>
+				                                   </div>
                                     </fieldset>
+	                                   <fieldset>
+                                    <div class="form-group">
+                                    <label class="col-sm-2 control-label">Exam Name</label>
+                                    <div class="col-sm-4">
+                                          <input type="text" name="exam_name" class="form-control" placeholder="Enter Exam Name" required value="<?php echo $rows->exam_name; ?>">
+                                      </div>
+                                    </div>
+                                        </fieldset>
           					 <fieldset>
                               <div class="form-group">
                                  <label class="col-sm-2 control-label">Exam Type</label>
                                    <div class="col-sm-4">
                                    <select  name="exam_flag" id="exam_flag" class="selectpicker"  class="form-control">
-                                                <option value="1">Internal/External</option>
-                                                <option value="0">Total</option>
-                                              </select>
+                                      <option value="1">Internal/External</option>
+                                      <option value="0">Total</option>
+                                    </select>
                           <script language="JavaScript">document.myformsection.exam_flag.value="<?php echo $rows->exam_flag; ?>";</script>
-                                            </div>
+                                  </div>
+  </div>
+</fieldset>
+
+<fieldset>
+   <div class="form-group">
+      <label class="col-sm-2 control-label">Grade  Option</label>
+      <div class="col-sm-4">
+         <select  name="grade_flag" id="grade_flag" class="selectpicker"  class="form-control">
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+         </select>
+           <script language="JavaScript">document.myformsection.grade_flag.value="<?php echo $rows->grade_flag; ?>";</script>
+      </div>
+   </div>
+</fieldset>
+                                            	 <fieldset>
+                                                   <div class="form-group">
                                <label class="col-sm-2 control-label">Status</label>
                                           <div class="col-sm-4">
                                    <select name="status" class="selectpicker form-control" data-style="btn-default btn-block" >
@@ -85,12 +105,13 @@
                                    </select>
                           <script language="JavaScript">document.myformsection.status.value="<?php echo $rows->status; ?>";</script>
                                             </div></div>
-									</fieldset>		
+									</fieldset>
 									<fieldset>
                                         <div class="form-group">
-											<label class="col-sm-2 control-label">&nbsp;</label>
-                                          <div class="col-sm-4">
-                                               <button type="submit" id="save" class="btn btn-info btn-fill center">Update Exam</button>
+											<!-- <label class="col-sm-2 control-label">&nbsp;</label> -->
+
+                                            <div class="text-center">
+                                                <button type="submit" id="save" class="btn btn-info btn-fill center">Update Exam</button>
                                             </div>
 
                                             </div>

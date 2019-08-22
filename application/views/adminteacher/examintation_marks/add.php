@@ -25,7 +25,7 @@
 						  $ex_name=$row->exam_name;
 						  $exam_id=$row->exam_id;
 					   ?>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                            <a rel="tooltip" href="<?php echo base_url(); ?>examinationresult/view_all_subject?var=<?php echo $exam_id; ?>"  class="btn btn-wd"><?php echo $ex_name; ?></a>
                         </div>
 						<?php } }?>

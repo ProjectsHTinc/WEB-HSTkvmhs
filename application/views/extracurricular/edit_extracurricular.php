@@ -5,7 +5,7 @@
            <div class="row">
                <div class="col-md-10">
                    <div class="card">
-                       <div class="header"> 
+                       <div class="header">
                            <h4 class="title">Edit Activities</h4>
                        </div>
                        <?php foreach ($edit as  $res) { } ?>
@@ -14,7 +14,7 @@
                                  <fieldset>
                                       <div class="form-group">
                                           <label class="col-sm-2 control-label">Activities Name	</label>
-                                          <div class="col-sm-4"> 
+                                          <div class="col-sm-4">
 										                         <input type="text" name="ext_name" class="form-control"  value="<?php echo $res->extra_curricular_name; ?>">
 
                                               <input type="hidden" name="id" class="form-control"  value="<?php echo $res->id; ?>">
@@ -53,9 +53,9 @@
 
 <script type="text/javascript">
 $(document).ready(function () {
-$('#curricular').addClass('collapse in');
-$('#activities').addClass('active');
-$('#curricular1').addClass('active');
+  $('#mastersmenu').addClass('collapse in');
+  $('#master').addClass('active');
+  $('#curricular1').addClass('active');
    $('#feesformsection').validate({ // initialize the plugin
        rules: {
            groups_name:{required:true },
@@ -67,5 +67,5 @@ $('#curricular1').addClass('active');
           }
    });
 });
- 
+
 </script>

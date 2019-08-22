@@ -31,12 +31,12 @@ Class Enrollmentmodel extends CI_Model
         function ad_enrollment($admisnid,$admit_year,$formatted_date,$admisn_no,$name,$class,$quota_id,$groups_id,$activity_id,$status){
         	//echo $admisn_no; echo'<br>'; echo $admisnid;
 			$year_id=$this->getYear();
-			
+
             $check_email="SELECT * FROM edu_enrollment WHERE admit_year='$admit_year'  AND admission_id='$admisnid'";
-        
-       
+
+
           $result=$this->db->query($check_email);
-         
+
           if($result->num_rows()==0){
 
 			  $digits = 6;
@@ -44,19 +44,19 @@ Class Enrollmentmodel extends CI_Model
 			  //echo $OTP;
               $md5pwd=md5($OTP);
 
-			  $admisn="select name,admission_id,admisn_no from edu_admission WHERE admission_id='".$admisnid."'"; 
+			  $admisn="select name,admission_id,admisn_no from edu_admission WHERE admission_id='".$admisnid."'";
      	      $resultset = $this->db->query($admisn);
 		      foreach ($resultset->result() as $rows)
 		      {}
 			    if(!empty($admisnid)){
-		        $admisnid=$rows->admission_id; 
+		        $admisnid=$rows->admission_id;
 				}else{
 					$admisnid=$admisnid;
 				}
 				//echo  $admisn_no;exit;
              $query="INSERT INTO edu_enrollment (admission_id,admit_year,admit_date,admisn_no,name,class_id,house_id,extra_curicullar_id,quota_id,created_at,status) VALUES ('$admisnid','$admit_year','$formatted_date','$admisn_no','$name','$class','$groups_id','$activity_id','$quota_id',NOW(),'$status')";
              $resultset=$this->db->query($query);
-             
+
             //Student User Creation
              $sql="SELECT COUNT(admission_id) AS student FROM edu_admission " ;
              $resultsql=$this->db->query($sql);
@@ -112,7 +112,7 @@ Class Enrollmentmodel extends CI_Model
                   $notes =utf8_encode($userdetails."To known more detail click here  http://bit.ly/2wLwdRQ");
                   $phone=$cell;
                   $this->smsmodel->sendSMS($phone,$notes);
-        
+
                 }
 
 
@@ -120,7 +120,7 @@ Class Enrollmentmodel extends CI_Model
               $resultset=$this->db->query($stude_insert);
 
              $query2="UPDATE edu_admission SET enrollment='1' WHERE admission_id='$admisnid'";
-         
+
       		 $resultset=$this->db->query($query2);
 
             $data= array("status" => "success");
@@ -162,9 +162,8 @@ Class Enrollmentmodel extends CI_Model
 	   {
 		  $year_id=$this->getYear();
 
-        $query="SELECT e.*,cm.class_sec_id,cm.class,cm.section,c.class_id,c.class_name,s.sec_id,s.sec_name,a.admission_id,a.admisn_no,a.sex,a.name,(Select b.blood_group_name FROM edu_blood_group as b WHERE  b.id IN(a.blood_group)) AS blood_group_name FROM edu_enrollment as e,edu_classmaster as cm, edu_sections as s,edu_class as c,edu_admission AS a WHERE  
-          e.class_id=cm.class_sec_id and cm.class=c.class_id and cm.section=s.sec_id AND e.admission_id=a.admission_id  AND  e.admit_year='$year_id' ORDER BY enroll_id DESC";
-         
+         $query="SELECT e.*,cm.class_sec_id,cm.class,cm.section,c.class_id,c.class_name,s.sec_id,s.sec_name,a.admission_id,a.admisn_no,a.sex,a.name,(Select b.blood_group_name FROM edu_blood_group as b WHERE  b.id IN(a.blood_group)) AS blood_group_name FROM edu_enrollment as e,edu_classmaster as cm, edu_sections as s,edu_class as c,edu_admission AS a WHERE e.class_id=cm.class_sec_id and cm.class=c.class_id and cm.section=s.sec_id AND e.admission_id=a.admission_id  AND  e.admit_year='$year_id' ORDER BY enroll_id DESC";
+
          $res=$this->db->query($query);
          return $res->result();
        }
@@ -247,7 +246,7 @@ Class Enrollmentmodel extends CI_Model
 		  foreach ($resultset->result() as $rows)
 		  {
 		   echo $rows->name;
-		   //echo $rows->admission_id;  
+		   //echo $rows->admission_id;
 		   exit;
 		  }
 

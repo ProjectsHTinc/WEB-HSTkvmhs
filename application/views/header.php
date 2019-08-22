@@ -204,6 +204,8 @@
                         <li id="masters3"><a href="<?php echo base_url(); ?>classadd/addclass">Class & Sections</a></li>
                         <li id="masters4" ><a href="<?php echo base_url(); ?>subjectadd/addsubject">Subjects</a></li>
                         <li id="masters5"><a href="<?php echo base_url(); ?>classmanage/home">Class Management </a></li>
+                        <li id="curricular1"><a href="<?php echo base_url(); ?>extracurricular/home">Extra-Co curricular  </a></li>
+                        <li id="curricular2"><a href="<?php echo base_url(); ?>groups/home">House Groups</a></li>
                      </ul>
                   </div>
                </li>
@@ -222,7 +224,7 @@
                      </ul>
                   </div>
                </li>
-               <li id="activities">
+               <!-- <li id="activities">
                   <a data-toggle="collapse" href="#curricular">
                      <img class="menuimg" src="<?php echo base_url(); ?>assets/img/icons/extracurricular.png"/>
                      <p>Extra-Co curricular</p>
@@ -234,7 +236,7 @@
                         <li id="curricular2"><a href="<?php echo base_url(); ?>groups/home">House Groups</a></li>
                      </ul>
                   </div>
-               </li>
+               </li> -->
                <li id="enroll">
                   <a data-toggle="collapse" href="#enrollmentmenu">
                      <img class="menuimg" src="<?php echo base_url(); ?>assets/img/icons/register.png"/>
@@ -331,6 +333,22 @@
                      </ul>
                   </div>
                </li>
+               <li id="rank">
+                  <a  data-toggle="collapse" href="#rankmenu">
+                   <!-- <img class="menuimg" src="<?php echo base_url(); ?>assets/img/icons/homework&classtest.png"/> -->
+                    <i class="pe-7s-note2"></i>
+                     <p>Marks Consolidation</p>
+                      <b class="caret"></b>
+                  </a>
+                  <div class="collapse" id="rankmenu">
+                     <ul class="nav">
+                        <li id="rank1"><a href="<?php echo base_url(); ?>rank/home">Rank System</a></li>
+                        <!-- <li id="rank2"><a href="<?php echo base_url(); ?>rank/">Rank Average</a></li> -->
+                        <li id="rank3"><a href="<?php echo base_url(); ?>rank/get_mark_average">Totals / Average</a></li>
+                     </ul>
+                  </div>
+
+               </li>
                <li id="communication">
                   <a data-toggle="collapse" href="#communcicationmenu">
                      <img class="menuimg" src="<?php echo base_url(); ?>assets/img/icons/circular.png"/>
@@ -382,6 +400,8 @@
                      </ul>
                   </div>
                </li>
+
+
                <li id="user">
                   <a data-toggle="collapse" href="#usermanagement">
                      <i class="pe-7s-settings"></i>
@@ -395,13 +415,6 @@
                         <li id="user3"><a href="<?php echo base_url(); ?>userrolemanage/students">Students</a></li>
                      </ul>
                   </div>
-               </li>
-               <li id="rank">
-                  <a href="<?php echo base_url(); ?>rank/home">
-                   <img class="menuimg" src="<?php echo base_url(); ?>assets/img/icons/homework&classtest.png"/>
-                     <p>Rank</p>
-                  </a>
-
                </li>
             </ul>
          </div>

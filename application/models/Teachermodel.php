@@ -74,7 +74,7 @@ Class Teachermodel extends CI_Model
           $resultset=$this->db->query($query);
             $data= array("status" => "success");
             return $data;
-       
+
 
        }
 
@@ -117,7 +117,7 @@ Class Teachermodel extends CI_Model
 
         // Save Subject handling teacher
         function save_subject_handling($user_id,$subject_id,$class_master_id,$id,$status){
-           $check="SELECT * FROM edu_teacher_handling_subject WHERE subject_id='$subject_id' AND class_master_id='$class_master_id'  AND teacher_id='$user_id' AND status='Active'";
+           $check="SELECT * FROM edu_teacher_handling_subject WHERE subject_id='$subject_id' AND class_master_id='$class_master_id'  AND teacher_id='$user_id' AND status='Active' AND id!='$id'";
           $result=$this->db->query($check);
           if($result->num_rows()==0){
             $query="UPDATE edu_teacher_handling_subject  SET subject_id='$subject_id',class_master_id='$class_master_id',status='$status',updated_at=NOW(),updated_by='$user_id' WHERE id='$id'";

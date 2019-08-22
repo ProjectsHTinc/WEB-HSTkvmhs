@@ -184,7 +184,7 @@ Class Class_manage extends CI_Model
 
 
       function getListClass($subject_id){
-        $query="SELECT estc.subject_id,estc.class_master_id,c.class_name,s.sec_name,esu.subject_name  FROM edu_subject_to_class AS estc LEFT JOIN edu_classmaster AS cm ON estc.class_master_id=cm.class_sec_id LEFT JOIN edu_class AS c ON cm.class=c.class_id
+        $query="SELECT estc.subject_id,estc.class_master_id,c.class_name,s.sec_name,esu.subject_name,cm.class_sec_id  FROM edu_subject_to_class AS estc LEFT JOIN edu_classmaster AS cm ON estc.class_master_id=cm.class_sec_id LEFT JOIN edu_class AS c ON cm.class=c.class_id
         LEFT JOIN edu_sections AS s ON cm.section=s.sec_id LEFT JOIN edu_subject AS esu ON estc.subject_id=esu.subject_id WHERE estc.subject_id='$subject_id'";
         $resultset=$this->db->query($query);
          if($resultset->num_rows()==0){

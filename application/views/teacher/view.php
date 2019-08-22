@@ -59,7 +59,7 @@
                                     </td>
                                     <td class="text-left">
                                        <a href="<?php echo base_url(); ?>teacher/get_teacher_id/<?php echo $rows->teacher_id; ?>" rel="tooltip" title="Edit" class="btn btn-simple btn-warning btn-icon edit"><i class="fa fa-edit"></i></a>
-																			 <?php if($rows->role_type_id=='5'){
+																			 <?php  if($rows->role_type_id=='5'){
 
 																			 }else{ ?>
 																				 <a rel="tooltip" href="#myModal" data-id="<?php echo $rows->teacher_id; ?>" title="Add Subjects" class="open-AddBookDialog btn btn-simple btn-warning btn-icon edit" style="color:#eb34ff;" data-toggle="modal" data-target="#myModal"   >

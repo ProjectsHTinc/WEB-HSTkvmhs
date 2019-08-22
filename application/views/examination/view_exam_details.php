@@ -13,7 +13,7 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet" type="text/css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
 <div class="main-panel">
-     
+
       <div class="content">
          <div class="container-fluid">
           <?php if($this->session->flashdata('msg')): ?>
@@ -35,10 +35,10 @@
                   </div>
                      <div class="content">
                   <div class="fresh-datatables">
-                    
+
            <table id="bootstrap-table" class="table">
               <thead>
-                 <th data-field="id">ID</th>
+                 <th data-field="id">S.No</th>
                  <th data-field="name" data-sortable="true"> Subject</th>
                  <th data-field="edate" data-sortable="true">Exam Date</th>
                  <!--th data-field="section"  data-sortable="true">Class/Section</th-->
@@ -80,7 +80,7 @@
                     <?php }else{?>
                     <td><?php echo'<span style="color:#d6dcd5;">'; echo 'No'; echo'</span>';?></td>
                     <td><?php echo'<span style="color:#d6dcd5;">'; echo 'No'; echo'</span>'; ?></td>
-                    <?php } 
+                    <?php }
                        $id=$rows->teacher_id;
                        if(!empty($id)){
                        $query = "SELECT teacher_id,name FROM edu_teachers WHERE teacher_id='$id' ";
@@ -119,53 +119,16 @@
     <!-- end row -->
  </div>
 </div>
-   
+
 </div>
 
 <script type="text/javascript">
    function myFunction(){
    $( "#datepicker" ).datepicker();
    }
-  
-   var $table = $('#bootstrap-table');
-   $().ready(function() {
-   $table.bootstrapTable({
-   toolbar: ".toolbar",
-   clickToSelect: true,
-   showRefresh: true,
-   search: true,
-   showToggle: true,
-   showColumns: true,
-   pagination: true,
-   searchAlign: 'left',
-   pageSize: 10,
-   clickToSelect: false,
-   pageList: [10, 25, 50, 100, 150],
-   
-   formatShowingRows: function(pageFrom, pageTo, totalRows) {
-   //do nothing here, we don't want to show the text "showing x of y from..."
-   },
-   formatRecordsPerPage: function(pageNumber) {
-   return pageNumber + " rows visible";
-   },
-   icons: {
-   refresh: 'fa fa-refresh',
-   toggle: 'fa fa-th-list',
-   columns: 'fa fa-columns',
-   detailOpen: 'fa fa-plus-circle',
-   detailClose: 'fa fa-minus-circle'
-   }
-   });
-   
-   //activate the tooltips after the data table is initialized
-   $('[rel="tooltip"]').tooltip();
-   
-   $(window).resize(function() {
-   $table.bootstrapTable('resetView');
-   });
-   
-   });
-   
+
+  $('#bootstrap-table').DataTable();
+
    $().ready(function() {
    $('#exammenu').addClass('collapse in');
    $('#exam').addClass('active');
@@ -186,6 +149,5 @@
    }
    });
    });
-   
-</script>
 
+</script>

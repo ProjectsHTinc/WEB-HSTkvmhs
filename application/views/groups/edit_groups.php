@@ -5,7 +5,7 @@
            <div class="row">
                <div class="col-md-8">
                    <div class="card">
-                       <div class="header"> 
+                       <div class="header">
                            <h4 class="title">Edit House Groups </h4>
                        </div>
                        <?php foreach ($edit as  $res) { } ?>
@@ -14,7 +14,7 @@
                                  <fieldset>
                                       <div class="form-group">
                                           <label class="col-sm-2 control-label">House Groups</label>
-                                          <div class="col-sm-4"> 
+                                          <div class="col-sm-4">
 										                         <input type="text" name="groups_name" class="form-control"  value="<?php echo $res->group_name; ?>">
 
                                               <input type="hidden" name="id" class="form-control"  value="<?php echo $res->id; ?>">
@@ -53,9 +53,10 @@
 
 <script type="text/javascript">
 $(document).ready(function () {
-$('#curricular').addClass('collapse in');
-$('#activities').addClass('active');
-$('#curricular2').addClass('active'); 
+
+$('#mastersmenu').addClass('collapse in');
+$('#master').addClass('active');
+$('#curricular2').addClass('active');
 
    $('#feesformsection').validate({ // initialize the plugin
        rules: {
@@ -68,5 +69,5 @@ $('#curricular2').addClass('active');
           }
    });
 });
- 
+
 </script>

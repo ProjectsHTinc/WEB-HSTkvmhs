@@ -160,9 +160,10 @@ class Teacher extends CI_Controller {
 			$datas=$this->session->userdata();
 			$user_id=$this->session->userdata('user_id');
 			$user_type=$this->session->userdata('user_type');
-			$datas['res'] = $this->teachermodel->view_subject_handling_teacher();
-			//echo '<pre>';print_r($datas['result']);exit;
 		 if($user_type==1){
+			 $datas['resubject'] = $this->subjectmodel->getsubject();
+			 $datas['getall_class']=$this->class_manage->getall_class();
+			 $datas['res'] = $this->teachermodel->view_subject_handling_teacher();
 		 $this->load->view('header');
 		 $this->load->view('teacher/teacher_subject_handling',$datas);
 		 $this->load->view('footer');
@@ -178,8 +179,6 @@ class Teacher extends CI_Controller {
 			$datas=$this->session->userdata();
 			$user_id=$this->session->userdata('user_id');
 			$user_type=$this->session->userdata('user_type');
-
-			//echo '<pre>';print_r($datas['res']);exit;
 		 if($user_type==1){
 			 $datas['res'] = $this->teachermodel->get_subject_handling_teacher($id);
 			$datas['resubject'] = $this->subjectmodel->getsubject();

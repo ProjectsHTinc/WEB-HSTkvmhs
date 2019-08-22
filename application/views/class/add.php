@@ -43,11 +43,12 @@
 
 <?php endif; ?>
        <div class="content">
+
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
-                            <div class="content">
+                            <div class="content"> <h4 class="title">List of class</h4><br>
 
                                 <div class="fresh-datatables">
 
@@ -69,7 +70,7 @@
                                     <td><?php echo $i; ?></td>
                                     <td><?php echo $rows->class_name; ?></td>
 									<td>
-										<?php 
+										<?php
 										if($sta=='Active'){?>
 										<button class="btn btn-success btn-fill btn-wd">Active</button>
 										<?php  }else{?>
@@ -132,44 +133,5 @@ $(document).ready(function () {
 });
 
 
-
- var $table = $('#bootstrap-table');
-       $().ready(function(){
-           $table.bootstrapTable({
-               toolbar: ".toolbar",
-               clickToSelect: true,
-               showRefresh: true,
-               search: true,
-               showToggle: true,
-               showColumns: true,
-               pagination: true,
-               searchAlign: 'left',
-               pageSize: 8,
-               clickToSelect: false,
-               pageList: [8,10,25,50,100],
-
-               formatShowingRows: function(pageFrom, pageTo, totalRows){
-                   //do nothing here, we don't want to show the text "showing x of y from..."
-               },
-               formatRecordsPerPage: function(pageNumber){
-                   return pageNumber + " rows visible";
-               },
-               icons: {
-                   refresh: 'fa fa-refresh',
-                   toggle: 'fa fa-th-list',
-                   columns: 'fa fa-columns',
-                   detailOpen: 'fa fa-plus-circle',
-                   detailClose: 'fa fa-minus-circle'
-               }
-           });
-
-           //activate the tooltips after the data table is initialized
-           $('[rel="tooltip"]').tooltip();
-
-           $(window).resize(function () {
-               $table.bootstrapTable('resetView');
-           });
-
-
-       });
+$('#bootstrap-table').DataTable();
 </script>

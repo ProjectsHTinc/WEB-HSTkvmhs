@@ -38,11 +38,11 @@ public function add_exam()
 	$datas=$this->session->userdata();
 	$user_id=$this->session->userdata('user_id');
 	$user_type=$this->session->userdata('user_type');
-	$datas['result'] = $this->examinationmodel->get_exam_details();
-	$datas['years'] = $this->examinationmodel->get_years_details();
-	//echo '<pre>'; print_r($datas['years']);exit;
+
 	if($user_type==1)
 	{
+		$datas['result'] = $this->examinationmodel->get_exam_details();
+		$datas['years'] = $this->examinationmodel->get_years_details();
 		$this->load->view('header');
 		$this->load->view('examination/add',$datas);
 		$this->load->view('footer');
@@ -92,34 +92,29 @@ public function create()
 	$datas=$this->session->userdata();
 	$user_id=$this->session->userdata('user_id');
 	$user_type=$this->session->userdata('user_type');
-
 	$datas['result'] = $this->yearsmodel->getall_years();
-
 	if($user_type==1)
 	{
 		$exam_year=$this->input->post('exam_year');
 		$exam_name=$this->input->post('exam_name');
 		$status=$this->input->post('status');
 		$exam_flag=$this->input->post('exam_flag');
-
-		$datas=$this->examinationmodel->exam_details($exam_year,$exam_name,$exam_flag,$status);
-		//print_r($datas['status']);exit;
-		//print_r($data['exam_name']);exit;
-
-	if($datas['status']=="success"){
-		$this->session->set_flashdata('msg','Added Successfully');
-		redirect('examination/add_exam');
-	}else if($datas['status']=="Exam Name Already Exist")
-	{
-		$this->session->set_flashdata('msg','Exam Name Already Exist');
-		redirect('examination/add_exam');
-	}else{
-		$this->session->set_flashdata('msg','Failed to Add');
-		redirect('examination/add_exam');
-	}
-	}else{
-		redirect('/');
-	}
+		$grade_flag=$this->input->post('grade_flag');
+		$datas=$this->examinationmodel->exam_details($exam_year,$exam_name,$exam_flag,$grade_flag,$status);
+		if($datas['status']=="success"){
+			$this->session->set_flashdata('msg','Added Successfully');
+			redirect('examination/add_exam');
+		}else if($datas['status']=="Exam Name Already Exist")
+		{
+			$this->session->set_flashdata('msg','Exam Name Already Exist');
+			redirect('examination/add_exam');
+		}else{
+			$this->session->set_flashdata('msg','Failed to Add');
+			redirect('examination/add_exam');
+		}
+		}else{
+			redirect('/');
+		}
 }
 
 
@@ -153,18 +148,20 @@ public function update()
 		$exam_name=$this->input->post('exam_name');
 		$status=$this->input->post('status');
 		$exam_flag=$this->input->post('exam_flag');
-		$datas=$this->examinationmodel->update_exam($exam_id,$exam_year,$exam_name,$exam_flag,$status);
-
-	if($datas['status']=="success")
-	{
-		$this->session->set_flashdata('msg','Updated Successfully');
-		redirect('examination/add_exam');
-	}else{
-		$this->session->set_flashdata('msg','Failed To Updated');
-		redirect('examination/add_exam');
+		$grade_flag=$this->input->post('grade_flag');
+		$datas=$this->examinationmodel->update_exam($exam_id,$exam_year,$exam_name,$exam_flag,$grade_flag,$status);
+		if($datas['status']=="success")
+		{
+			$this->session->set_flashdata('msg','Updated Successfully');
+			redirect('examination/add_exam');
+		}else{
+			$this->session->set_flashdata('msg','Failed To Updated');
+			redirect('examination/add_exam');
+		}
+		}else{
+			redirect('/');
+		}
 	}
-	}
-}
 
 
 public function add_exam_details()
@@ -179,7 +176,7 @@ public function add_exam_details()
 		$subject_name=$this->input->post('subject_id');
 		//print_r($subject_name);exit;
 		$exdate=$this->input->post('exam_dates');
-	
+
 		$time=$this->input->post('time');
 		//print_r($time);exit;
 		$teacher_id=$this->input->post('teacher_id');
@@ -189,7 +186,7 @@ public function add_exam_details()
 		$sub_total=$this->input->post('sub_total');
 		$inter_mark=$this->input->post('inter_mark');
 		$exter_mark=$this->input->post('exter_mark');
-		$inter_exter_mark=$this->input->post('inter_exter_mark'); 
+		$inter_exter_mark=$this->input->post('inter_exter_mark');
 
 	$datas=$this->examinationmodel->add_exam_details($exam_year,$class_name,$subject_name,$exdate,$time,$teacher_id,$status,$sub_total,$inter_mark,$exter_mark,$inter_exter_mark,$user_id);
 	if($datas['status']=="success"){
@@ -225,7 +222,7 @@ public function view_exam_details($exam_id,$classmaster_id)
 	else{
 		redirect('/');
 	}
-	
+
 }
 
 public function edit_exam_details($exam_detail_id)
@@ -257,12 +254,12 @@ public function update_exam_details()
 	{
 		$id=$this->input->post('id');
 		$exam_year=$this->input->post('eid');
-		//echo $exam_year; 
+		//echo $exam_year;
 		$class_name=$this->input->post('class_name');
 
 		$subject_name=$this->input->post('subject_name');
 		//echo $subject_name; exit;
-		$exam_date=$this->input->post('exam_date'); 
+		$exam_date=$this->input->post('exam_date');
 		$dateTime = new DateTime($exam_date);
 		$formatted_date=date_format($dateTime,'Y-m-d' );
 
@@ -279,11 +276,11 @@ public function update_exam_details()
 		$inter_mark=$this->input->post('inter_mark');
 		$exter_mark=$this->input->post('exter_mark');
 		//echo $inter_mark; echo $exter_mark; exit;
-		$inter_exter_mark=$this->input->post('inter_exter_mark'); 
+		$inter_exter_mark=$this->input->post('inter_exter_mark');
 
 		$datas=$this->examinationmodel->update_exam_detail($id,$exam_year,$class_name,$subject_name,$formatted_date,$time,$teacher_id,$status,$sub_total,$inter_mark,$exter_mark,$inter_exter_mark,$user_id);
 
-      
+
 	if($datas['status']=="success")
 	{
 		$this->session->set_flashdata('msg','Updated Successfully');
@@ -322,10 +319,10 @@ public function exam_name_status()
 	$datas=$this->session->userdata();
 	$user_id=$this->session->userdata('user_id');
 	$user_type=$this->session->userdata('user_type');
-	$datas['exam_name']=$this->examinationmodel->exam_name_status();
-	//print_r($datas['exam_name']);exit;
+
 	if($user_type==1)
 	{
+		$datas['exam_name']=$this->examinationmodel->exam_name_status();
 		$this->load->view('header');
 		$this->load->view('examination/exam_name',$datas);
 		$this->load->view('footer');
@@ -351,7 +348,7 @@ public function marks_status($exam_id)
 	}
 	else{
 		redirect('/');
-	} 
+	}
 
 }
 
@@ -374,7 +371,7 @@ public function exam_mark_details_cls_teacher()
 	//echo '<pre>';print_r($datas['stu']); exit;
 
 	if($user_type==1)
-	{ 
+	{
 		$this->load->view('header');
 		$this->load->view('examination/exam_class_result',$datas);
 		$this->load->view('footer');
@@ -397,15 +394,15 @@ public function marks_status_update()
 
 	// print_r($datas);exit;
 	if($datas['status']=="success")
-	{ 
+	{
 		$a=$datas['var1']; $b=$datas['var2'];//echo $a;exit;
 		$this->session->set_flashdata('msg','Approved Successfully');
 		redirect('examination/exam_mark_details_cls_teacher?var1='.$b.'&var2='.$a.'',$datas);
 	}elseif($datas['status']=="Already Approved Exam Marks")
-	{ 
+	{
 		$a=$datas['var1']; $b=$datas['var2'];
 		$this->session->set_flashdata('msg','Already Approved Exam Marks');
-		redirect('examination/exam_mark_details_cls_teacher?var1='.$b.'&var2='.$a.'',$datas);  
+		redirect('examination/exam_mark_details_cls_teacher?var1='.$b.'&var2='.$a.'',$datas);
 	}else{
 		$a=$datas['var1']; $b=$datas['var2'];
 		$this->session->set_flashdata('msg','Falid To Approve');

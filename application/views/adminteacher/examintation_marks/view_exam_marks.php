@@ -23,7 +23,7 @@
 						  //echo $ex_name;
 						 //echo $exam_year;
 					   ?>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                            <a rel="tooltip" href="<?php echo base_url(); ?>examinationresult/marks_details_view?var=<?php echo $exam_id; ?>"  class="btn btn-wd"><?php echo $ex_name; ?></a>
                         </div>
 					   <?php }?>
@@ -47,8 +47,8 @@
    $(document).ready(function () {
     $('#examinationmenu').addClass('collapse in');
 				$('#exam').addClass('active');
-				$('#exam2').addClass('active'); 
-    
+				$('#exam2').addClass('active');
+
    });
 
    var $table = $('#bootstrap-table');
@@ -91,5 +91,3 @@
 
          });
 </script>
-
-

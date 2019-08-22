@@ -76,10 +76,9 @@ class Student extends CI_Controller
         $datas           = $this->session->userdata();
         $user_id         = $this->session->userdata('user_id');
         $user_type       = $this->session->userdata('user_type');
-        $datas['result'] = $this->studentmodel->exam_marks($user_id,$exam_id,$user_type);
-        //$datas['eflag']  = $this->studentmodel->getall_exam_details($exam_id,$user_id,$user_type);
-        //echo '<pre>';print_r($datas['result']);exit;
         if ($user_type == 3) {
+          $datas['res']=$this->studentmodel->exam_name($exam_id);
+          $datas['result'] = $this->studentmodel->exam_marks($user_id,$exam_id,$user_type);
             $this->load->view('adminstudent/student_header');
             $this->load->view('adminstudent/exam_result/exam_marks', $datas);
             $this->load->view('adminstudent/student_footer');

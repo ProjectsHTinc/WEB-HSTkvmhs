@@ -9,14 +9,14 @@
          <?php endif; ?>
          <div class="row">
             <div class="col-md-12">
-               <div class="card">  
+               <div class="card">
                   <div class="header">
                      <h4 class="title">Examination Calendar</h4>
                   </div>
                   <div class="content">
                      <div class="row">
                        <?php if(empty($exam_view)){
-						   echo "<p style=text-align:center;color:red;>Admin doesn't Approve The Reportcard </p>"; 
+						   echo "<p style=text-align:center;color:red;>Admin doesn't Approve The Reportcard </p>";
 					   }else{
 					   foreach($exam_view as $row)
 					   {
@@ -25,23 +25,23 @@
 						  //  echo $ex_name;
 						 // echo $exam_year;
 					   ?>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                            <a rel="tooltip" href="<?php echo base_url(); ?>student/exam_calender/<?php echo $exams_id; ?>"  class="btn btn-wd"><?php echo $ex_name; ?></a>
                         </div>
 					   <?php } }?>
-						
+
                      </div>
                   </div>
                </div>
             </div>
          </div>
          <!-- row -->
-		 
-	
-     
+
+
+
          <!-- end row -->
-        
-   
+
+
       </div>
    </div>
 </div>
@@ -50,7 +50,7 @@
    $('#examinationmenu').addClass('collapse in');
    $('#exam').addClass('active');
    $('#exam1').addClass('active');
-  
+
    });
 
 </script>

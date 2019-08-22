@@ -108,20 +108,14 @@
                                                     <div class="col-sm-6">
                                                         <select name="class_master_id_for_last_academic_year" id="class_master_id" data-title="From Class" class="selectpicker" data-style=" btn-block" data-menu-style="dropdown-blue" onchange="get_student_list()">
                                                             <?php foreach($res_class as $rows){ ?>
-                                                                <option value="<?php echo $rows->class_id; ?>">
-                                                                    <?php echo $rows->class_name; ?>-
-                                                                        <?php echo $rows->sec_name; ?>
-                                                                </option>
+                                                                <option value="<?php echo $rows->class_id; ?>"><?php echo $rows->class_name; ?>-<?php echo $rows->sec_name; ?></option>
                                                                 <?php    } ?>
                                                         </select>
                                                     </div>
                                                     <div class="col-sm-6">
                                                         <select name="promotion_class_master_id" id="to_class_master_id" data-title="To Class" class="selectpicker" data-style=" btn-block" data-menu-style="dropdown-blue">
                                                             <?php foreach($res_class_all as $rows){ ?>
-                                                                <option value="<?php echo $rows->class_id; ?>">
-                                                                    <?php echo $rows->class_name; ?>-
-                                                                        <?php echo $rows->sec_name; ?>
-                                                                </option>
+                                                                <option value="<?php echo $rows->class_id; ?>"><?php echo $rows->class_name; ?>-<?php echo $rows->sec_name; ?></option>
                                                                 <?php    } ?>
                                                         </select>
                                                     </div>
@@ -203,21 +197,19 @@
                                                 <?php echo $rows->student_name;?>
                                             </td>
                                             <td>
-                                                <?php echo date('Y', strtotime($rows->last_year));  echo "-"; echo date('Y', strtotime( $rows->to_year));  ?>
+                                                <?php echo date('Y', strtotime($rows->last_year)); echo "-"; echo date('Y', strtotime( $rows->to_year));  ?>
                                             </td>
                                             <td>
                                                 <?php echo date('Y', strtotime($rows->from_month));  echo "-"; echo date('Y', strtotime( $rows->to_month));  ?>
                                             </td>
                                             <td>
-                                                <?php echo $rows->last_class; ?>-
-                                                    <?php echo $rows->last_sec; ?>
+                                                <?php echo $rows->last_class; ?>-<?php echo $rows->last_sec; ?>
                                             </td>
                                             <td>
                                                 <?php echo $rows->result_status;?>
                                             </td>
                                             <td>
-                                                <?php echo $rows->class_name; ?>-
-                                                    <?php echo $rows->sec_name; ?>
+                                                <?php echo $rows->class_name; ?>-<?php echo $rows->sec_name; ?>
                                             </td>
                                             <td>
                                                 <a href="<?php echo base_url(); ?>promotion/edit_promotion/<?php echo $rows->id; ?>" rel="tooltip" title="Edit" class="btn btn-simple btn-warning btn-icon edit"><i class="fa fa-pencil-square-o"></i></a>
@@ -362,7 +354,7 @@ $('#promo1').addClass('active');
             status: "select status"
 
         },
-  
+
         submitHandler: function(form) {
          //alert("hi");
          swal({

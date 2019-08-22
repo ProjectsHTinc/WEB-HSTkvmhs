@@ -1,10 +1,8 @@
-
-
 <div class="main-panel">
    <div class="content">
       <div class="container-fluid">
          <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
                <div class="card">
                   <div class="header">
                      <h4 class="title">Add Examination</h4>
@@ -21,7 +19,7 @@
                                        {
                                          $fyear=$rows1->from_month;
                                           $month= strtotime($fyear);
-                                       
+
                                        $eyear=$rows1->to_month;
                                        $month1= strtotime($eyear);
                                          ?>
@@ -53,6 +51,17 @@
                         </fieldset>
                         <fieldset>
                            <div class="form-group">
+                              <label class="col-sm-2 control-label">Grade  Option</label>
+                              <div class="col-sm-6">
+                                 <select  name="grade_flag" id="grade_flag" class="selectpicker"  class="form-control">
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                 </select>
+                              </div>
+                           </div>
+                        </fieldset>
+                        <fieldset>
+                           <div class="form-group">
                               <label class="col-sm-2 control-label">Status</label>
                               <div class="col-sm-6">
                                  <select name="status"  class="selectpicker form-control">
@@ -64,8 +73,8 @@
                         </fieldset>
                         <fieldset>
                            <div class="form-group">
-                              <label class="col-sm-2 control-label">&nbsp;</label>
-                              <div class="col-sm-4">
+                              <!-- <label class="col-sm-2 control-label">&nbsp;</label> -->
+                              <div class="text-center">
                                  <button type="submit" id="save" class="btn btn-info btn-fill center">Save</button>
                               </div>
                            </div>
@@ -88,12 +97,15 @@
                <div class="col-md-12">
                   <div class="card">
                      <div class="content">
+                       <h4 class="title">List of Examination</h4> <br>
                         <div class="fresh-datatables">
                            <table id="bootstrap-table" class="table">
                               <thead>
                                  <th>S.no</th>
                                  <th>Exam Year</th>
                                  <th>Exam Name</th>
+                                 <!-- <th>Type</th> -->
+                                 <th>Grade Option</th>
                                  <th>Status</th>
                                  <th>Actions</th>
                               </thead>
@@ -104,7 +116,7 @@
                                     $status=$rows->status;
                                     $fyear=$rows->from_month;
                                     $month= strtotime($fyear);
-                                    
+
                                     $eyear=$rows->to_month;
                                     $month1= strtotime($eyear);
                                     ?>
@@ -112,12 +124,18 @@
                                     <td><?php echo $i; ?></td>
                                     <td><?php  echo  date('Y',$month); ?> (To) <?php  echo  date('Y',$month1); ?></td>
                                     <td><?php echo $rows->exam_name; ?></td>
+                                    <!-- <td><?php echo $rows->exam_flag; ?></td> -->
+                                    <td><?php if($rows->grade_flag=='1'){ ?>
+                                      <i class="fa fa-check" aria-hidden="true"></i>
+                                  <?php   }else{ ?>
+
+                                    <?php  } ?></td>
                                     <td><?php if($status=='Active'){?>
                                        <button class="btn btn-success btn-fill btn-wd">Active</button>
                                        <?php }else{?>
                                        <button class="btn btn-danger btn-fill btn-wd">Deactive</button>
-                                       <?php } 
-                                          //echo $rows->status;?> 
+                                       <?php }
+                                        ?>
                                     </td>
                                     <td>
                                        <!-- <a href="<?php echo base_url(); ?>examination/add_exam_subject/<?php echo $rows->exam_id; ?>" rel="tooltip" title="Added Exam Details" class="btn btn-simple btn-info btn-icon table-action view" >
@@ -143,71 +161,26 @@
 </div>
 <script type="text/javascript">
    $(document).ready(function () {
-   
+
     $('#myformsection').validate({ // initialize the plugin
         rules: {
             exam_year:{required:true },
             exam_name:{required:true },
-   
-   
         },
         messages: {
-   
-   
               exam_year: "Please Enter Section Name",
                  exam_name: "Please Enter Exam name"
-   
-   
+
             }
     });
    });
-   
-   var $table = $('#bootstrap-table');
-         $().ready(function(){
-             $table.bootstrapTable({
-                 toolbar: ".toolbar",
-                 clickToSelect: true,
-                 showRefresh: true,
-                 search: true,
-                 showToggle: true,
-                 showColumns: true,
-                 pagination: true,
-                 searchAlign: 'left',
-                 pageSize: 8,
-                 clickToSelect: false,
-                 pageList: [8,10,25,50,100],
-   
-                 formatShowingRows: function(pageFrom, pageTo, totalRows){
-                     //do nothing here, we don't want to show the text "showing x of y from..."
-                 },
-                 formatRecordsPerPage: function(pageNumber){
-                     return pageNumber + " rows visible";
-                 },
-                 icons: {
-                     refresh: 'fa fa-refresh',
-                     toggle: 'fa fa-th-list',
-                     columns: 'fa fa-columns',
-                     detailOpen: 'fa fa-plus-circle',
-                     detailClose: 'fa fa-minus-circle'
-                 }
-             });
-   
-             //activate the tooltips after the data table is initialized
-             $('[rel="tooltip"]').tooltip();
-   
-             $(window).resize(function () {
-                 $table.bootstrapTable('resetView');
-             });
-   
-   
-         });
-</script>
-<script type="text/javascript">
+
+$('#bootstrap-table').DataTable();
    $().ready(function(){
      $('#exammenu').addClass('collapse in');
      $('#exam').addClass('active');
      $('#exam1').addClass('active');
-   
+
      $('.datepicker').datetimepicker({
        format: 'YYYY',
        icons: {
@@ -224,4 +197,3 @@
     });
    });
 </script>
-

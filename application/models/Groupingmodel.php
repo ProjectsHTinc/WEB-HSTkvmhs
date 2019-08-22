@@ -122,7 +122,7 @@ Class Groupingmodel extends CI_Model
           {
             $year_id=$this->getYear();
             $query="SELECT ee.class_id,c.class_name,s.sec_name FROM edu_enrollment AS ee LEFT JOIN edu_classmaster AS cm ON ee.class_id=cm.class_sec_id LEFT JOIN edu_class AS c ON cm.class=c.class_id
-             LEFT JOIN edu_sections AS s ON cm.section=s.sec_id WHERE admit_year='2' GROUP BY ee.class_id";
+             LEFT JOIN edu_sections AS s ON cm.section=s.sec_id WHERE admit_year='$year_id' GROUP BY ee.class_id";
              $res=$this->db->query($query);
             return $res->result();
 
@@ -132,7 +132,7 @@ Class Groupingmodel extends CI_Model
           function getListstudent($class_master_id){
              $year_id=$this->getYear();
               $query="SELECT eu.user_id,ee.name,ee.enroll_id FROM edu_users AS eu LEFT JOIN edu_admission AS ea ON eu.user_master_id=ea.admission_id AND eu.user_type='3'
-LEFT JOIN edu_enrollment AS ee ON ee.admission_id=ea.admission_id WHERE  ee.class_id='$class_master_id' AND ee.admit_year='2' AND ee.status='Active'";
+LEFT JOIN edu_enrollment AS ee ON ee.admission_id=ea.admission_id WHERE  ee.class_id='$class_master_id' AND ee.admit_year='$year_id' AND ee.status='Active'";
             $resultset=$this->db->query($query);
             if($resultset->num_rows()==0){
               $data= array("status" => "nodata");

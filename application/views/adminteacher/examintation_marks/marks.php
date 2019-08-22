@@ -15,6 +15,7 @@
                      <h4 class="title">Enter Exam Marks
                         <?php
                            foreach($result as $flag){} $ename=$flag->exam_name;
+
                            echo '('; echo $ename; echo ')';
                            $cls_masid=$this->input->get('var1');
                            $exam_id=$this->input->get('var2');
@@ -24,6 +25,7 @@
                             $cid=$cla_tea_id[0]->class_teacher;
                            //echo $cid; //exit;
                            //echo $cls_masid;
+                           if($flag->grade_flag=='0'){ echo "<small>No Grade System</small>";?> <style>.grade_opt{display: none;}</style> <?php  } else{ echo "1";  }
                            if($cid==$cls_masid)
                            {?>
                         <a href="<?php echo base_url(); ?>examinationresult/exam_mark_details_cls_teacher?var1=<?php echo $cid; ?>&var2=<?php  echo $exam_id; ?>"  class="btn btn-info btn-fill btn-wd">View Class Mark</a>
@@ -91,7 +93,7 @@
                                  <td style="width:05%;"><?php echo $i;?></td>
                                  <td style="width:15%;">
                                     <?php  $stdid=$rows->name;
-                                       echo $stdid; 
+                                       echo $stdid;
                                        ?>
                                  </td>
                                  <?php
@@ -100,19 +102,19 @@
                                     $tm=$rows->total_marks;
                                     if(is_numeric($im)){
                                       ?>
-                                 <td style="width: 20%;"><?php echo $rows->internal_mark; ?> ( <?php echo $rows->internal_grade; ?> )</td>
+                                 <td style="width: 20%;"><?php echo $rows->internal_mark; ?> <span class="grade_opt">( <?php echo $rows->internal_grade; ?> )</span></td>
                                  <?php }else{?>
                                  <td style="width: 20%;color: red;"><?php echo $rows->internal_mark; ?></td>
                                  <?php }
                                     if(is_numeric($em)){  ?>
-                                 <td style="width: 20%;"><?php echo $rows->external_mark; ?> ( <?php echo $rows->external_grade; ?> )</td>
+                                 <td style="width: 20%;"><?php echo $rows->external_mark; ?> <span class="grade_opt">( <?php echo $rows->external_grade; ?> )</span></td>
                                  <?php }else{?>
                                  <td style="width: 20%;color: red;"><?php echo $rows->external_mark; ?></td>
                                  <?php }  if(is_numeric($tm)){
                                         if($tm < '35' || !is_numeric($im) || !is_numeric($em)){ ?>
                                  <td style="width: 20%;color: red;"><?php echo $rows->total_marks; ?> ( <?php echo $rows->total_grade;echo ' '; echo')'; echo ' ';echo"Fail"; ?> </td>
                                         <?php }else{  ?>
-                                 <td style="width: 20%;"><?php echo $rows->total_marks; ?> ( <?php echo $rows->total_grade; ?> )</td>
+                                 <td style="width: 20%;"><?php echo $rows->total_marks; ?> <span class="grade_opt">( <?php echo $rows->total_grade; ?> )</span></td>
                                  <?php }
                                }else{ ?>
                                  <td style="width: 20%;"><?php echo $rows->total_marks; ?></td>
@@ -125,7 +127,7 @@
                                         echo $stdid; ?>
                                  </td>
                                  <?php  if(is_numeric($tm)){ ?>
-                                 <td style="width:30%;"><?php echo $rows->total_marks; ?> ( <?php echo $rows->total_grade; ?> )</td>
+                                 <td style="width:30%;"><?php echo $rows->total_marks; ?><span class="grade_opt"> ( <?php echo $rows->total_grade; ?> )</span></td>
                                  <?php }else{ ?>
                                  <td style="width:30%;"><?php echo $rows->total_marks; ?> </td>
                                  <?php } ?>

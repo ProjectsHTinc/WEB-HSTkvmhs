@@ -11,7 +11,7 @@
                   </div>
                   <div class="content">
                      <form method="post" action="<?php echo base_url(); ?>years/add_terms" class="form-horizontal" enctype="multipart/form-data" id="myformsection">
-                      
+
                         <fieldset>
                            <div class="form-group">
                               <label class="col-sm-2 control-label"> YEAR</label>
@@ -21,10 +21,10 @@
                                        {
                                          $fyear=$rows->from_month;
                                        $month= strtotime($fyear);
-                                       
+
                                        $eyear=$rows->to_month;
                                        $month1= strtotime($eyear);
-                                       
+
                                          ?>
                                     <option value="<?php  echo $rows->year_id; ?>"><?php  echo  date('Y',$month); ?> (To) <?php  echo  date('Y',$month1); ?></option>
                                     <?php } ?>
@@ -94,11 +94,11 @@
                               <tbody>
                                  <?php
                                     $i=1;
-                                    foreach ($terms as $rows) { 
+                                    foreach ($terms as $rows) {
                                     $sta=$rows->status;
                                     $yrdata=$rows->from_date;
                                           $month4= strtotime($yrdata);
-                                    
+
                                     $endmonth=$rows->to_date;
                                     $month5= strtotime($endmonth);
                                      ?>
@@ -106,7 +106,7 @@
                                     <td><?php  echo $i; ?></td>
                                     <?php
                                        $tea_name=$rows->year_id;
-                                       
+
                                        $sQuery = "SELECT * FROM edu_academic_year ";
                                        $objRs=$this->db->query($sQuery);
                                        $row=$objRs->result();
@@ -116,11 +116,11 @@
                                        $fyear=$rows1->from_month;
                                        $month= strtotime($fyear);
                                        $sec=date('Y',$month);
-                                       
+
                                        $eyear=$rows1->to_month;
                                        $month1= strtotime($eyear);
                                        $sec1=date('Y',$month1);
-                                       
+
                                        $arryPlatform = explode(",",$tea_name);
                                        $sPlatform_id  = trim($s);
                                        $sPlatform_name  = trim($sec);
@@ -136,7 +136,7 @@
                                     <td><?php  echo date('M-Y',$month5) ; ?></td>
                                     <td><?php  echo $rows->term_name; ?></td>
                                     <td>
-                                       <?php 
+                                       <?php
                                           if($sta=='Active'){?>
                                        <button class="btn btn-success btn-fill btn-wd">Active</button>
                                        <?php  }else{?>
@@ -172,65 +172,25 @@
    $('#masters2').addClass('active');
     $('#myformsection').validate({ // initialize the plugin
         rules: {
-   
-   
+
+
             yexam:{required:true },
-   
-   
+
+
         },
         messages: {
-   
-   
+
+
               yexam: "Please Enter Section Name"
-   
-   
+
+
             }
     });
    });
-   
-   var $table = $('#bootstrap-table');
-         $().ready(function(){
-             $table.bootstrapTable({
-                 toolbar: ".toolbar",
-                 clickToSelect: true,
-                 showRefresh: true,
-                 search: true,
-                 showToggle: true,
-                 showColumns: true,
-                 pagination: true,
-                 searchAlign: 'left',
-                 pageSize: 8,
-                 clickToSelect: false,
-                 pageList: [8,10,25,50,100],
-   
-                 formatShowingRows: function(pageFrom, pageTo, totalRows){
-                     //do nothing here, we don't want to show the text "showing x of y from..."
-                 },
-                 formatRecordsPerPage: function(pageNumber){
-                     return pageNumber + " rows visible";
-                 },
-                 icons: {
-                     refresh: 'fa fa-refresh',
-                     toggle: 'fa fa-th-list',
-                     columns: 'fa fa-columns',
-                     detailOpen: 'fa fa-plus-circle',
-                     detailClose: 'fa fa-minus-circle'
-                 }
-             });
-   
-             //activate the tooltips after the data table is initialized
-             $('[rel="tooltip"]').tooltip();
-   
-             $(window).resize(function () {
-                 $table.bootstrapTable('resetView');
-             });
-   
-   
-         });
-</script>
-<script type="text/javascript">
+
+$('#bootstrap-table').DataTable();
    $().ready(function(){
-   
+
      $('.datepicker').datetimepicker({
        format: 'DD-MM-YYYY',
        icons: {
@@ -247,4 +207,3 @@
     });
    });
 </script>
-

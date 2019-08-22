@@ -7,23 +7,25 @@
                   <div class="header">
                      <h4 class="title">Exam Name</h4>
                   </div>
-                  <div class="content">  
+                  <div class="content">
                      <div class="row">
                         <?php
                            if(empty($exam_name)){   ?>
-                        <div class="col-md-2">
+                        <!-- <div class="col-md-2">
                            <p style="padding:10px;color:red;text-align:center;">No Marks Added</p>
-                        </div>
-                        <?php  }  else{ 
-                                  foreach($exam_name as $rows){
- 					    ?>
-                        <div class="col-md-2">
+                        </div> -->
+                        <?php  }  else{
+                                  foreach($exam_name as $rows){ ?>
+                        <div class="col-md-3">
                            <a rel="tooltip" href="<?php echo base_url(); ?>examination/marks_status/<?php echo $rows->exam_id; ?>" class="btn btn-wd"><?php echo $rows->exam_name; ?></a>
+                            <input type="hidden" name="msta_id" value="<?php echo $rows->exam_status_id; ?>"/>
                         </div>
-						<input type="hidden" name="msta_id" value="<?php echo $rows->exam_status_id; ?>"/>
+
+
                         <?php  } }  ?>
 
                      </div>
+                       <div class="clearfix"></div>
                   </div>
                </div>
             </div>
@@ -32,6 +34,12 @@
       </div>
    </div>
 </div>
+<style>
+.btn{
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+</style>
 <script type="text/javascript">
    $(document).ready(function () {
    $('#exammenu').addClass('collapse in');
@@ -57,8 +65,5 @@
             }
     });
    });
-   
+
 </script>
-
-
-
